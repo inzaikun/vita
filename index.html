@@ -276,6 +276,21 @@
   .records-table td.surplus { color: var(--warn); }
   .records-table tr td:first-child { color: var(--text); font-size: 12px; white-space: nowrap; }
 
+  /* 削除ボタン */
+  .records-table th.del-th { width: 32px; }
+  .records-table td.del-cell { padding: 4px; text-align: center; width: 32px; }
+  .records-table .del-btn {
+    background: transparent; border: none; cursor: pointer;
+    padding: 4px; color: var(--text-mute);
+    border-radius: 2px;
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: all 0.1s;
+  }
+  .records-table .del-btn:hover {
+    background: #fff0f0; color: var(--warn);
+  }
+  .records-table .del-btn svg { width: 14px; height: 14px; }
+
   /* 行追加・CSV行 */
   .add-day-row, .csv-row {
     display: flex; align-items: center; gap: 8px; padding: 10px;
@@ -711,6 +726,7 @@ function renderRecordsTable() {
         ${editCell(date, 'intake', day.intake, '10', '—')}
         ${editCell(date, 'burn', day.burn, '10', '—')}
         ${balanceCellHtml(day.intake, day.burn)}
+        <td class="del-cell">${hasData ? `<button class="del-btn" data-date="${date}" title="この行を削除"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg></button>` : ''}</td>
       </tr>
     `;
   }).join('');
@@ -725,6 +741,7 @@ function renderRecordsTable() {
           <th class="right">摂取 (kcal)</th>
           <th class="right">消費 (kcal)</th>
           <th class="right">収支</th>
+          <th class="del-th"></th>
         </tr>
       </thead>
       <tbody>${rows}</tbody>
@@ -769,6 +786,21 @@ function renderRecordsTable() {
       balanceCell.className = `right balance-cell ${b < 0 ? 'deficit' : b > 0 ? 'surplus' : ''}`;
     }
     // 今日の行が変更されたら推移グラフを更新
+    debounceRenderTrends();
+  });
+
+  // 削除ボタン（クリック委譲）
+  c.querySelector('table').addEventListener('click', (e) => {
+    const btn = e.target.closest('.del-btn');
+    if (!btn) return;
+    const date = btn.dataset.date;
+    if (!confirm(`${date} の記録を削除しますか？`)) return;
+    localStorage.removeItem(`day:${date}`);
+    // extra-dates にあれば消す
+    const extras = storage.get('extra-dates') || [];
+    const updated = extras.filter(d => d !== date);
+    if (updated.length !== extras.length) storage.set('extra-dates', updated);
+    renderRecordsTable();
     debounceRenderTrends();
   });
 
@@ -1218,66 +1250,22 @@ function renderLineChart(data, series, opts = {}) {
 }
 
 // ============================================================================
-// テストデータ投入（初回のみ）
+// テストデータのクリーンアップ（旧バージョンが投入したデータを削除）
 // ============================================================================
-function seedTestData() {
-  const SEED_KEY = 'seed:2026-04-test';
-  if (localStorage.getItem(SEED_KEY)) return; // すでに投入済み
-
-  // 既存の day:* データを全削除
-  const keysToDelete = [];
-  for (let i = 0; i < localStorage.length; i++) {
-    const k = localStorage.key(i);
-    if (k && k.startsWith('day:')) keysToDelete.push(k);
+function cleanupSeedData() {
+  const CLEAN_KEY = 'seed:2026-04-test';
+  // 旧バージョンが残した SEED_KEY が存在する場合、4月のテストデータを削除
+  if (localStorage.getItem(CLEAN_KEY)) {
+    for (let day = 1; day <= 30; day++) {
+      const dateStr = `2026-04-${String(day).padStart(2, '0')}`;
+      localStorage.removeItem(`day:${dateStr}`);
+    }
+    localStorage.removeItem(CLEAN_KEY);
+    console.log('旧テストデータをクリアしました（2026年4月分）');
   }
-  keysToDelete.forEach(k => localStorage.removeItem(k));
-
-  // 2026年4月のテストデータ
-  // [日, 消費(out), 摂取(in), 体重, 体脂肪]
-  const data = [
-    [1,  2000, 2000, null, null],
-    [2,  2500, 2000, 64.9, 13.5],
-    [3,  2500, 2000, 64.5, 13.5],
-    [4,  2200, 2000, 64.3, 13.5],
-    [5,  2500, 2000, null, null],
-    [6,  2200, 2000, 64.8, 12.9],
-    [7,  2200, 2100, 64.3, 12.6],
-    [8,  2200, 1800, null, null],
-    [9,  2200, 1900, 63.7, 13.2],
-    [10, 2200, 1900, 63.6, 13.1],
-    [11, 2500, 2500, 63.6, 12.9],
-    [12, 2500, 2300, null, null],
-    [13, 2400, 2000, null, null],
-    [14, 2400, 2000, 63.6, 12.6],
-    [15, 2200, 2000, 63.6, 12.5],
-    [16, 2300, 2000, 63.6, 12.4],
-    [17, 3000, 3200, null, null],
-    [18, 2300, 2000, 63.6, 12.4],
-    [19, 2300, 2000, 63.4, 12.1],
-    [20, 2200, 1900, 63.4, 12.2],
-    [21, 2100, 1900, 64.1, 11.2],
-    [22, 2100, 1900, 63.9, 12.1],
-    [23, 2100, 2100, 63.3, 11.9],
-    [24, 2100, 2000, null, null],
-    [25, 2300, 2300, 63.0, 11.9],
-    [26, 2200, 2000, null, null],
-    [27, 2100, 2000, 62.8, 11.8],
-    [28, 2200, 2200, 62.7, 11.9],
-    [29, 2100, 2000, null, null],
-    [30, 2200, 2000, 62.3, 12.1],
-  ];
-
-  data.forEach(([day, out, inn, weight, bodyFat]) => {
-    const dateStr = `2026-04-${String(day).padStart(2, '0')}`;
-    const record = { weight, bodyFat, intake: inn, burn: out };
-    localStorage.setItem(`day:${dateStr}`, JSON.stringify(record));
-  });
-
-  localStorage.setItem(SEED_KEY, '1');
-  console.log('テストデータを投入しました（2026年4月、30日分）');
 }
 
-seedTestData();
+cleanupSeedData();
 
 // ============================================================================
 // 下部タブ切替
