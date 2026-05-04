@@ -10,8 +10,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 <meta name="apple-mobile-web-app-title" content="Vita" />
-<!-- テーマカラー（Androidブラウザのアドレスバー色） -->
-<meta name="theme-color" content="#f08300" />
+<!-- テーマカラー（ブラウザのアドレスバー / iOSステータスバー周辺の色） -->
+<meta name="theme-color" content="#ffffff" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet" />
@@ -71,14 +71,13 @@
     flex-wrap: wrap; gap: 12px;
   }
   .logo {
-    display: flex; align-items: flex-start; gap: 4px;
+    display: flex; align-items: center; gap: 0;
   }
   .logo .mascot {
-    width: auto; height: 28px;
-    object-fit: contain;
+    width: 72px; height: auto;
     display: block;
     flex-shrink: 0;
-    margin-top: 0;
+    margin-left: -6px;
   }
   .logo-text { display: flex; flex-direction: column; }
   .logo h1 {
@@ -586,8 +585,8 @@
     section h2 { font-size: 14px; padding: 6px 10px; }
     .chart-card h3 { font-size: 13px; }
     .header-inner { padding: 8px 12px; }
-    .logo { gap: 3px; }
-    .logo .mascot { height: 24px; }
+    .logo { gap: 0; }
+    .logo .mascot { width: 56px; margin-left: -5px; margin-top: 0; }
     .logo h1 { font-size: 18px; }
     .logo h1::before { width: 5px; height: 18px; }
     .logo p { display: none; }
