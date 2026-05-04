@@ -322,7 +322,7 @@
   .input-card {
     background: #fff;
     border: 1px solid var(--border);
-    padding: 24px 20px;
+    padding: 20px 16px;
   }
   .input-card-date {
     font-size: 12px; font-weight: 700;
@@ -331,25 +331,28 @@
     margin-bottom: 20px;
   }
   .input-row {
-    display: flex; align-items: center; gap: 12px;
+    display: flex; align-items: center; gap: 10px;
     padding: 10px 0;
     border-bottom: 1px solid var(--border-light);
   }
   .input-row:last-of-type { border-bottom: none; }
   .input-label {
-    font-size: 14px; font-weight: 700; color: var(--text);
-    width: 100px; flex-shrink: 0;
+    font-size: 13px; font-weight: 700; color: var(--text);
+    flex: 0 0 auto;
+    min-width: 80px;
   }
   .input-control {
-    flex: 1;
-    display: flex; align-items: baseline; gap: 8px;
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex; align-items: baseline; gap: 6px;
     border-bottom: 2px solid var(--border);
     padding-bottom: 6px;
     transition: border-color 0.15s;
   }
   .input-control:focus-within { border-bottom-color: var(--brand); }
   .input-control input {
-    flex: 1;
+    flex: 1 1 0;
+    width: 0;
     background: transparent; border: none;
     font-size: 22px; font-weight: 700; color: var(--text);
     font-family: inherit; padding: 0;
@@ -358,7 +361,7 @@
   }
   .input-control input:focus { outline: none; }
   .input-control input::placeholder { color: #ccc; }
-  .input-unit { font-size: 14px; color: var(--text-sub); font-weight: 700; }
+  .input-unit { font-size: 13px; color: var(--text-sub); font-weight: 700; flex-shrink: 0; }
   .input-status {
     text-align: center; margin-top: 16px;
     font-size: 12px; color: var(--text-mute);
@@ -565,6 +568,13 @@
     .logo h1 { font-size: 18px; }
     .logo h1::before { width: 5px; height: 18px; }
     .logo p { display: none; }
+    /* Inputビュー */
+    .input-card { padding: 16px 12px; }
+    .input-row { gap: 8px; padding: 8px 0; }
+    .input-label { font-size: 12px; min-width: 64px; }
+    .input-control { gap: 4px; }
+    .input-control input { font-size: 18px; }
+    .input-unit { font-size: 11px; }
   }
 </style>
 </head>
@@ -602,14 +612,14 @@
             </div>
           </div>
           <div class="input-row">
-            <label class="input-label">摂取 (IN)</label>
+            <label class="input-label">摂取</label>
             <div class="input-control">
               <input type="number" step="10" inputmode="decimal" id="input-intake" placeholder="—" />
               <span class="input-unit">kcal</span>
             </div>
           </div>
           <div class="input-row">
-            <label class="input-label">消費 (OUT)</label>
+            <label class="input-label">消費</label>
             <div class="input-control">
               <input type="number" step="10" inputmode="decimal" id="input-burn" placeholder="—" />
               <span class="input-unit">kcal</span>
