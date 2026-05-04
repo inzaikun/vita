@@ -439,7 +439,7 @@
     padding: 0 14px;
   }
   .detail-item.is-open .detail-item-body {
-    max-height: 1000px;
+    max-height: 5000px;
     padding: 0 14px 14px;
   }
   .detail-item-meta {
@@ -454,6 +454,7 @@
     font-size: 13px; color: var(--text); line-height: 1.6;
     white-space: pre-wrap;
     word-break: break-word;
+    overflow-wrap: break-word;
     background: #fafafa;
     padding: 10px 12px;
     border-left: 3px solid var(--brand);
@@ -763,14 +764,22 @@ const storage = {
 // ============================================================================
 // ユーティリティ
 // ============================================================================
-const todayStr = () => new Date().toISOString().split('T')[0];
+// Dateオブジェクトを YYYY-MM-DD 形式（ローカルタイム）に変換
+const dateToStr = (d) => {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+};
+// 今日の日付を YYYY-MM-DD 形式（ローカルタイム基準）で取得
+const todayStr = () => dateToStr(new Date());
 const formatDate = (s) => { const d = new Date(s); return `${d.getMonth()+1}/${d.getDate()}`; };
 const lastNDays = (n) => {
   const days = [];
   for (let i = n - 1; i >= 0; i--) {
     const d = new Date();
     d.setDate(d.getDate() - i);
-    days.push(d.toISOString().split('T')[0]);
+    days.push(dateToStr(d));
   }
   return days;
 };
@@ -825,7 +834,7 @@ function getRangeDays(n, offset = 0) {
   for (let i = n - 1 + endOffsetDays; i >= endOffsetDays; i--) {
     const d = new Date();
     d.setDate(d.getDate() - i);
-    days.push(d.toISOString().split('T')[0]);
+    days.push(dateToStr(d));
   }
   return days;
 }
@@ -850,7 +859,7 @@ function bucketByWeek(daily) {
     const diff = (day === 0 ? -6 : 1 - day);
     const monday = new Date(date);
     monday.setDate(date.getDate() + diff);
-    const key = monday.toISOString().split('T')[0];
+    const key = dateToStr(monday);
     if (!buckets.has(key)) buckets.set(key, []);
     buckets.get(key).push(d);
   });
@@ -1552,6 +1561,7 @@ function saveNote() {
   setDayField(noteModalCurrentDate, 'note', value);
   closeNoteModal();
   renderRecordsTable();
+  renderDetail();
 }
 
 document.getElementById('note-modal-save').addEventListener('click', saveNote);
@@ -1609,7 +1619,7 @@ function downloadCSV() {
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  const ts = new Date().toISOString().split('T')[0];
+  const ts = todayStr();
   a.href = url;
   a.download = `vita_records_${ts}.csv`;
   document.body.appendChild(a);
