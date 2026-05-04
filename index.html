@@ -28,7 +28,7 @@
     --bg-card: #fff;
     --border: #d0d0d0;
     --border-light: #e5e5e5;
-    --good: #007a3d;
+    --good: #f08300;
     --warn: #c9302c;
   }
 
@@ -192,6 +192,31 @@
   }
   .trends-head .subtitle { display: none; }
 
+  /* 期間ナビゲーション */
+  .period-nav {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 8px; padding: 8px 12px; margin-bottom: 12px;
+    background: #fff; border: 1px solid var(--border-light);
+  }
+  .period-nav button {
+    background: #fff; border: 1px solid var(--border);
+    cursor: pointer; padding: 6px 12px;
+    font-size: 12px; font-weight: 700; color: var(--text-sub);
+    font-family: inherit;
+    display: inline-flex; align-items: center; gap: 4px;
+    transition: all 0.1s;
+  }
+  .period-nav button:hover:not(:disabled) {
+    border-color: var(--brand); color: var(--brand);
+  }
+  .period-nav button:disabled {
+    opacity: 0.3; cursor: not-allowed;
+  }
+  .period-label {
+    font-size: 13px; font-weight: 700; color: var(--text);
+    text-align: center; flex: 1;
+  }
+
   /* 期間切替セグメント */
   .range-tabs {
     display: flex; gap: 0; background: #fff;
@@ -251,13 +276,13 @@
   .records-table td.surplus { color: var(--warn); }
   .records-table tr td:first-child { color: var(--text); font-size: 12px; white-space: nowrap; }
 
-  /* 行追加・CSVボタン */
-  .add-day-row {
+  /* 行追加・CSV行 */
+  .add-day-row, .csv-row {
     display: flex; align-items: center; gap: 8px; padding: 10px;
     background: #fafafa; border: 1px solid var(--border); border-top: none;
     flex-wrap: wrap;
   }
-  .add-day-row span:first-child {
+  .add-day-row span:first-child, .csv-row span:first-child {
     font-size: 11px; color: var(--text-sub); font-weight: 700;
   }
   .add-day-row input[type=date] {
@@ -266,22 +291,16 @@
     padding: 5px 8px; color: var(--text);
   }
   .add-day-row input[type=date]:focus { outline: none; border-color: var(--brand); }
-  #add-date-btn, #csv-download-btn {
+  #add-date-btn, #csv-download-btn, #csv-import-btn {
     padding: 5px 12px; font-size: 12px; font-weight: 700;
     background: #fff; border: 1px solid var(--border);
     cursor: pointer; color: var(--text-sub);
     font-family: inherit;
     transition: all 0.1s;
-  }
-  #add-date-btn:hover, #csv-download-btn:hover {
-    border-color: var(--brand); color: var(--brand);
-  }
-  #csv-download-btn {
-    background: var(--brand); color: #fff; border-color: var(--brand);
     display: inline-flex; align-items: center;
   }
-  #csv-download-btn:hover {
-    background: var(--brand-dark); color: #fff;
+  #add-date-btn:hover, #csv-download-btn:hover, #csv-import-btn:hover {
+    border-color: var(--brand); color: var(--brand);
   }
 
   /* tooltip */
@@ -314,6 +333,9 @@
     .chart-box { padding: 8px; }
     .trends-head { gap: 8px; padding: 6px 10px; }
     .trends-head h2 { font-size: 14px; }
+    .period-nav { padding: 6px 10px; }
+    .period-nav button { padding: 5px 10px; font-size: 11px; }
+    .period-label { font-size: 12px; }
     .range-tabs button { padding: 5px 9px; font-size: 11px; }
     section h2 { font-size: 14px; padding: 6px 10px; }
     .chart-card h3 { font-size: 13px; }
@@ -357,6 +379,17 @@
             <p class="subtitle" id="trends-subtitle">直近1ヶ月の推移</p>
           </div>
           <div class="range-tabs" id="range-tabs"></div>
+        </div>
+        <div class="period-nav" id="period-nav">
+          <button id="period-prev" title="前の期間へ">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:14px;height:14px;"><polyline points="15 18 9 12 15 6"/></svg>
+            <span>前へ</span>
+          </button>
+          <span class="period-label" id="period-label">—</span>
+          <button id="period-next" title="次の期間へ">
+            <span>次へ</span>
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:14px;height:14px;"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
         </div>
         <div class="stat-grid" id="stat-grid"></div>
       </section>
@@ -443,11 +476,14 @@ const RANGES = {
   '3y':  { label: '3年',  days: 1095, bucket: 'month' },
 };
 let currentRange = '1m';
+let currentOffset = 0; // 0=最新、1=1期間前、2=2期間前...
 
-// 全データを取得（直近指定日数分）
-function getRangeDays(n) {
+// 指定期間の日数分の日付配列を取得（offsetで過去にスライド可能）
+function getRangeDays(n, offset = 0) {
   const days = [];
-  for (let i = n - 1; i >= 0; i--) {
+  // offset期間分過去にずらす
+  const endOffsetDays = offset * n;
+  for (let i = n - 1 + endOffsetDays; i >= endOffsetDays; i--) {
     const d = new Date();
     d.setDate(d.getDate() - i);
     days.push(d.toISOString().split('T')[0]);
@@ -519,7 +555,7 @@ function aggregateBucket(keyDate, items, kind) {
 
 function renderTrends() {
   const range = RANGES[currentRange];
-  const daily = getDailyData(getRangeDays(range.days));
+  const daily = getDailyData(getRangeDays(range.days, currentOffset));
 
   // 集計済みデータ（チャート用）
   let chartData;
@@ -538,8 +574,24 @@ function renderTrends() {
     weightDelta = filledWeight[filledWeight.length - 1].weight - filledWeight[0].weight;
   }
 
+  // 期間ラベル（表示中の期間）
+  const startDate = daily[0]?.dateRaw || '';
+  const endDate = daily[daily.length - 1]?.dateRaw || '';
+  const fmtMD = (s) => s ? `${s.slice(5,7).replace(/^0/,'')}/${s.slice(8).replace(/^0/,'')}` : '';
+  const periodRangeText = startDate && endDate ? `${fmtMD(startDate)} 〜 ${fmtMD(endDate)}` : '';
+  const periodLabel = currentOffset === 0
+    ? `直近${range.label}（${periodRangeText}）`
+    : `${range.label}前（${periodRangeText}）`;
+
+  // 期間ナビ更新
+  document.getElementById('period-label').textContent = periodRangeText || range.label;
+  const prevBtn = document.getElementById('period-prev');
+  const nextBtn = document.getElementById('period-next');
+  prevBtn.disabled = false; // 過去はずっと辿れる（データなくても表示はOK）
+  nextBtn.disabled = currentOffset === 0; // 0より未来はない
+
   // サブタイトル
-  document.getElementById('trends-subtitle').textContent = `直近${range.label}の推移`;
+  document.getElementById('trends-subtitle').textContent = `${periodLabel}の推移`;
 
   // 期間タブ（毎回再生成）
   const tabsEl = document.getElementById('range-tabs');
@@ -550,6 +602,7 @@ function renderTrends() {
     if (key === currentRange) btn.classList.add('active');
     btn.addEventListener('click', () => {
       currentRange = key;
+      currentOffset = 0; // 期間切替時はオフセットをリセット
       renderTrends();
     });
     tabsEl.appendChild(btn);
@@ -680,15 +733,17 @@ function renderRecordsTable() {
       <span style="font-size:11px; color:#78716c; letter-spacing:0.15em; text-transform:uppercase;">他の日付を追加:</span>
       <input type="date" id="add-date-input" value="${today}" max="${today}" />
       <button id="add-date-btn">追加</button>
-      <span style="flex:1;"></span>
+    </div>
+    <div class="csv-row">
+      <span style="font-size:11px; color:#78716c; letter-spacing:0.15em; text-transform:uppercase;">CSV:</span>
       <input type="file" id="csv-import-input" accept=".csv,text/csv" style="display:none;" />
       <button id="csv-import-btn" title="CSVファイルから読み込み">
         <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="width:12px;height:12px;vertical-align:-1px;margin-right:4px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        CSV読込
+        読込
       </button>
       <button id="csv-download-btn" title="全データをCSVでダウンロード">
         <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="width:12px;height:12px;vertical-align:-1px;margin-right:4px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        CSV書出
+        書出
       </button>
     </div>
   `;
@@ -979,7 +1034,7 @@ function renderBarChart(data, key, bucket = 'day') {
     rect.setAttribute('y', Math.min(y0, y1));
     rect.setAttribute('width', barW);
     rect.setAttribute('height', Math.max(1, Math.abs(y1 - y0)));
-    rect.setAttribute('fill', d[key] < 0 ? '#007a3d' : d[key] > 0 ? '#c9302c' : '#888888');
+    rect.setAttribute('fill', d[key] < 0 ? '#f08300' : d[key] > 0 ? '#c9302c' : '#888888');
     rect.setAttribute('rx', barW > 4 ? 2 : 0);
     rect.style.cursor = 'pointer';
 
@@ -1254,6 +1309,55 @@ window.addEventListener('resize', () => {
     }
   }, 200);
 });
+
+// ============================================================================
+// 期間ナビゲーション（前/次ボタン + スワイプ）
+// ============================================================================
+document.getElementById('period-prev').addEventListener('click', () => {
+  currentOffset++;
+  renderTrends();
+});
+document.getElementById('period-next').addEventListener('click', () => {
+  if (currentOffset > 0) {
+    currentOffset--;
+    renderTrends();
+  }
+});
+
+// グラフ領域のスワイプ対応
+(() => {
+  const cc = document.getElementById('charts-container');
+  let touchStartX = null;
+  let touchStartY = null;
+  let touchStartTime = 0;
+  cc.addEventListener('touchstart', (e) => {
+    if (e.touches.length !== 1) return;
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    touchStartTime = Date.now();
+  }, { passive: true });
+  cc.addEventListener('touchend', (e) => {
+    if (touchStartX === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    const dt = Date.now() - touchStartTime;
+    touchStartX = null;
+    // 横スワイプ判定: |dx|>60px、縦より明確に大きい、500ms以内
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5 && dt < 500) {
+      if (dx > 0) {
+        // 右スワイプ → 過去へ
+        currentOffset++;
+        renderTrends();
+      } else {
+        // 左スワイプ → 未来へ
+        if (currentOffset > 0) {
+          currentOffset--;
+          renderTrends();
+        }
+      }
+    }
+  }, { passive: true });
+})();
 
 // ============================================================================
 // 起動
