@@ -192,6 +192,22 @@
   }
   .chart-card .subtitle { display: none; }
   .chart-box { padding: 12px; }
+  .chart-scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    /* スクロールバー（薄め） */
+    scrollbar-width: thin;
+    scrollbar-color: #d0d0d0 transparent;
+  }
+  .chart-scroll::-webkit-scrollbar { height: 6px; }
+  .chart-scroll::-webkit-scrollbar-track { background: transparent; }
+  .chart-scroll::-webkit-scrollbar-thumb {
+    background: #d0d0d0; border-radius: 3px;
+  }
+  .chart-scroll::-webkit-scrollbar-thumb:hover { background: #a0a0a0; }
+  .chart-scroll svg.chart-svg { display: block; }
   .chart-svg { width: 100%; height: auto; display: block; }
   .empty-state { text-align: center; padding: 48px 0; color: var(--text-mute); font-size: 13px; }
 
@@ -816,15 +832,16 @@ function setDayField(date, field, value) {
 
 // 期間定義: { ラベル, 日数, 集計単位 }
 const RANGES = {
-  '7d':  { label: '7日',  days: 7,    bucket: 'day' },
   '1m':  { label: '1ヶ月', days: 30,   bucket: 'day' },
-  '3m':  { label: '3ヶ月', days: 90,   bucket: 'week' },
+  '3m':  { label: '3ヶ月', days: 90,   bucket: 'day' },
   '6m':  { label: '半年', days: 180,  bucket: 'week' },
   '1y':  { label: '1年',  days: 365,  bucket: 'month' },
   '3y':  { label: '3年',  days: 1095, bucket: 'month' },
 };
+// 横スクロール型で表示する期間（日別、左右にスクラブ）
+const SCROLLABLE_RANGES = new Set(['1m', '3m']);
 let currentRange = '1m';
-let currentOffset = 0; // 0=最新、1=1期間前、2=2期間前...
+let currentOffset = 0; // 0=最新、1=1期間前、2=2期間前...（スクロール型では使わない）
 
 // 指定期間の日数分の日付配列を取得（offsetで過去にスライド可能）
 function getRangeDays(n, offset = 0) {
@@ -903,7 +920,40 @@ function aggregateBucket(keyDate, items, kind) {
 
 function renderTrends() {
   const range = RANGES[currentRange];
-  const daily = getDailyData(getRangeDays(range.days, currentOffset));
+  const isScrollable = SCROLLABLE_RANGES.has(currentRange);
+
+  // データ範囲決定
+  // - スクロール型：入力済みの最古日 〜 今日。データがなければ「直近X日」
+  // - 集計型：従来通り offset を考慮
+  let dailyDays;
+  if (isScrollable) {
+    const allInputDates = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.startsWith('day:')) allInputDates.push(k.slice(4));
+    }
+    allInputDates.sort();
+    const today = todayStr();
+    const oldest = allInputDates[0] || today;
+    // 「最古日」と「今日からX日前」のうち古い方を起点に（最低でもrange.days分は表示）
+    const minStart = (() => {
+      const d = new Date();
+      d.setDate(d.getDate() - (range.days - 1));
+      return dateToStr(d);
+    })();
+    const start = oldest < minStart ? oldest : minStart;
+    // start から today までの全日付配列
+    dailyDays = [];
+    const startD = new Date(start);
+    const endD = new Date(today);
+    for (let d = new Date(startD); d <= endD; d.setDate(d.getDate() + 1)) {
+      dailyDays.push(dateToStr(d));
+    }
+  } else {
+    dailyDays = getRangeDays(range.days, currentOffset);
+  }
+
+  const daily = getDailyData(dailyDays);
 
   // 集計済みデータ（チャート用）
   let chartData;
@@ -911,10 +961,13 @@ function renderTrends() {
   else if (range.bucket === 'week') chartData = bucketByWeek(daily);
   else chartData = bucketByMonth(daily);
 
-  // 統計
-  const filledBalance = daily.filter(d => d.balance !== null);
-  const filledWeight = daily.filter(d => d.weight !== null);
-  const recordedDays = daily.filter(d => d.intake !== null || d.burn !== null || d.weight !== null).length;
+  // 統計（スクロール型は「今見えている範囲」ではなく「直近range.days」で計算）
+  const statRangeDaily = isScrollable
+    ? getDailyData(getRangeDays(range.days, 0))
+    : daily;
+  const filledBalance = statRangeDaily.filter(d => d.balance !== null);
+  const filledWeight = statRangeDaily.filter(d => d.weight !== null);
+  const recordedDays = statRangeDaily.filter(d => d.intake !== null || d.burn !== null || d.weight !== null).length;
   const avgBalance = filledBalance.length ? filledBalance.reduce((s, d) => s + d.balance, 0) / filledBalance.length : 0;
 
   let weightDelta = null;
@@ -922,21 +975,31 @@ function renderTrends() {
     weightDelta = filledWeight[filledWeight.length - 1].weight - filledWeight[0].weight;
   }
 
-  // 期間ラベル（表示中の期間）
-  const startDate = daily[0]?.dateRaw || '';
-  const endDate = daily[daily.length - 1]?.dateRaw || '';
-  const fmtMD = (s) => s ? `${s.slice(5,7).replace(/^0/,'')}/${s.slice(8).replace(/^0/,'')}` : '';
-  const periodRangeText = startDate && endDate ? `${fmtMD(startDate)} 〜 ${fmtMD(endDate)}` : '';
-  const periodLabel = currentOffset === 0
-    ? `直近${range.label}（${periodRangeText}）`
-    : `${range.label}前（${periodRangeText}）`;
+  // 期間ラベル
+  let periodRangeText = '';
+  let periodLabel = '';
+  if (isScrollable) {
+    periodLabel = `直近${range.label}（横スワイプで過去も閲覧可）`;
+  } else {
+    const startDate = daily[0]?.dateRaw || '';
+    const endDate = daily[daily.length - 1]?.dateRaw || '';
+    const fmtMD = (s) => s ? `${s.slice(5,7).replace(/^0/,'')}/${s.slice(8).replace(/^0/,'')}` : '';
+    periodRangeText = startDate && endDate ? `${fmtMD(startDate)} 〜 ${fmtMD(endDate)}` : '';
+    periodLabel = currentOffset === 0
+      ? `直近${range.label}（${periodRangeText}）`
+      : `${range.label}前（${periodRangeText}）`;
+  }
 
-  // 期間ナビ更新
-  document.getElementById('period-label').textContent = periodRangeText || range.label;
-  const prevBtn = document.getElementById('period-prev');
-  const nextBtn = document.getElementById('period-next');
-  prevBtn.disabled = false; // 過去はずっと辿れる（データなくても表示はOK）
-  nextBtn.disabled = currentOffset === 0; // 0より未来はない
+  // 期間ナビ更新（スクロール型では非表示）
+  const periodNav = document.getElementById('period-nav');
+  if (isScrollable) {
+    periodNav.style.display = 'none';
+  } else {
+    periodNav.style.display = '';
+    document.getElementById('period-label').textContent = periodRangeText || range.label;
+    document.getElementById('period-prev').disabled = false;
+    document.getElementById('period-next').disabled = currentOffset === 0;
+  }
 
   // サブタイトル
   document.getElementById('trends-subtitle').textContent = `${periodLabel}の推移`;
@@ -979,6 +1042,12 @@ function renderTrends() {
 
   const bucketLabel = range.bucket === 'day' ? '日別' : range.bucket === 'week' ? '週平均' : '月平均';
 
+  // スクロール型では「窓幅 = range.days」分が画面に収まるようにSVG幅を動的に決める
+  const scrollOpts = isScrollable ? {
+    scrollable: true,
+    visibleDays: range.days,
+  } : {};
+
   // 1. 体重 + 体脂肪率（折れ線、dual axis）
   const filledChartWeight = chartData.filter(d => d.weight !== null);
   const filledChartFat = chartData.filter(d => d.bodyFat !== null);
@@ -986,13 +1055,13 @@ function renderTrends() {
     cc.appendChild(makeChartCard('Body Weight & Fat', `体重・体脂肪率の${bucketLabel}推移`, renderLineChart(chartData, [
       { key: 'weight',  color: '#333333', label: '体重',     axis: 'left',  unit: 'kg', decimals: 1 },
       { key: 'bodyFat', color: '#f08300', label: '体脂肪率', axis: 'right', unit: '%',  decimals: 1 },
-    ], { autoY: true, autoYRight: true, bucket: range.bucket })));
+    ], { autoY: true, autoYRight: true, bucket: range.bucket, ...scrollOpts })));
   }
 
   // 2. カロリー収支（バー）
   const filledChartBalance = chartData.filter(d => d.balance !== null);
   if (filledChartBalance.length > 0) {
-    cc.appendChild(makeChartCard('Calorie Balance', `${bucketLabel}カロリー収支`, renderBarChart(chartData, 'balance', range.bucket)));
+    cc.appendChild(makeChartCard('Calorie Balance', `${bucketLabel}カロリー収支`, renderBarChart(chartData, 'balance', range.bucket, scrollOpts)));
   }
 
   // 3. 摂取vs消費（折れ線）
@@ -1001,7 +1070,16 @@ function renderTrends() {
     cc.appendChild(makeChartCard('Intake vs Burn', `摂取と消費の${bucketLabel}推移`, renderLineChart(chartData, [
       { key: 'intake', color: '#333333', label: '摂取' },
       { key: 'burn', color: '#888888', dashed: true, label: '消費' },
-    ], { unit: 'kcal', bucket: range.bucket })));
+    ], { unit: 'kcal', bucket: range.bucket, ...scrollOpts })));
+  }
+
+  // スクロール型なら、各チャートのスクロール位置を右端に
+  if (isScrollable) {
+    requestAnimationFrame(() => {
+      cc.querySelectorAll('.chart-scroll').forEach(el => {
+        el.scrollLeft = el.scrollWidth;
+      });
+    });
   }
 }
 
@@ -1639,7 +1717,16 @@ function makeChartCard(title, subtitle, svg) {
   const card = document.createElement('div');
   card.className = 'chart-card';
   card.innerHTML = `<h3>${title}</h3><p class="subtitle">${subtitle}</p><div class="chart-box"></div>`;
-  card.querySelector('.chart-box').appendChild(svg);
+  // SVGに data-scrollable 属性があれば、横スクロール用ラッパーで包む
+  const box = card.querySelector('.chart-box');
+  if (svg.dataset && svg.dataset.scrollable === 'true') {
+    const scroller = document.createElement('div');
+    scroller.className = 'chart-scroll';
+    scroller.appendChild(svg);
+    box.appendChild(scroller);
+  } else {
+    box.appendChild(svg);
+  }
   return card;
 }
 
@@ -1682,10 +1769,24 @@ function showTip(e, html) {
 }
 function hideTip() { tooltip.style.opacity = '0'; }
 
-function renderBarChart(data, key, bucket = 'day') {
+function renderBarChart(data, key, bucket = 'day', opts = {}) {
   const isMobile = window.innerWidth < 640;
-  const W = isMobile ? 480 : 800;
-  const H = isMobile ? 280 : 240;
+  const scrollable = opts.scrollable === true;
+  const visibleDays = opts.visibleDays || data.length;
+
+  // スクロール型: 1日あたりの幅を固定、SVG全体は横長
+  // 通常型: 従来どおり画面サイズに合わせる
+  let W, H;
+  if (scrollable) {
+    // 「visible幅」=画面に収まる幅、「全体幅」=データ全長
+    const visibleW = isMobile ? 480 : 800;
+    const dayW = visibleW / visibleDays; // 1日あたり何px
+    W = Math.max(visibleW, data.length * dayW);
+    H = isMobile ? 280 : 240;
+  } else {
+    W = isMobile ? 480 : 800;
+    H = isMobile ? 280 : 240;
+  }
   const P = isMobile
     ? { t: 16, r: 12, b: 28, l: 40 }
     : { t: 20, r: 20, b: 30, l: 50 };
@@ -1699,13 +1800,20 @@ function renderBarChart(data, key, bucket = 'day') {
   const barW = Math.max(2, innerW / data.length * 0.7);
   const barGap = innerW / data.length;
 
-  // ラベル間引き：モバイルは少なめ
-  const labelStep = Math.max(1, Math.ceil(data.length / (isMobile ? 7 : 10)));
+  // ラベル間引き：モバイルは少なめ。スクロール型は密度を保つ
+  const labelStep = scrollable
+    ? Math.max(1, Math.ceil(visibleDays / (isMobile ? 7 : 10)))
+    : Math.max(1, Math.ceil(data.length / (isMobile ? 7 : 10)));
 
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
   svg.setAttribute('class', 'chart-svg');
-  // aspect ratio保持（デフォルトのxMidYMid meet）
+  if (scrollable) {
+    svg.setAttribute('width', W);
+    svg.setAttribute('height', H);
+    svg.setAttribute('preserveAspectRatio', 'none');
+    svg.dataset.scrollable = 'true';
+  }
 
   const ticks = [-range, -range/2, 0, range/2, range];
   ticks.forEach(t => {
@@ -1772,8 +1880,19 @@ function renderBarChart(data, key, bucket = 'day') {
 function renderLineChart(data, series, opts = {}) {
   const isMobile = window.innerWidth < 640;
   const hasRightAxis = series.some(s => s.axis === 'right');
-  const W = isMobile ? 480 : 800;
-  const H = isMobile ? 280 : 240;
+  const scrollable = opts.scrollable === true;
+  const visibleDays = opts.visibleDays || data.length;
+
+  let W, H;
+  if (scrollable) {
+    const visibleW = isMobile ? 480 : 800;
+    const dayW = visibleW / visibleDays;
+    W = Math.max(visibleW, data.length * dayW);
+    H = isMobile ? 280 : 240;
+  } else {
+    W = isMobile ? 480 : 800;
+    H = isMobile ? 280 : 240;
+  }
   const P = isMobile
     ? { t: 24, r: hasRightAxis ? 40 : 12, b: 28, l: 40 }
     : { t: 20, r: hasRightAxis ? 50 : 20, b: 30, l: 50 };
@@ -1814,7 +1933,12 @@ function renderLineChart(data, series, opts = {}) {
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
   svg.setAttribute('class', 'chart-svg');
-  // aspect ratio保持（デフォルトのxMidYMid meet）
+  if (scrollable) {
+    svg.setAttribute('width', W);
+    svg.setAttribute('height', H);
+    svg.setAttribute('preserveAspectRatio', 'none');
+    svg.dataset.scrollable = 'true';
+  }
 
   // Y軸の目盛とグリッド線
   const tickCount = 4;
@@ -1849,8 +1973,10 @@ function renderLineChart(data, series, opts = {}) {
     }
   }
 
-  // ラベル間引き：モバイルは少なめ
-  const labelStep = Math.max(1, Math.ceil(data.length / (isMobile ? 6 : 10)));
+  // ラベル間引き：モバイルは少なめ。スクロール型は密度を保つ
+  const labelStep = scrollable
+    ? Math.max(1, Math.ceil(visibleDays / (isMobile ? 6 : 10)))
+    : Math.max(1, Math.ceil(data.length / (isMobile ? 6 : 10)));
   data.forEach((d, i) => {
     if (i % labelStep !== 0 && i !== data.length - 1) return;
     const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
@@ -1978,7 +2104,7 @@ document.getElementById('period-next').addEventListener('click', () => {
   }
 });
 
-// グラフ領域のスワイプ対応
+// グラフ領域のスワイプ対応（集計型期間の時のみ）
 (() => {
   const cc = document.getElementById('charts-container');
   let touchStartX = null;
@@ -1986,6 +2112,10 @@ document.getElementById('period-next').addEventListener('click', () => {
   let touchStartTime = 0;
   cc.addEventListener('touchstart', (e) => {
     if (e.touches.length !== 1) return;
+    // スクロール型期間の時はスワイプを期間切替に使わない（チャート内部スクロール優先）
+    if (SCROLLABLE_RANGES.has(currentRange)) return;
+    // チャート内部のスクロール領域上ではスワイプ無効
+    if (e.target.closest && e.target.closest('.chart-scroll')) return;
     touchStartX = e.touches[0].clientX;
     touchStartY = e.touches[0].clientY;
     touchStartTime = Date.now();
