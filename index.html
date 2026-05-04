@@ -363,11 +363,13 @@
   .input-control input::placeholder { color: #ccc; }
   .input-unit { font-size: 13px; color: var(--text-sub); font-weight: 700; flex-shrink: 0; }
   .input-status {
-    text-align: center; margin-top: 16px;
-    font-size: 12px; color: var(--text-mute);
+    text-align: center; margin-top: 12px;
+    font-size: 12px; color: var(--good); font-weight: 700;
     min-height: 18px;
+    opacity: 0;
+    transition: opacity 0.15s;
   }
-  .input-status.saved { color: var(--good); font-weight: 700; }
+  .input-status.saved { opacity: 1; }
 
   /* Detail ビュー（アコーディオン式） */
   .detail-list {
@@ -625,7 +627,7 @@
               <span class="input-unit">kcal</span>
             </div>
           </div>
-          <div class="input-status" id="input-status">—</div>
+          <div class="input-status" id="input-status"></div>
         </div>
       </section>
     </div>
@@ -986,7 +988,7 @@ function renderInput() {
   document.getElementById('input-bodyfat').value = day.bodyFat ?? '';
   document.getElementById('input-intake').value = day.intake ?? '';
   document.getElementById('input-burn').value = day.burn ?? '';
-  document.getElementById('input-status').textContent = '—';
+  document.getElementById('input-status').textContent = '';
   document.getElementById('input-status').className = 'input-status';
 }
 
@@ -997,7 +999,7 @@ function flashSavedStatus() {
   el.className = 'input-status saved';
   if (inputStatusTimer) clearTimeout(inputStatusTimer);
   inputStatusTimer = setTimeout(() => {
-    el.textContent = '—';
+    el.textContent = '';
     el.className = 'input-status';
   }, 1500);
 }
@@ -1345,11 +1347,11 @@ function importCSV(text) {
   // BOMを削除
   if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
 
-  const lines = text.split(/\r?\n/).filter(l => l.trim() !== '');
-  if (lines.length < 2) throw new Error('データ行がありません');
+  const records = parseCSV(text);
+  if (records.length < 2) throw new Error('データ行がありません');
 
   // ヘッダー解析
-  const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+  const headers = records[0].map(h => h.trim().toLowerCase());
   const idx = {
     date:    headers.findIndex(h => h === 'date'),
     weight:  headers.findIndex(h => h === 'weight_kg' || h === 'weight'),
@@ -1362,14 +1364,14 @@ function importCSV(text) {
 
   let imported = 0, skipped = 0;
   const overwrite = confirm(
-    `${lines.length - 1}行のデータを読み込みます。\n\n` +
+    `${records.length - 1}行のデータを読み込みます。\n\n` +
     `【OK】既存データを上書きする\n` +
     `【キャンセル】既存日付はスキップする`
   );
 
-  for (let i = 1; i < lines.length; i++) {
-    const cols = parseCSVLine(lines[i]);
-    const date = cols[idx.date];
+  for (let i = 1; i < records.length; i++) {
+    const cols = records[i];
+    const date = (cols[idx.date] || '').trim();
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) { skipped++; continue; }
     if (date > todayStr()) { skipped++; continue; }
     if (!overwrite && storage.get(`day:${date}`)) { skipped++; continue; }
@@ -1378,7 +1380,7 @@ function importCSV(text) {
       if (i < 0) return null;
       const v = cols[i];
       if (v == null || v === '') return null;
-      const n = Number(v);
+      const n = Number(String(v).trim());
       return isNaN(n) ? null : n;
     };
     const str = (i) => {
@@ -1404,25 +1406,73 @@ function importCSV(text) {
   return { imported, skipped };
 }
 
-// 簡易CSVパーサー（クォート対応）
-function parseCSVLine(line) {
-  const result = [];
-  let current = '';
+// CSV全体パーサー（RFC 4180準拠：クォート内の改行とカンマに対応）
+function parseCSV(text) {
+  const records = [];
+  let row = [];
+  let field = '';
   let inQuote = false;
-  for (let i = 0; i < line.length; i++) {
-    const c = line[i];
+  let i = 0;
+  while (i < text.length) {
+    const c = text[i];
     if (inQuote) {
-      if (c === '"' && line[i+1] === '"') { current += '"'; i++; }
-      else if (c === '"') { inQuote = false; }
-      else current += c;
+      if (c === '"') {
+        if (text[i+1] === '"') {
+          // エスケープされたダブルクォート
+          field += '"';
+          i += 2;
+          continue;
+        } else {
+          // クォート終了
+          inQuote = false;
+          i++;
+          continue;
+        }
+      } else {
+        field += c;
+        i++;
+        continue;
+      }
     } else {
-      if (c === '"') inQuote = true;
-      else if (c === ',') { result.push(current.trim()); current = ''; }
-      else current += c;
+      if (c === '"') {
+        inQuote = true;
+        i++;
+        continue;
+      } else if (c === ',') {
+        row.push(field);
+        field = '';
+        i++;
+        continue;
+      } else if (c === '\r') {
+        // \r\n または \r 単独 → 行末
+        if (text[i+1] === '\n') i++;
+        row.push(field);
+        // 空行はスキップ（全フィールド空）
+        if (row.length > 1 || row[0] !== '') records.push(row);
+        row = [];
+        field = '';
+        i++;
+        continue;
+      } else if (c === '\n') {
+        row.push(field);
+        if (row.length > 1 || row[0] !== '') records.push(row);
+        row = [];
+        field = '';
+        i++;
+        continue;
+      } else {
+        field += c;
+        i++;
+        continue;
+      }
     }
   }
-  result.push(current.trim());
-  return result;
+  // 最後のフィールド・行を確定
+  if (field !== '' || row.length > 0) {
+    row.push(field);
+    if (row.length > 1 || row[0] !== '') records.push(row);
+  }
+  return records;
 }
 
 // ============================================================================
