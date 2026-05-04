@@ -307,7 +307,7 @@
     .records-table { font-size: 11px; }
     .records-table th, .records-table td { padding: 6px 8px; }
     .records-table td.cell-edit { min-width: 48px; }
-    .records-table td.cell-edit input { padding: 6px 8px; font-size: 16px; }
+    .records-table td.cell-edit input { padding: 6px 8px; font-size: 11px; }
     .records-table tr.today-row td:first-child::before {
       content: '●'; padding: 0; background: none; color: var(--brand); font-size: 10px;
     }
@@ -578,22 +578,7 @@ function renderTrends() {
 
   const bucketLabel = range.bucket === 'day' ? '日別' : range.bucket === 'week' ? '週平均' : '月平均';
 
-  // 1. カロリー収支（バー）
-  const filledChartBalance = chartData.filter(d => d.balance !== null);
-  if (filledChartBalance.length > 0) {
-    cc.appendChild(makeChartCard('Caloric Balance', `${bucketLabel}カロリー収支`, renderBarChart(chartData, 'balance', range.bucket)));
-  }
-
-  // 2. 摂取vs消費（折れ線）
-  const filledIntake = chartData.filter(d => d.intake !== null);
-  if (filledIntake.length > 0) {
-    cc.appendChild(makeChartCard('Intake vs Burn', `摂取と消費の${bucketLabel}推移`, renderLineChart(chartData, [
-      { key: 'intake', color: '#333333', label: '摂取' },
-      { key: 'burn', color: '#888888', dashed: true, label: '消費' },
-    ], { unit: 'kcal', bucket: range.bucket })));
-  }
-
-  // 3. 体重 + 体脂肪率（折れ線、dual axis）
+  // 1. 体重 + 体脂肪率（折れ線、dual axis）
   const filledChartWeight = chartData.filter(d => d.weight !== null);
   const filledChartFat = chartData.filter(d => d.bodyFat !== null);
   if (filledChartWeight.length > 0 || filledChartFat.length > 0) {
@@ -601,6 +586,21 @@ function renderTrends() {
       { key: 'weight',  color: '#333333', label: '体重',     axis: 'left',  unit: 'kg', decimals: 1 },
       { key: 'bodyFat', color: '#f08300', label: '体脂肪率', axis: 'right', unit: '%',  decimals: 1 },
     ], { autoY: true, autoYRight: true, bucket: range.bucket })));
+  }
+
+  // 2. カロリー収支（バー）
+  const filledChartBalance = chartData.filter(d => d.balance !== null);
+  if (filledChartBalance.length > 0) {
+    cc.appendChild(makeChartCard('Caloric Balance', `${bucketLabel}カロリー収支`, renderBarChart(chartData, 'balance', range.bucket)));
+  }
+
+  // 3. 摂取vs消費（折れ線）
+  const filledIntake = chartData.filter(d => d.intake !== null);
+  if (filledIntake.length > 0) {
+    cc.appendChild(makeChartCard('Intake vs Burn', `摂取と消費の${bucketLabel}推移`, renderLineChart(chartData, [
+      { key: 'intake', color: '#333333', label: '摂取' },
+      { key: 'burn', color: '#888888', dashed: true, label: '消費' },
+    ], { unit: 'kcal', bucket: range.bucket })));
   }
 }
 
@@ -678,7 +678,7 @@ function renderRecordsTable() {
     </table>
     <div class="add-day-row">
       <span style="font-size:11px; color:#78716c; letter-spacing:0.15em; text-transform:uppercase;">他の日付を追加:</span>
-      <input type="date" id="add-date-input" value="${today}" />
+      <input type="date" id="add-date-input" value="${today}" max="${today}" />
       <button id="add-date-btn">追加</button>
       <span style="flex:1;"></span>
       <input type="file" id="csv-import-input" accept=".csv,text/csv" style="display:none;" />
@@ -721,6 +721,10 @@ function renderRecordsTable() {
   document.getElementById('add-date-btn').addEventListener('click', () => {
     const d = document.getElementById('add-date-input').value;
     if (!d) return;
+    if (d > todayStr()) {
+      alert('未来の日付は追加できません。');
+      return;
+    }
     const extras = storage.get('extra-dates') || [];
     if (!extras.includes(d)) {
       extras.push(d);
@@ -795,6 +799,7 @@ function importCSV(text) {
     const cols = parseCSVLine(lines[i]);
     const date = cols[idx.date];
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) { skipped++; continue; }
+    if (date > todayStr()) { skipped++; continue; }
     if (!overwrite && storage.get(`day:${date}`)) { skipped++; continue; }
 
     const num = (i) => {
