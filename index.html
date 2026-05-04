@@ -1647,8 +1647,38 @@ const tooltip = document.getElementById('chart-tooltip');
 function showTip(e, html) {
   tooltip.innerHTML = html;
   tooltip.style.opacity = '1';
-  tooltip.style.left = (e.pageX + 10) + 'px';
-  tooltip.style.top = (e.pageY - 10) + 'px';
+  // 一旦画面の安全な位置に置いて寸法計測
+  tooltip.style.left = '0px';
+  tooltip.style.top = '0px';
+  const tipRect = tooltip.getBoundingClientRect();
+  const tipW = tipRect.width;
+  const tipH = tipRect.height;
+  const margin = 8;
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+
+  // クリック位置（ビューポート基準）
+  const cx = e.clientX;
+  const cy = e.clientY;
+
+  // 横位置：右側に置けるなら右、無理なら左、それも無理なら画面内に収める
+  let left = cx + 10;
+  if (left + tipW > vw - margin) {
+    left = cx - tipW - 10;
+  }
+  if (left < margin) left = margin;
+  if (left + tipW > vw - margin) left = vw - tipW - margin;
+
+  // 縦位置：上に置けるなら上、無理なら下
+  let top = cy - tipH - 10;
+  if (top < margin) {
+    top = cy + 14;
+  }
+  if (top + tipH > vh - margin) top = vh - tipH - margin;
+
+  // ページ全体のスクロール量を加算（page基準で配置）
+  tooltip.style.left = (left + window.scrollX) + 'px';
+  tooltip.style.top = (top + window.scrollY) + 'px';
 }
 function hideTip() { tooltip.style.opacity = '0'; }
 
