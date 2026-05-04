@@ -1007,8 +1007,8 @@ function renderInput() {
   const dateLabel = `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()} (${dayName})`;
   document.getElementById('input-card-date').textContent = `TODAY · ${dateLabel}`;
 
-  document.getElementById('input-weight').value = day.weight ?? '';
-  document.getElementById('input-bodyfat').value = day.bodyFat ?? '';
+  document.getElementById('input-weight').value = day.weight != null ? Number(day.weight).toFixed(1) : '';
+  document.getElementById('input-bodyfat').value = day.bodyFat != null ? Number(day.bodyFat).toFixed(1) : '';
   document.getElementById('input-intake').value = day.intake ?? '';
   document.getElementById('input-burn').value = day.burn ?? '';
   document.getElementById('input-status').textContent = '';
@@ -1059,6 +1059,14 @@ function bindInputView() {
       flashSavedStatus();
       debounceRenderTrends();
     });
+    // フォーカスが外れたら、体重・体脂肪率は小数点1位に整形
+    if (field === 'weight' || field === 'bodyFat') {
+      input.addEventListener('blur', () => {
+        if (input.value === '') return;
+        const n = Number(input.value);
+        if (!isNaN(n)) input.value = n.toFixed(1);
+      });
+    }
   });
 }
 
@@ -1099,8 +1107,8 @@ function renderDetail() {
     const isToday = date === today;
     const isOpen = detailExpanded.has(date);
     const meta = [];
-    if (day.weight != null) meta.push(`<span><strong>体重</strong> ${day.weight}kg</span>`);
-    if (day.bodyFat != null) meta.push(`<span><strong>体脂肪</strong> ${day.bodyFat}%</span>`);
+    if (day.weight != null) meta.push(`<span><strong>体重</strong> ${Number(day.weight).toFixed(1)}kg</span>`);
+    if (day.bodyFat != null) meta.push(`<span><strong>体脂肪</strong> ${Number(day.bodyFat).toFixed(1)}%</span>`);
     if (day.intake != null) meta.push(`<span><strong>摂取</strong> ${day.intake}kcal</span>`);
     if (day.burn != null) meta.push(`<span><strong>消費</strong> ${day.burn}kcal</span>`);
     if (day.intake != null && day.burn != null) {
@@ -1196,9 +1204,17 @@ function renderRecordsTable() {
   };
 
   // 各セルを編集可能なinputとして描画
+  // 体重・体脂肪率は小数点1位で表示、摂取・消費は整数表示
   const editCell = (date, field, value, step, placeholder) => {
-    const v = value == null ? '' : value;
-    return `<td class="cell-edit"><input type="number" step="${step}" inputmode="decimal" data-date="${date}" data-field="${field}" value="${v}" placeholder="${placeholder}" /></td>`;
+    let displayValue = '';
+    if (value != null) {
+      if (field === 'weight' || field === 'bodyFat') {
+        displayValue = Number(value).toFixed(1);
+      } else {
+        displayValue = value;
+      }
+    }
+    return `<td class="cell-edit"><input type="number" step="${step}" inputmode="decimal" data-date="${date}" data-field="${field}" value="${displayValue}" placeholder="${placeholder}" /></td>`;
   };
 
   const rows = allDates.map(date => {
@@ -1282,6 +1298,19 @@ function renderRecordsTable() {
     }
     // 今日の行が変更されたら推移グラフを更新
     debounceRenderTrends();
+  });
+
+  // フォーカスが外れた時に体重・体脂肪率を小数点1位フォーマット
+  c.querySelector('table').addEventListener('focusout', (e) => {
+    const input = e.target;
+    if (input.tagName !== 'INPUT') return;
+    const field = input.dataset.field;
+    if (field !== 'weight' && field !== 'bodyFat') return;
+    if (input.value === '') return;
+    const n = Number(input.value);
+    if (!isNaN(n)) {
+      input.value = n.toFixed(1);
+    }
   });
 
   // 削除ボタン（クリック委譲）
