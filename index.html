@@ -1769,6 +1769,14 @@ function showTip(e, html) {
 }
 function hideTip() { tooltip.style.opacity = '0'; }
 
+// 点・バー以外をクリック/タップしたらツールチップを消す
+document.addEventListener('click', (e) => {
+  // SVG内の data-has-tip 属性が付いた要素をクリックした場合は何もしない（その要素のハンドラに任せる）
+  if (e.target.closest('[data-has-tip]')) return;
+  // それ以外をクリックしたらツールチップを消す
+  hideTip();
+}, true);
+
 function renderBarChart(data, key, bucket = 'day', opts = {}) {
   const isMobile = window.innerWidth < 640;
   const scrollable = opts.scrollable === true;
@@ -1868,9 +1876,11 @@ function renderBarChart(data, key, bucket = 'day', opts = {}) {
       const n = d._items ? d._items.filter(x => x.balance !== null).length : 0;
       tipHtml = `${d.date}<br>${bucketLabel}収支: ${d[key] >= 0 ? '+' : ''}${d[key].toFixed(0)} kcal<br>(${n}日分の平均)`;
     }
+    rect.setAttribute('data-has-tip', '1');
     rect.addEventListener('mouseenter', (e) => showTip(e, tipHtml));
     rect.addEventListener('mousemove', (e) => showTip(e, tipHtml));
     rect.addEventListener('mouseleave', hideTip);
+    rect.addEventListener('click', (e) => { e.stopPropagation(); showTip(e, tipHtml); });
     svg.appendChild(rect);
   });
 
@@ -2045,9 +2055,11 @@ function renderLineChart(data, series, opts = {}) {
       const unit = s.unit || opts.unit || '';
       const decimals = s.decimals != null ? s.decimals : (opts.autoY ? 1 : 0);
       const html = `${p.date}<br>${s.label}: ${p.v.toFixed(decimals)}${unit ? ' ' + unit : ''}`;
+      hit.setAttribute('data-has-tip', '1');
       hit.addEventListener('mouseenter', (e) => showTip(e, html));
       hit.addEventListener('mousemove', (e) => showTip(e, html));
       hit.addEventListener('mouseleave', hideTip);
+      hit.addEventListener('click', (e) => { e.stopPropagation(); showTip(e, html); });
       svg.appendChild(c);
       svg.appendChild(hit);
     });
