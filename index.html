@@ -318,6 +318,133 @@
     border-color: var(--brand); color: var(--brand);
   }
 
+  /* Input ビュー */
+  .input-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    padding: 24px 20px;
+  }
+  .input-card-date {
+    font-size: 12px; font-weight: 700;
+    color: var(--text-mute); letter-spacing: 0.15em;
+    text-transform: uppercase; text-align: center;
+    margin-bottom: 20px;
+  }
+  .input-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .input-row:last-of-type { border-bottom: none; }
+  .input-label {
+    font-size: 14px; font-weight: 700; color: var(--text);
+    width: 100px; flex-shrink: 0;
+  }
+  .input-control {
+    flex: 1;
+    display: flex; align-items: baseline; gap: 8px;
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 6px;
+    transition: border-color 0.15s;
+  }
+  .input-control:focus-within { border-bottom-color: var(--brand); }
+  .input-control input {
+    flex: 1;
+    background: transparent; border: none;
+    font-size: 28px; font-weight: 700; color: var(--text);
+    font-family: inherit; padding: 0;
+    text-align: right;
+    min-width: 0;
+  }
+  .input-control input:focus { outline: none; }
+  .input-control input::placeholder { color: #ccc; }
+  .input-unit { font-size: 14px; color: var(--text-sub); font-weight: 700; }
+  .input-status {
+    text-align: center; margin-top: 16px;
+    font-size: 12px; color: var(--text-mute);
+    min-height: 18px;
+  }
+  .input-status.saved { color: var(--good); font-weight: 700; }
+
+  /* Detail ビュー（アコーディオン式） */
+  .detail-list {
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .detail-item {
+    background: #fff; border: 1px solid var(--border);
+    overflow: hidden;
+    transition: border-color 0.15s;
+  }
+  .detail-item.is-today { border-left: 4px solid var(--brand); }
+  .detail-item-head {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 14px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.1s;
+  }
+  .detail-item-head:hover { background: #fafafa; }
+  .detail-toggle {
+    background: transparent; border: none; cursor: pointer;
+    padding: 0; display: inline-flex; align-items: center; justify-content: center;
+    color: var(--text-mute);
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+  .detail-toggle-icon { width: 18px; height: 18px; transition: transform 0.2s; }
+  .detail-item.is-open .detail-toggle-icon { transform: rotate(180deg); }
+  .detail-item-head-text {
+    display: flex; align-items: center; gap: 8px; flex: 1; flex-wrap: wrap;
+  }
+  .detail-item-date {
+    font-size: 14px; font-weight: 700; color: var(--text);
+  }
+  .detail-item-day { font-size: 12px; color: var(--text-mute); }
+  .detail-item-today-badge {
+    background: var(--brand); color: #fff;
+    font-size: 10px; font-weight: 700;
+    padding: 2px 6px; border-radius: 2px;
+  }
+  .detail-note-mark {
+    color: var(--brand);
+    display: inline-flex; align-items: center;
+  }
+  .detail-item-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.25s ease, padding 0.25s ease;
+    padding: 0 14px;
+  }
+  .detail-item.is-open .detail-item-body {
+    max-height: 1000px;
+    padding: 0 14px 14px;
+  }
+  .detail-item-meta {
+    font-size: 11px; color: var(--text-mute);
+    margin-bottom: 8px;
+    display: flex; gap: 12px; flex-wrap: wrap;
+  }
+  .detail-item-meta span strong { color: var(--text-sub); font-weight: 700; }
+  .detail-note-area { transition: background 0.1s; }
+  .detail-note-area:hover { background: #fafafa; }
+  .detail-item-note {
+    font-size: 13px; color: var(--text); line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+    background: #fafafa;
+    padding: 10px 12px;
+    border-left: 3px solid var(--brand);
+  }
+  .detail-item-note-empty {
+    font-size: 12px; color: var(--text-mute); font-style: italic;
+    padding: 10px 12px;
+    border-left: 3px dashed var(--border);
+  }
+  .detail-empty {
+    text-align: center; padding: 48px 20px;
+    color: var(--text-mute); font-size: 13px;
+  }
+
   /* tooltip */
   .chart-tooltip {
     position: absolute; pointer-events: none;
@@ -453,8 +580,35 @@
 </header>
 
 <main class="stack">
+  <!-- Inputビュー -->
+  <div class="view active" id="view-input">
+    <div class="stack">
+      <section>
+        <h2>Today's Input</h2>
+        <div class="input-card">
+          <div class="input-card-date" id="input-card-date">—</div>
+          <div class="input-row">
+            <label class="input-label">体重</label>
+            <div class="input-control">
+              <input type="number" step="0.1" inputmode="decimal" id="input-weight" placeholder="—" />
+              <span class="input-unit">kg</span>
+            </div>
+          </div>
+          <div class="input-row">
+            <label class="input-label">体脂肪率</label>
+            <div class="input-control">
+              <input type="number" step="0.1" inputmode="decimal" id="input-bodyfat" placeholder="—" />
+              <span class="input-unit">%</span>
+            </div>
+          </div>
+          <div class="input-status" id="input-status">—</div>
+        </div>
+      </section>
+    </div>
+  </div>
+
   <!-- Recordビュー -->
-  <div class="view active" id="view-record">
+  <div class="view" id="view-record">
     <div class="stack">
       <!-- Records（インライン編集） -->
       <section>
@@ -491,6 +645,16 @@
       <div id="charts-container"></div>
     </div>
   </div>
+
+  <!-- Detailビュー -->
+  <div class="view" id="view-detail">
+    <div class="stack">
+      <section>
+        <h2>Detail</h2>
+        <div id="detail-container"></div>
+      </section>
+    </div>
+  </div>
 </main>
 
 <!-- メモダイアログ -->
@@ -512,13 +676,21 @@
 
 <!-- 下部タブバー -->
 <nav class="bottom-tabs">
-  <button class="bottom-tab active" data-view="record">
+  <button class="bottom-tab active" data-view="input">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+    <span>Input</span>
+  </button>
+  <button class="bottom-tab" data-view="record">
     <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>
     <span>Record</span>
   </button>
   <button class="bottom-tab" data-view="graph">
     <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
     <span>Graph</span>
+  </button>
+  <button class="bottom-tab" data-view="detail">
+    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
+    <span>Detail</span>
   </button>
 </nav>
 
@@ -775,6 +947,164 @@ function renderTrends() {
   }
 }
 
+// ============================================================================
+// Input ビュー（今日の体重・体脂肪率を入力）
+// ============================================================================
+function renderInput() {
+  const today = todayStr();
+  const day = getDay(today);
+  const d = new Date(today);
+  const dayName = ['日','月','火','水','木','金','土'][d.getDay()];
+  const dateLabel = `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()} (${dayName})`;
+  document.getElementById('input-card-date').textContent = `TODAY · ${dateLabel}`;
+
+  const wInput = document.getElementById('input-weight');
+  const fInput = document.getElementById('input-bodyfat');
+  wInput.value = day.weight ?? '';
+  fInput.value = day.bodyFat ?? '';
+  document.getElementById('input-status').textContent = '—';
+  document.getElementById('input-status').className = 'input-status';
+}
+
+let inputStatusTimer = null;
+function flashSavedStatus() {
+  const el = document.getElementById('input-status');
+  el.textContent = '✓ 保存しました';
+  el.className = 'input-status saved';
+  if (inputStatusTimer) clearTimeout(inputStatusTimer);
+  inputStatusTimer = setTimeout(() => {
+    el.textContent = '—';
+    el.className = 'input-status';
+  }, 1500);
+}
+
+// 全角数字・記号を半角に変換
+function toHalfWidth(s) {
+  if (!s) return s;
+  return s
+    .replace(/[０-９]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0xFEE0))
+    .replace(/．/g, '.')
+    .replace(/。/g, '.')
+    .replace(/ー/g, '-')
+    .replace(/−/g, '-');
+}
+
+// イベントバインドは起動時に1回だけ
+function bindInputView() {
+  const wInput = document.getElementById('input-weight');
+  const fInput = document.getElementById('input-bodyfat');
+  const handler = (field, input) => () => {
+    // 全角→半角変換
+    const half = toHalfWidth(input.value);
+    if (half !== input.value) input.value = half;
+    const today = todayStr();
+    const value = input.value === '' ? null : Number(input.value);
+    if (input.value !== '' && isNaN(value)) return; // 不正値は保存しない
+    setDayField(today, field, value);
+    flashSavedStatus();
+    debounceRenderTrends();
+  };
+  wInput.addEventListener('input', handler('weight', wInput));
+  fInput.addEventListener('input', handler('bodyFat', fInput));
+}
+
+// ============================================================================
+// Detail ビュー（日付ごとのメモ一覧、アコーディオン式）
+// ============================================================================
+const detailExpanded = new Set(); // 開いている日付を記憶
+
+function renderDetail() {
+  const c = document.getElementById('detail-container');
+  // 入力済みの全日付を集める
+  const dates = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k && k.startsWith('day:')) dates.push(k.slice(4));
+  }
+  dates.sort().reverse(); // 新しい順
+
+  const today = todayStr();
+  if (dates.length === 0) {
+    c.innerHTML = '<div class="detail-empty">記録がありません。Inputタブから入力してみましょう。</div>';
+    return;
+  }
+
+  // 初回表示時、今日のカードはデフォルトで開く
+  if (detailExpanded.size === 0 && dates.includes(today)) {
+    detailExpanded.add(today);
+  }
+
+  const escapeHtml = (s) => String(s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
+  c.innerHTML = `<div class="detail-list">${dates.map(date => {
+    const day = getDay(date);
+    const d = new Date(date);
+    const dayName = ['日','月','火','水','木','金','土'][d.getDay()];
+    const isToday = date === today;
+    const isOpen = detailExpanded.has(date);
+    const meta = [];
+    if (day.weight != null) meta.push(`<span><strong>体重</strong> ${day.weight}kg</span>`);
+    if (day.bodyFat != null) meta.push(`<span><strong>体脂肪</strong> ${day.bodyFat}%</span>`);
+    if (day.intake != null) meta.push(`<span><strong>摂取</strong> ${day.intake}kcal</span>`);
+    if (day.burn != null) meta.push(`<span><strong>消費</strong> ${day.burn}kcal</span>`);
+    if (day.intake != null && day.burn != null) {
+      const b = day.intake - day.burn;
+      meta.push(`<span><strong>収支</strong> ${b >= 0 ? '+' : ''}${b}</span>`);
+    }
+    const hasNote = !!day.note;
+    return `
+      <div class="detail-item ${isToday ? 'is-today' : ''} ${isOpen ? 'is-open' : ''}" data-date="${date}">
+        <div class="detail-item-head">
+          <button class="detail-toggle" data-date="${date}" aria-expanded="${isOpen}">
+            <svg class="detail-toggle-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="detail-item-head-text">
+            <span class="detail-item-date">${date}</span>
+            <span class="detail-item-day">(${dayName})</span>
+            ${isToday ? '<span class="detail-item-today-badge">TODAY</span>' : ''}
+            ${hasNote ? '<span class="detail-note-mark" title="メモあり"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:12px;height:12px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>' : ''}
+          </div>
+        </div>
+        <div class="detail-item-body">
+          ${meta.length ? `<div class="detail-item-meta">${meta.join('')}</div>` : ''}
+          <div class="detail-note-area" data-date="${date}">
+            ${day.note
+              ? `<div class="detail-item-note">${escapeHtml(day.note)}</div>`
+              : `<div class="detail-item-note-empty">メモなし — タップで追加</div>`}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('')}</div>`;
+
+  // ヘッダークリックで開閉
+  c.querySelectorAll('.detail-item-head').forEach(head => {
+    head.addEventListener('click', (e) => {
+      // ノート編集の領域クリックは別処理なので除外（このイベントはheadのみ）
+      const date = head.parentElement.dataset.date;
+      if (detailExpanded.has(date)) {
+        detailExpanded.delete(date);
+      } else {
+        detailExpanded.add(date);
+      }
+      head.parentElement.classList.toggle('is-open');
+      const btn = head.querySelector('.detail-toggle');
+      btn.setAttribute('aria-expanded', detailExpanded.has(date));
+    });
+  });
+
+  // メモ領域クリックでメモダイアログ
+  c.querySelectorAll('.detail-note-area').forEach(area => {
+    area.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openNoteModal(area.dataset.date);
+    });
+    area.style.cursor = 'pointer';
+  });
+}
+
 function renderRecordsTable() {
   const c = document.getElementById('records-container');
 
@@ -814,7 +1144,7 @@ function renderRecordsTable() {
   // 各セルを編集可能なinputとして描画
   const editCell = (date, field, value, step, placeholder) => {
     const v = value == null ? '' : value;
-    return `<td class="cell-edit"><input type="number" step="${step}" data-date="${date}" data-field="${field}" value="${v}" placeholder="${placeholder}" /></td>`;
+    return `<td class="cell-edit"><input type="number" step="${step}" inputmode="decimal" data-date="${date}" data-field="${field}" value="${v}" placeholder="${placeholder}" /></td>`;
   };
 
   const rows = allDates.map(date => {
@@ -876,9 +1206,13 @@ function renderRecordsTable() {
   c.querySelector('table').addEventListener('input', (e) => {
     const input = e.target;
     if (input.tagName !== 'INPUT') return;
+    // 全角→半角変換
+    const half = toHalfWidth(input.value);
+    if (half !== input.value) input.value = half;
     const date = input.dataset.date;
     const field = input.dataset.field;
     const value = input.value === '' ? null : Number(input.value);
+    if (input.value !== '' && isNaN(value)) return; // 不正値は保存しない
     setDayField(date, field, value);
     // 該当行の収支セル更新
     const tr = input.closest('tr');
@@ -1435,8 +1769,11 @@ document.querySelectorAll('.bottom-tab').forEach(btn => {
     document.querySelectorAll('.view').forEach(el => el.classList.toggle('active', el.id === `view-${v}`));
     // ビュー切替時に最上部にスクロール
     window.scrollTo({ top: 0, behavior: 'instant' });
-    // Graphビューに切り替えた時は推移を再描画（直前の編集を反映）
+    // 各ビューで再描画が必要なものを呼ぶ
+    if (v === 'input') renderInput();
+    if (v === 'record') renderRecordsTable();
     if (v === 'graph') renderTrends();
+    if (v === 'detail') renderDetail();
   });
 });
 
@@ -1510,6 +1847,8 @@ document.getElementById('period-next').addEventListener('click', () => {
 // ============================================================================
 renderRecordsTable();
 renderTrends();
+bindInputView();
+renderInput();
 </script>
 
 </body>
