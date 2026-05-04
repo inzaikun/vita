@@ -838,10 +838,10 @@ const RANGES = {
   '1y':  { label: '1年',  days: 365,  bucket: 'month' },
   '3y':  { label: '3年',  days: 1095, bucket: 'month' },
 };
-// 横スクロール型で表示する期間（日別、左右にスクラブ）
-const SCROLLABLE_RANGES = new Set(['1m', '3m']);
+// 全期間ページング型（指定期間を1画面で表示、前後にスワイプ/ボタンで移動）
+const SCROLLABLE_RANGES = new Set(); // 空：旧スクロール型は廃止
 let currentRange = '1m';
-let currentOffset = 0; // 0=最新、1=1期間前、2=2期間前...（スクロール型では使わない）
+let currentOffset = 0; // 0=最新、1=1期間前、2=2期間前...
 
 // 指定期間の日数分の日付配列を取得（offsetで過去にスライド可能）
 function getRangeDays(n, offset = 0) {
