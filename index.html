@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Quotidie — Daily Health Log</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Noto+Serif+JP:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: #fafaf9;
+    color: #1c1917;
+    font-family: 'Noto Serif JP', serif;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+  .num { font-family: 'JetBrains Mono', monospace; font-feature-settings: 'tnum'; }
+  .display { font-family: 'Cormorant Garamond', serif; }
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+  input[type=number] { -moz-appearance: textfield; }
+
+  /* ヘッダー */
+  header {
+    border-bottom: 1px solid #e7e5e4;
+    background: rgba(250, 250, 249, 0.85);
+    backdrop-filter: blur(8px);
+    position: sticky; top: 0; z-index: 10;
+  }
+  .header-inner {
+    max-width: 960px; margin: 0 auto;
+    padding: 20px 24px;
+    display: flex; align-items: baseline; justify-content: space-between;
+    flex-wrap: wrap; gap: 16px;
+  }
+  .logo h1 { font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 30px; margin: 0; letter-spacing: 0.02em; }
+  .logo p { font-size: 11px; color: #78716c; letter-spacing: 0.2em; text-transform: uppercase; margin: 2px 0 0 0; }
+  nav { display: flex; gap: 4px; }
+  nav button {
+    background: none; border: none; cursor: pointer;
+    padding: 8px 16px; font-size: 14px; font-family: 'Noto Serif JP', serif;
+    color: #78716c; border-bottom: 2px solid transparent;
+    display: flex; align-items: center; gap: 8px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  nav button:hover { color: #1c1917; }
+  nav button.active { color: #1c1917; border-bottom-color: #1c1917; }
+  nav button svg { width: 16px; height: 16px; }
+
+  main { max-width: 960px; margin: 0 auto; padding: 32px 24px 128px; }
+  .view { display: none; }
+  .view.active { display: block; }
+
+  .stack > * + * { margin-top: 40px; }
+
+  section h2 { font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 24px; margin: 0; }
+  section .subtitle { font-size: 11px; color: #78716c; margin: 2px 0 24px 0; }
+
+  /* 日付ピッカー行 */
+  .date-row { display: flex; align-items: center; justify-content: space-between; }
+  .date-row input[type=date] {
+    font-family: 'JetBrains Mono', monospace; font-size: 18px;
+    background: transparent; border: none; border-bottom: 1px solid #d6d3d1;
+    padding: 4px 0; color: #1c1917;
+  }
+  .date-row input[type=date]:focus { outline: none; border-bottom-color: #1c1917; }
+  .today-btn { background: none; border: none; cursor: pointer; font-size: 11px; color: #78716c; letter-spacing: 0.2em; text-transform: uppercase; }
+  .today-btn:hover { color: #1c1917; }
+
+  /* バランスカード */
+  .balance-card {
+    background: #1c1917; color: #f5f5f4;
+    padding: 48px 40px; border-radius: 2px;
+    position: relative; overflow: hidden;
+  }
+  .balance-card::after {
+    content: ''; position: absolute; top: -80px; right: -80px;
+    width: 256px; height: 256px; border-radius: 50%;
+    background: #292524; opacity: 0.5;
+  }
+  .balance-card .label-top { position: absolute; top: 24px; right: 32px; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #78716c; z-index: 1; }
+  .balance-card .balance-num { font-family: 'JetBrains Mono', monospace; font-size: 64px; font-weight: 300; letter-spacing: -0.02em; line-height: 1; position: relative; z-index: 1; }
+  .balance-card .balance-status { font-size: 14px; margin-top: 8px; letter-spacing: 0.05em; position: relative; z-index: 1; }
+  .balance-card .balance-status.deficit { color: #6ee7b7; }
+  .balance-card .balance-status.surplus { color: #fde68a; }
+  .balance-card .balance-status.zero { color: #a8a29e; }
+  .balance-card .meta { margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; position: relative; z-index: 1; }
+  .balance-card .meta-label { font-size: 11px; color: #a8a29e; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 6px; }
+  .balance-card .meta-val { font-family: 'JetBrains Mono', monospace; font-size: 24px; }
+  .balance-card .meta-unit { font-size: 11px; color: #78716c; margin-top: 2px; }
+
+  /* 数値入力 */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .number-field .ftext { font-size: 11px; color: #78716c; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 8px; }
+  .number-field .ibox { display: flex; align-items: baseline; gap: 8px; border-bottom: 1px solid #d6d3d1; padding-bottom: 8px; transition: border-color 0.2s; }
+  .number-field .ibox:focus-within { border-bottom-color: #1c1917; }
+  .number-field input { flex: 1; background: transparent; border: none; font-family: 'JetBrains Mono', monospace; font-size: 24px; color: #1c1917; min-width: 0; }
+  .number-field input:focus { outline: none; }
+  .number-field input::placeholder { color: #d6d3d1; }
+  .number-field .unit { font-size: 13px; color: #78716c; }
+
+  /* 統計 */
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: #e7e5e4; border: 1px solid #e7e5e4; margin-bottom: 40px; }
+  .stat { background: #fafaf9; padding: 20px 24px; }
+  .stat-label { font-size: 10px; color: #78716c; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 8px; }
+  .stat-val { font-family: 'JetBrains Mono', monospace; font-size: 24px; }
+  .stat-val .stat-unit { font-size: 11px; color: #78716c; margin-left: 4px; }
+  .stat-val.good { color: #047857; }
+  .stat-val.warn { color: #b45309; }
+
+  /* チャート */
+  .chart-card { margin-bottom: 32px; }
+  .chart-card h3 { font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 20px; margin: 0; }
+  .chart-card .subtitle { font-size: 11px; color: #78716c; margin: 2px 0 16px 0; }
+  .chart-box { background: white; border: 1px solid #e7e5e4; padding: 20px; border-radius: 2px; }
+  .chart-svg { width: 100%; height: 240px; display: block; }
+  .empty-state { text-align: center; padding: 64px 0; color: #a8a29e; font-family: 'Noto Serif JP', serif; }
+
+  /* 過去記録一覧 */
+  .records-table { width: 100%; border-collapse: collapse; font-family: 'JetBrains Mono', monospace; font-size: 13px; background: white; border: 1px solid #e7e5e4; }
+  .records-table th { text-align: left; font-weight: 500; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #78716c; padding: 12px 16px; border-bottom: 1px solid #e7e5e4; }
+  .records-table th.right { text-align: right; }
+  .records-table td { padding: 10px 16px; border-bottom: 1px solid #f5f5f4; color: #1c1917; }
+  .records-table td.right { text-align: right; }
+  .records-table td.muted { color: #d6d3d1; }
+  .records-table td.deficit { color: #047857; }
+  .records-table td.surplus { color: #b45309; }
+  .records-table tr.clickable { cursor: pointer; transition: background 0.15s; }
+  .records-table tr.clickable:hover td { background: #fafaf9; }
+  .records-table tr:last-child td { border-bottom: none; }
+
+  /* tooltip */
+  .chart-tooltip {
+    position: absolute; pointer-events: none;
+    background: #1c1917; color: #f5f5f4;
+    padding: 8px 12px; border-radius: 2px;
+    font-size: 11px; font-family: 'JetBrains Mono', monospace;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    white-space: nowrap; z-index: 100;
+    transition: opacity 0.15s;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 640px) {
+    .balance-card { padding: 32px 24px; }
+    .balance-card .balance-num { font-size: 48px; }
+    .grid-2 { grid-template-columns: 1fr; }
+    .stat-grid { grid-template-columns: 1fr; }
+    .records-table { font-size: 11px; }
+    .records-table th, .records-table td { padding: 8px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <h1>Quotidie</h1>
+      <p>daily health log</p>
+    </div>
+    <nav>
+      <button class="active" data-view="today">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        本日
+      </button>
+      <button data-view="summary">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+        推移
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- 本日ビュー -->
+  <div class="view active stack" id="view-today">
+    <div class="date-row">
+      <input type="date" id="date-input" />
+      <button class="today-btn" id="today-btn">today</button>
+    </div>
+
+    <!-- バランスカード -->
+    <div class="balance-card">
+      <div class="label-top">kcal balance</div>
+      <div class="balance-num" id="balance-num">0</div>
+      <div class="balance-status zero" id="balance-status">─ 未入力</div>
+      <div class="meta">
+        <div>
+          <div class="meta-label">摂取</div>
+          <div class="meta-val" id="total-intake">0</div>
+          <div class="meta-unit">kcal</div>
+        </div>
+        <div>
+          <div class="meta-label">消費</div>
+          <div class="meta-val" id="total-burn">0</div>
+          <div class="meta-unit">kcal</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 体重 -->
+    <section>
+      <h2>Body</h2>
+      <p class="subtitle">体重・体脂肪率</p>
+      <div class="grid-2">
+        <div class="number-field">
+          <div class="ftext">体重</div>
+          <div class="ibox">
+            <input type="number" step="0.1" id="weight" placeholder="—" />
+            <span class="unit">kg</span>
+          </div>
+        </div>
+        <div class="number-field">
+          <div class="ftext">体脂肪率</div>
+          <div class="ibox">
+            <input type="number" step="0.1" id="bodyFat" placeholder="—" />
+            <span class="unit">%</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- カロリー -->
+    <section>
+      <h2>Calories</h2>
+      <p class="subtitle">摂取カロリー・消費カロリー</p>
+      <div class="grid-2">
+        <div class="number-field">
+          <div class="ftext">摂取カロリー</div>
+          <div class="ibox">
+            <input type="number" step="10" id="intake" placeholder="—" />
+            <span class="unit">kcal</span>
+          </div>
+        </div>
+        <div class="number-field">
+          <div class="ftext">消費カロリー</div>
+          <div class="ibox">
+            <input type="number" step="10" id="burn" placeholder="—" />
+            <span class="unit">kcal</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- 推移ビュー -->
+  <div class="view stack" id="view-summary">
+    <section>
+      <h2>Trends</h2>
+      <p class="subtitle">直近14日の推移</p>
+      <div class="stat-grid" id="stat-grid"></div>
+    </section>
+    <div id="charts-container"></div>
+    <section id="records-section" style="display:none;">
+      <h2>Records</h2>
+      <p class="subtitle">直近14日の記録一覧 — 行をクリックすると編集</p>
+      <div id="records-container"></div>
+    </section>
+  </div>
+</main>
+
+<div class="chart-tooltip" id="chart-tooltip" style="opacity:0;"></div>
+
+<script>
+// ============================================================================
+// ストレージ層: localStorage
+// ============================================================================
+const storage = {
+  get(key) {
+    try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : null; }
+    catch (e) { return null; }
+  },
+  set(key, value) {
+    try { localStorage.setItem(key, JSON.stringify(value)); return true; }
+    catch (e) { return false; }
+  },
+};
+
+// ============================================================================
+// ユーティリティ
+// ============================================================================
+const todayStr = () => new Date().toISOString().split('T')[0];
+const formatDate = (s) => { const d = new Date(s); return `${d.getMonth()+1}/${d.getDate()}`; };
+const lastNDays = (n) => {
+  const days = [];
+  for (let i = n - 1; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    days.push(d.toISOString().split('T')[0]);
+  }
+  return days;
+};
+const makeDefaultDay = () => ({ weight: null, bodyFat: null, intake: null, burn: null });
+
+let state = {
+  view: 'today',
+  date: todayStr(),
+  day: makeDefaultDay(),
+};
+
+function loadDay(d) {
+  const stored = storage.get(`day:${d}`);
+  state.day = stored || makeDefaultDay();
+}
+function saveDay() {
+  // すべて未入力なら保存しない（履歴を汚さない）
+  const d = state.day;
+  if (d.weight == null && d.bodyFat == null && d.intake == null && d.burn == null) {
+    localStorage.removeItem(`day:${state.date}`);
+  } else {
+    storage.set(`day:${state.date}`, state.day);
+  }
+}
+
+// ============================================================================
+// View切替
+// ============================================================================
+document.querySelectorAll('nav button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const v = btn.dataset.view;
+    state.view = v;
+    document.querySelectorAll('nav button').forEach(b => b.classList.toggle('active', b === btn));
+    document.querySelectorAll('.view').forEach(el => el.classList.toggle('active', el.id === `view-${v}`));
+    if (v === 'summary') renderSummary();
+  });
+});
+
+// ============================================================================
+// 本日ビュー
+// ============================================================================
+const dateInput = document.getElementById('date-input');
+const todayBtn = document.getElementById('today-btn');
+const weightInput = document.getElementById('weight');
+const bodyFatInput = document.getElementById('bodyFat');
+const intakeInput = document.getElementById('intake');
+const burnInput = document.getElementById('burn');
+
+dateInput.addEventListener('change', () => {
+  state.date = dateInput.value;
+  loadDay(state.date);
+  renderToday();
+});
+todayBtn.addEventListener('click', () => {
+  state.date = todayStr();
+  dateInput.value = state.date;
+  loadDay(state.date);
+  renderToday();
+});
+
+function bindNum(input, field) {
+  input.addEventListener('input', () => {
+    state.day[field] = input.value === '' ? null : Number(input.value);
+    saveDay();
+    updateBalance();
+  });
+}
+bindNum(weightInput, 'weight');
+bindNum(bodyFatInput, 'bodyFat');
+bindNum(intakeInput, 'intake');
+bindNum(burnInput, 'burn');
+
+function updateBalance() {
+  const intake = state.day.intake ?? 0;
+  const burn = state.day.burn ?? 0;
+  const balance = intake - burn;
+  document.getElementById('total-intake').textContent = intake.toFixed(0);
+  document.getElementById('total-burn').textContent = burn.toFixed(0);
+
+  const bn = document.getElementById('balance-num');
+  const bs = document.getElementById('balance-status');
+
+  if (state.day.intake == null && state.day.burn == null) {
+    bn.textContent = '—';
+    bs.textContent = '─ 未入力';
+    bs.className = 'balance-status zero';
+  } else {
+    bn.textContent = (balance > 0 ? '+' : '') + balance.toFixed(0);
+    if (balance < 0) { bs.textContent = '─ deficit'; bs.className = 'balance-status deficit'; }
+    else if (balance > 0) { bs.textContent = '+ surplus'; bs.className = 'balance-status surplus'; }
+    else { bs.textContent = '◯ even'; bs.className = 'balance-status zero'; }
+  }
+}
+
+function renderToday() {
+  dateInput.value = state.date;
+  weightInput.value = state.day.weight ?? '';
+  bodyFatInput.value = state.day.bodyFat ?? '';
+  intakeInput.value = state.day.intake ?? '';
+  burnInput.value = state.day.burn ?? '';
+  updateBalance();
+}
+
+// ============================================================================
+// 推移ビュー（自前SVGチャート）
+// ============================================================================
+function getHistoryData() {
+  const days = lastNDays(14);
+  return days.map(d => {
+    const day = storage.get(`day:${d}`);
+    if (!day) return { date: formatDate(d), dateRaw: d, intake: null, burn: null, balance: null, weight: null, bodyFat: null };
+    const balance = (day.intake != null && day.burn != null) ? day.intake - day.burn : null;
+    return { date: formatDate(d), dateRaw: d, intake: day.intake, burn: day.burn, balance, weight: day.weight, bodyFat: day.bodyFat };
+  });
+}
+
+function renderSummary() {
+  const data = getHistoryData();
+  const filledBalance = data.filter(d => d.balance !== null);
+  const filledWeight = data.filter(d => d.weight !== null);
+  const filledIntake = data.filter(d => d.intake !== null);
+
+  const recordedDays = data.filter(d => d.intake !== null || d.burn !== null || d.weight !== null).length;
+  const avgIntake = filledIntake.length ? filledIntake.reduce((s, d) => s + d.intake, 0) / filledIntake.length : 0;
+  const avgBalance = filledBalance.length ? filledBalance.reduce((s, d) => s + d.balance, 0) / filledBalance.length : 0;
+
+  // 体重の変化
+  let weightDelta = null;
+  if (filledWeight.length >= 2) {
+    weightDelta = filledWeight[filledWeight.length - 1].weight - filledWeight[0].weight;
+  }
+
+  const sg = document.getElementById('stat-grid');
+  sg.innerHTML = `
+    <div class="stat"><div class="stat-label">記録日数</div><div class="stat-val">${recordedDays}/14</div></div>
+    <div class="stat"><div class="stat-label">平均収支</div><div class="stat-val ${avgBalance < 0 ? 'good' : avgBalance > 0 ? 'warn' : ''}">${filledBalance.length ? (avgBalance >= 0 ? '+' : '') + avgBalance.toFixed(0) : '—'}<span class="stat-unit">${filledBalance.length ? 'kcal' : ''}</span></div></div>
+    <div class="stat"><div class="stat-label">体重変化</div><div class="stat-val ${weightDelta != null && weightDelta < 0 ? 'good' : weightDelta != null && weightDelta > 0 ? 'warn' : ''}">${weightDelta != null ? (weightDelta >= 0 ? '+' : '') + weightDelta.toFixed(1) : '—'}<span class="stat-unit">${weightDelta != null ? 'kg' : ''}</span></div></div>
+  `;
+
+  const cc = document.getElementById('charts-container');
+  cc.innerHTML = '';
+
+  if (recordedDays === 0) {
+    const empty = document.createElement('div');
+    empty.className = 'empty-state';
+    empty.textContent = 'まだ記録がありません。本日タブから入力を始めましょう。';
+    cc.appendChild(empty);
+    document.getElementById('records-section').style.display = 'none';
+    return;
+  }
+
+  // カロリー収支
+  if (filledBalance.length > 0) {
+    cc.appendChild(makeChartCard('Caloric Balance', '日別カロリー収支', renderBarChart(data, 'balance')));
+  }
+  // 摂取vs消費
+  if (filledIntake.length > 0) {
+    cc.appendChild(makeChartCard('Intake vs Burn', '摂取と消費の推移', renderLineChart(data, [
+      { key: 'intake', color: '#1c1917', label: '摂取' },
+      { key: 'burn', color: '#a8a29e', dashed: true, label: '消費' },
+    ], { unit: 'kcal' })));
+  }
+  // 体重
+  if (filledWeight.length > 0) {
+    cc.appendChild(makeChartCard('Body Weight', '体重の推移', renderLineChart(data, [
+      { key: 'weight', color: '#0f766e', label: '体重' },
+    ], { unit: 'kg', autoY: true })));
+  }
+
+  // 過去記録一覧
+  renderRecordsTable(data);
+}
+
+function renderRecordsTable(data) {
+  const section = document.getElementById('records-section');
+  const c = document.getElementById('records-container');
+  const filled = data.filter(d => d.intake != null || d.burn != null || d.weight != null || d.bodyFat != null);
+  if (filled.length === 0) { section.style.display = 'none'; return; }
+  section.style.display = 'block';
+
+  const fmt = (v, suffix = '') => v == null ? '<td class="right muted">—</td>' : `<td class="right">${typeof v === 'number' ? (Number.isInteger(v) ? v : v.toFixed(1)) : v}${suffix ? '<span style="color:#a8a29e;font-size:10px;margin-left:2px;">'+suffix+'</span>' : ''}</td>`;
+  const balanceCell = (b) => {
+    if (b == null) return '<td class="right muted">—</td>';
+    const cls = b < 0 ? 'deficit' : b > 0 ? 'surplus' : '';
+    return `<td class="right ${cls}">${b >= 0 ? '+' : ''}${b.toFixed(0)}</td>`;
+  };
+
+  // 新しい順
+  const rows = [...filled].reverse().map(d => `
+    <tr class="clickable" data-date="${d.dateRaw}">
+      <td>${d.date}</td>
+      ${fmt(d.weight, 'kg')}
+      ${fmt(d.bodyFat, '%')}
+      ${fmt(d.intake)}
+      ${fmt(d.burn)}
+      ${balanceCell(d.balance)}
+    </tr>
+  `).join('');
+
+  c.innerHTML = `
+    <table class="records-table">
+      <thead>
+        <tr>
+          <th>DATE</th>
+          <th class="right">体重</th>
+          <th class="right">体脂肪</th>
+          <th class="right">摂取</th>
+          <th class="right">消費</th>
+          <th class="right">収支</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
+
+  // 行クリックで本日タブに飛んで編集
+  c.querySelectorAll('tr.clickable').forEach(tr => {
+    tr.addEventListener('click', () => {
+      const d = tr.dataset.date;
+      state.date = d;
+      loadDay(d);
+      // 本日タブに切替
+      document.querySelectorAll('nav button').forEach(b => b.classList.toggle('active', b.dataset.view === 'today'));
+      document.querySelectorAll('.view').forEach(el => el.classList.toggle('active', el.id === 'view-today'));
+      renderToday();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+}
+
+function makeChartCard(title, subtitle, svg) {
+  const card = document.createElement('div');
+  card.className = 'chart-card';
+  card.innerHTML = `<h3>${title}</h3><p class="subtitle">${subtitle}</p><div class="chart-box"></div>`;
+  card.querySelector('.chart-box').appendChild(svg);
+  return card;
+}
+
+const tooltip = document.getElementById('chart-tooltip');
+function showTip(e, html) {
+  tooltip.innerHTML = html;
+  tooltip.style.opacity = '1';
+  tooltip.style.left = (e.pageX + 10) + 'px';
+  tooltip.style.top = (e.pageY - 10) + 'px';
+}
+function hideTip() { tooltip.style.opacity = '0'; }
+
+function renderBarChart(data, key) {
+  const W = 800, H = 240, P = { t: 20, r: 20, b: 30, l: 50 };
+  const innerW = W - P.l - P.r, innerH = H - P.t - P.b;
+  const values = data.map(d => d[key]).filter(v => v !== null);
+  const maxV = values.length ? Math.max(...values, 0) : 100;
+  const minV = values.length ? Math.min(...values, 0) : -100;
+  const range = Math.max(Math.abs(maxV), Math.abs(minV)) * 1.1 || 100;
+
+  const yScale = v => P.t + innerH/2 - (v / range) * (innerH/2);
+  const barW = innerW / data.length * 0.7;
+  const barGap = innerW / data.length;
+
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  svg.setAttribute('class', 'chart-svg');
+  svg.setAttribute('preserveAspectRatio', 'none');
+
+  const ticks = [-range, -range/2, 0, range/2, range];
+  ticks.forEach(t => {
+    const y = yScale(t);
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', P.l); line.setAttribute('x2', W - P.r);
+    line.setAttribute('y1', y); line.setAttribute('y2', y);
+    line.setAttribute('stroke', t === 0 ? '#78716c' : '#e7e5e4');
+    line.setAttribute('stroke-dasharray', t === 0 ? '' : '2 4');
+    svg.appendChild(line);
+    const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    txt.setAttribute('x', P.l - 8); txt.setAttribute('y', y + 4);
+    txt.setAttribute('text-anchor', 'end'); txt.setAttribute('font-size', '11');
+    txt.setAttribute('fill', '#a8a29e'); txt.setAttribute('font-family', 'JetBrains Mono, monospace');
+    txt.textContent = Math.round(t);
+    svg.appendChild(txt);
+  });
+
+  data.forEach((d, i) => {
+    const cx = P.l + i * barGap + barGap/2;
+    const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    txt.setAttribute('x', cx); txt.setAttribute('y', H - 8);
+    txt.setAttribute('text-anchor', 'middle'); txt.setAttribute('font-size', '10');
+    txt.setAttribute('fill', '#a8a29e'); txt.setAttribute('font-family', 'JetBrains Mono, monospace');
+    txt.textContent = d.date;
+    svg.appendChild(txt);
+
+    if (d[key] === null || d[key] === undefined) return;
+    const y0 = yScale(0);
+    const y1 = yScale(d[key]);
+    const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    rect.setAttribute('x', cx - barW/2);
+    rect.setAttribute('y', Math.min(y0, y1));
+    rect.setAttribute('width', barW);
+    rect.setAttribute('height', Math.max(1, Math.abs(y1 - y0)));
+    rect.setAttribute('fill', d[key] < 0 ? '#10b981' : d[key] > 0 ? '#f59e0b' : '#a8a29e');
+    rect.setAttribute('rx', 2);
+    rect.style.cursor = 'pointer';
+    const tipHtml = `${d.date}<br>収支: ${d[key] >= 0 ? '+' : ''}${d[key].toFixed(0)} kcal<br>摂取 ${d.intake} / 消費 ${d.burn}`;
+    rect.addEventListener('mouseenter', (e) => showTip(e, tipHtml));
+    rect.addEventListener('mousemove', (e) => showTip(e, tipHtml));
+    rect.addEventListener('mouseleave', hideTip);
+    svg.appendChild(rect);
+  });
+
+  return svg;
+}
+
+function renderLineChart(data, series, opts = {}) {
+  const W = 800, H = 240, P = { t: 20, r: 20, b: 30, l: 50 };
+  const innerW = W - P.l - P.r, innerH = H - P.t - P.b;
+  const allVals = series.flatMap(s => data.map(d => d[s.key]).filter(v => v !== null && v !== undefined));
+  let minV, maxV;
+  if (opts.autoY) {
+    minV = Math.min(...allVals) - 1;
+    maxV = Math.max(...allVals) + 1;
+  } else {
+    minV = 0;
+    maxV = allVals.length ? Math.max(...allVals) * 1.15 : 100;
+  }
+  const range = maxV - minV || 1;
+
+  const yScale = v => P.t + innerH - ((v - minV) / range) * innerH;
+  const xScale = i => data.length === 1 ? P.l + innerW / 2 : P.l + (i / (data.length - 1)) * innerW;
+
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  svg.setAttribute('class', 'chart-svg');
+  svg.setAttribute('preserveAspectRatio', 'none');
+
+  const tickCount = 4;
+  for (let t = 0; t <= tickCount; t++) {
+    const v = minV + (range * t / tickCount);
+    const y = yScale(v);
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', P.l); line.setAttribute('x2', W - P.r);
+    line.setAttribute('y1', y); line.setAttribute('y2', y);
+    line.setAttribute('stroke', '#e7e5e4');
+    line.setAttribute('stroke-dasharray', '2 4');
+    svg.appendChild(line);
+    const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    txt.setAttribute('x', P.l - 8); txt.setAttribute('y', y + 4);
+    txt.setAttribute('text-anchor', 'end'); txt.setAttribute('font-size', '11');
+    txt.setAttribute('fill', '#a8a29e'); txt.setAttribute('font-family', 'JetBrains Mono, monospace');
+    txt.textContent = v.toFixed(opts.autoY ? 1 : 0);
+    svg.appendChild(txt);
+  }
+
+  data.forEach((d, i) => {
+    if (i % 2 !== 0 && data.length > 7) return;
+    const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    txt.setAttribute('x', xScale(i)); txt.setAttribute('y', H - 8);
+    txt.setAttribute('text-anchor', 'middle'); txt.setAttribute('font-size', '10');
+    txt.setAttribute('fill', '#a8a29e'); txt.setAttribute('font-family', 'JetBrains Mono, monospace');
+    txt.textContent = d.date;
+    svg.appendChild(txt);
+  });
+
+  series.forEach(s => {
+    const points = [];
+    data.forEach((d, i) => {
+      if (d[s.key] !== null && d[s.key] !== undefined) {
+        points.push({ x: xScale(i), y: yScale(d[s.key]), v: d[s.key], date: d.date });
+      }
+    });
+    if (points.length < 1) return;
+    if (points.length >= 2) {
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      const dStr = points.map((p, i) => (i === 0 ? 'M' : 'L') + p.x + ',' + p.y).join(' ');
+      path.setAttribute('d', dStr);
+      path.setAttribute('stroke', s.color);
+      path.setAttribute('stroke-width', '2');
+      path.setAttribute('fill', 'none');
+      if (s.dashed) path.setAttribute('stroke-dasharray', '4 4');
+      svg.appendChild(path);
+    }
+    points.forEach(p => {
+      const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      c.setAttribute('cx', p.x); c.setAttribute('cy', p.y);
+      c.setAttribute('r', s.dashed ? 0 : 3.5);
+      c.setAttribute('fill', s.color);
+      c.style.cursor = 'pointer';
+      const html = `${p.date}<br>${s.label}: ${p.v.toFixed(opts.autoY ? 1 : 0)}${opts.unit ? ' ' + opts.unit : ''}`;
+      c.addEventListener('mouseenter', (e) => showTip(e, html));
+      c.addEventListener('mousemove', (e) => showTip(e, html));
+      c.addEventListener('mouseleave', hideTip);
+      svg.appendChild(c);
+    });
+  });
+
+  return svg;
+}
+
+// ============================================================================
+// 起動
+// ============================================================================
+loadDay(state.date);
+renderToday();
+</script>
+
+</body>
+</html>
