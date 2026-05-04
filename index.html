@@ -992,7 +992,7 @@ function renderTrends() {
   // 2. カロリー収支（バー）
   const filledChartBalance = chartData.filter(d => d.balance !== null);
   if (filledChartBalance.length > 0) {
-    cc.appendChild(makeChartCard('Caloric Balance', `${bucketLabel}カロリー収支`, renderBarChart(chartData, 'balance', range.bucket)));
+    cc.appendChild(makeChartCard('Calorie Balance', `${bucketLabel}カロリー収支`, renderBarChart(chartData, 'balance', range.bucket)));
   }
 
   // 3. 摂取vs消費（折れ線）
