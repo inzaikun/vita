@@ -1,0 +1,71 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>中1 学習問題集</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#fff;--surface:#f4f6f8;--surface-2:#fafbfc;--border:#d7dde3;--text:#141f2b;--text-2:#55636f;--text-3:#8a929b;--accent:#1a7a4a;--accent-soft:#e6f4ec;--accent-border:#bfe0cd;--shakai:#155e9c;--shakai-soft:#e8f1fa;--shakai-border:#bcd6f2;--radius:9px;--radius-lg:15px;--shadow-sm:0 1px 2px rgba(16,32,48,.06);--font:"Inter","Noto Sans JP",system-ui,-apple-system,"Segoe UI",sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);color:var(--text);background:var(--surface);line-height:1.6;-webkit-font-smoothing:antialiased;word-break:auto-phrase;line-break:strict;overflow-wrap:break-word}
+.wrap{max-width:880px;margin:0 auto;padding:48px 24px 64px}
+header.hd{display:flex;align-items:center;gap:13px;margin-bottom:8px}
+.logo{width:40px;height:40px;border-radius:10px;flex:0 0 auto;background:linear-gradient(135deg,var(--accent),var(--shakai));display:grid;place-items:center;color:#fff;font-size:14px;font-weight:900}
+h1{font-size:31px;font-weight:900;letter-spacing:-.02em;line-height:1.25}
+.lead{font-size:18px;color:var(--text-2);margin:10px 0 4px}
+.count{font-size:16px;color:var(--text-3);font-weight:700;margin:30px 0 10px;letter-spacing:.02em}
+ul.docs{list-style:none;display:grid;gap:11px}
+a.doc{display:grid;grid-template-columns:104px 1fr 28px;align-items:center;gap:0 18px;text-decoration:none;color:inherit;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-lg);padding:17px 20px;box-shadow:var(--shadow-sm);transition:border-color .15s,box-shadow .15s,transform .15s}
+a.doc:hover{border-color:var(--accent-border);box-shadow:0 6px 20px rgba(16,32,48,.10);transform:translateY(-1px)}
+a.doc:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.badge{font-size:15px;font-weight:800;color:var(--accent);background:var(--accent-soft);border:1px solid var(--accent-border);border-radius:999px;padding:5px 0;text-align:center;white-space:nowrap}
+.badge.shakai{color:var(--shakai);background:var(--shakai-soft);border-color:var(--shakai-border)}
+.ttl{display:block;font-size:19px;font-weight:800;line-height:1.4}
+.desc{display:block;font-size:15.5px;color:var(--text-2);margin-top:4px}
+.qn{color:var(--text-3);font-weight:700}
+.arw{font-size:22px;color:var(--text-3);text-align:right;font-weight:700}
+a.doc:hover .arw{color:var(--accent)}
+.note{margin-top:30px;font-size:15.5px;color:var(--text-2);background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius);padding:14px 17px}
+.note b{font-weight:800}
+@media(max-width:640px){a.doc{grid-template-columns:1fr;gap:8px}.badge{justify-self:start;padding:4px 14px}.arw{display:none}h1{font-size:26px}}
+</style></head><body>
+<div class="wrap">
+<header class="hd"><span class="logo">中1</span><h1>中1 学習問題集</h1></header>
+<p class="lead">中学1年の学習用問題集（各問すべて解答・解説つき、通し番号）。まちがえた問題に印をつけて、3日後・テスト前にもう一度。</p>
+
+<div class="count">社会</div>
+<ul class="docs">
+<li><a class="doc" href="./chu1-shakai-01-sekai-no-sugata/">
+  <span class="badge shakai">社会①</span>
+  <span><span class="ttl">世界の姿</span><span class="desc">六大陸と三大洋・緯度と経度・地球儀と世界地図・世界の国々・州区分。<span class="qn">500問＋発展50</span></span></span>
+  <span class="arw">›</span></a></li>
+<li><a class="doc" href="./chu1-shakai-02-seikatsu-kankyo/">
+  <span class="badge shakai">社会②</span>
+  <span><span class="ttl">世界の人々の生活と環境</span><span class="desc">気候帯・衣食住・世界の宗教・言語。<span class="qn">100問＋発展20</span></span></span>
+  <span class="arw">›</span></a></li>
+<li><a class="doc" href="./chu1-shakai-03-asia-euro-africa/">
+  <span class="badge shakai">社会③</span>
+  <span><span class="ttl">世界の諸地域① アジア・ヨーロッパ・アフリカ</span><span class="desc">自然・産業・EU・文化・課題。<span class="qn">300問＋発展30</span></span></span>
+  <span class="arw">›</span></a></li>
+<li><a class="doc" href="./chu1-shakai-04-americas-oceania/">
+  <span class="badge shakai">社会④</span>
+  <span><span class="ttl">世界の諸地域② 北アメリカ・南アメリカ・オセアニア</span><span class="desc">大規模農業・資源・移民・環境。<span class="qn">300問＋発展30</span></span></span>
+  <span class="arw">›</span></a></li>
+<li><a class="doc" href="./chu1-shakai-05-nihon-no-sugata/">
+  <span class="badge shakai">社会⑤</span>
+  <span><span class="ttl">日本の姿</span><span class="desc">日本の位置・領域・時差・地域区分。<span class="qn">100問＋発展20</span></span></span>
+  <span class="arw">›</span></a></li>
+<li><a class="doc" href="./chu1-shakai-06-rekishi-genshi-heian/">
+  <span class="badge shakai">社会⑥</span>
+  <span><span class="ttl">歴史 原始〜平安</span><span class="desc">文明のおこり・縄文弥生古墳・飛鳥奈良（律令）・平安。<span class="qn">400問＋発展30</span></span></span>
+  <span class="arw">›</span></a></li>
+</ul>
+
+<div class="count">理科</div>
+<ul class="docs">
+<li><a class="doc" href="./chu1-rika-02-busshitsu/">
+  <span class="badge">理科②</span>
+  <span><span class="ttl">身のまわりの物質</span><span class="desc">有機物・金属・密度・気体・水溶液・状態変化（計算・実験・グラフ）。<span class="qn">200問＋発展20</span></span></span>
+  <span class="arw">›</span></a></li>
+</ul>
+
+<div class="note"><b>使い方</b>　各問題集は解答を「▶ 解答・解説を開く」で開閉できます。印刷にも対応（解答を開いた状態で印刷）。</div>
+</div></body></html>
