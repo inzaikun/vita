@@ -1,395 +1,697 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>中1理科② 身のまわりの物質 問題集</title>
 <style>
-  :root{--ink:#1a1a2e;--sub:#555;--accent:#1a7a4a;--accent-light:#e6f4ec;--line:#ccc;--ans:#b0306a;--ans-light:#fbe8f1;--star:#c8860a;--star-light:#fff4e0;}
-  html{color-scheme:light;}
-  body{font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic",sans-serif;background:#fff;color:var(--ink);line-height:1.9;max-width:760px;margin:0 auto;padding:24px 20px 80px;}
-  h1{font-size:1.5rem;border-bottom:3px solid var(--accent);padding-bottom:8px;margin-bottom:4px;}
-  .meta{color:var(--sub);font-size:0.85rem;margin-bottom:20px;}
-  .lead{background:var(--accent-light);border-radius:6px;padding:12px 16px;font-size:0.9rem;margin-bottom:24px;}
-  .toc{border:1px solid var(--line);border-radius:6px;padding:12px 20px;margin-bottom:28px;font-size:0.95rem;}
-  .toc a{color:var(--accent);text-decoration:none;} .toc a:hover{text-decoration:underline;}
-  h2{font-size:1.15rem;background:var(--accent-light);border-left:6px solid var(--accent);padding:6px 12px;margin-top:48px;scroll-margin-top:12px;}
-  h2 .pts{font-size:0.8rem;color:var(--sub);font-weight:normal;margin-left:10px;}
-  ol.q{padding-left:2.6em;} ol.q>li{margin-bottom:9px;}
-  .choices{color:var(--sub);font-size:0.9rem;} .note{color:var(--sub);font-size:0.85rem;}
-  details.ans{margin:14px 0 8px;border:1px solid var(--ans);border-radius:6px;background:var(--ans-light);}
-  details.ans>summary{cursor:pointer;padding:8px 14px;font-weight:bold;color:var(--ans);font-size:0.95rem;}
-  details.ans[open]>summary{border-bottom:1px solid var(--ans);}
-  ol.a{padding-left:2.6em;margin:8px 0;font-size:0.95rem;} ol.a>li{margin-bottom:4px;}
-  .exp{color:var(--sub);font-size:0.85rem;}
+  :root{--ink:#1a2230;--sub:#556;--accent:#1a7a4a;--accent-d:#136139;--accent-light:#e6f4ec;--line:#d3dbd6;--ans:#b0306a;--ans-light:#fbe8f1;--star:#b8790a;--star-light:#fff4e0;--warm:#c8860a;--warm-light:#fff8ec;}
+  html{color-scheme:light;-webkit-text-size-adjust:100%;}
+  *{box-sizing:border-box;}
+  body{font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic",sans-serif;background:#fff;color:var(--ink);line-height:1.8;margin:0 auto;max-width:760px;padding:20px 16px 80px;overflow-wrap:break-word;word-break:normal;}
+  h1{font-size:1.35rem;border-bottom:3px solid var(--accent);padding-bottom:8px;margin:0 0 4px;}
+  .meta{color:var(--sub);font-size:0.82rem;margin-bottom:16px;}
+  .lead{background:var(--accent-light);border-radius:8px;padding:11px 14px;font-size:0.9rem;margin-bottom:14px;}
+  .toolbar{position:sticky;top:0;z-index:5;background:#fff;padding:8px 0;border-bottom:1px solid var(--line);margin-bottom:14px;display:flex;gap:8px;flex-wrap:wrap;}
+  .toolbar button{font:inherit;font-size:0.82rem;font-weight:700;border:1px solid var(--accent);color:var(--accent);background:#fff;border-radius:999px;padding:5px 14px;cursor:pointer;}
+  .toolbar button:active{background:var(--accent-light);}
+  .toc{border:1px solid var(--line);border-radius:8px;padding:10px 16px;margin-bottom:22px;font-size:0.9rem;}
+  .toc a{color:var(--accent);text-decoration:none;} .toc a:active{text-decoration:underline;}
+  h2{font-size:1.1rem;background:var(--accent-light);border-left:6px solid var(--accent);padding:7px 12px;margin:40px 0 6px;border-radius:0 6px 6px 0;scroll-margin-top:56px;}
+  h2 .pts{font-size:0.76rem;color:var(--sub);font-weight:normal;margin-left:8px;}
+  h3{font-size:0.98rem;color:var(--accent-d);margin:22px 0 6px;border-bottom:1px dashed var(--line);padding-bottom:3px;}
+  ol.qa{padding-left:1.9em;margin:8px 0;}
+  ol.qa>li{margin:0 0 13px;padding-left:2px;}
+  .q{}
+  details.a{margin-top:5px;}
+  details.a>summary{display:inline-flex;align-items:center;gap:5px;list-style:none;cursor:pointer;font-size:0.8rem;font-weight:700;color:#fff;background:var(--accent);border-radius:999px;padding:3px 13px;user-select:none;}
+  details.a>summary::-webkit-details-marker{display:none;}
+  details.a>summary::before{content:"▶";font-size:0.62rem;}
+  details.a[open]>summary{background:var(--ans);}
+  details.a[open]>summary::before{content:"▼";}
+  .ac{margin-top:6px;padding:8px 12px;background:var(--ans-light);border-left:3px solid var(--ans);border-radius:0 6px 6px 0;font-size:0.9rem;line-height:1.75;overflow-wrap:anywhere;}
+  .ac .exp{color:var(--sub);font-size:0.84rem;}
+  .fig{margin:14px 0;border:1px solid var(--line);border-radius:8px;padding:10px;background:#fcfdfc;}
+  .fig figcaption{font-size:0.82rem;color:var(--sub);margin-bottom:6px;font-weight:700;}
+  .fig svg{width:100%;height:auto;display:block;}
+  .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:12px 0;}
+  table{border-collapse:collapse;font-size:0.82rem;min-width:520px;width:100%;}
+  th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top;white-space:nowrap;}
+  th{background:var(--accent-light);}
+  td.wrap,th.wrap{white-space:normal;}
   h2.star{background:var(--star-light);border-left-color:var(--star);}
-  details.ans.star{border-color:var(--star);background:var(--star-light);}
-  details.ans.star>summary{color:var(--star);} details.ans.star[open]>summary{border-bottom-color:var(--star);}
-  @media print{body{padding:0;max-width:none;} details.ans{break-inside:avoid;}}
-</style>
+  details.a.star>summary{background:var(--star);}
+  details.a.star[open]>summary{background:var(--ans);}
+  .note{color:var(--sub);font-size:0.82rem;}
+  @media(max-width:430px){
+    body{padding:14px 12px 70px;} h1{font-size:1.2rem;}
+    ol.qa{padding-left:1.7em;} .ac{font-size:0.88rem;}
+    table{font-size:0.78rem;min-width:460px;}
+  }
+  @media print{.toolbar{display:none;} details.a[open] .ac{display:block;} body{max-width:none;}}
+</style></head><body>
 
-<h1>中1理科② 身のまわりの物質 問題集</h1>
-<p class="meta">氏名：＿＿＿＿＿＿＿＿＿＿　　実施日：＿＿＿月＿＿＿日</p>
-<div class="lead">第1分野「身のまわりの物質」から、定期テストに出やすい<b>200問＋★発展20問</b>。通し番号1〜220。解答は各まとまりの「▶ 解答・解説を開く」で表示。まちがえた問題に印をつけ、3日後にもう一度。</div>
-<div class="toc"><b>目次</b><br>
-  A <a href="#a">物質の性質（有機物・金属・密度）1〜50</a>　B <a href="#b">気体の性質 51〜100</a><br>
-  C <a href="#c">水溶液 101〜150</a>　D <a href="#d">状態変化 151〜200</a>　★ <a href="#star">発展 201〜220</a>
+<h1>中1理科② 身のまわりの物質</h1>
+<p class="meta">氏名：＿＿＿＿＿＿＿＿　実施日：＿＿月＿＿日　／　定期テスト対策 400問＋★発展40問（通し番号1〜440）</p>
+<div class="lead">各問の下の<b>「▶答え」</b>を押すと、その場で解答・解説が開きます。まちがえた問題に印をつけ、3日後・テスト前にもう一度。図と表も活用しよう。</div>
+<div class="toolbar">
+  <button onclick="document.querySelectorAll('details.a').forEach(d=>d.open=true)">すべての答えを開く</button>
+  <button onclick="document.querySelectorAll('details.a').forEach(d=>d.open=false)">すべて閉じる</button>
 </div>
+<div class="toc"><b>目次</b>　A <a href="#a">物質の性質（1〜100）</a>　B <a href="#b">気体（101〜200）</a>　C <a href="#c">水溶液（201〜300）</a>　D <a href="#d">状態変化（301〜400）</a>　★ <a href="#star">発展（401〜440）</a></div>
 
-<h2 id="a">A　物質の性質（有機物・無機物・金属・密度）<span class="pts">（50問）</span></h2>
-<ol class="q" start="1">
-  <li>炭素をふくみ、燃やすと二酸化炭素を出す物質を何というか。</li>
-  <li>有機物以外の物質をまとめて何というか。</li>
-  <li>有機物を燃やすと、二酸化炭素のほかに何ができるか。</li>
-  <li>二酸化炭素の発生を確かめる薬品は何か。</li>
-  <li>二酸化炭素を石灰水に通すとどうなるか。</li>
-  <li>有機物に共通してふくまれる元素を2つ答えよ。</li>
-  <li>次のうち有機物をすべて選べ。〔砂糖・食塩・デンプン・ガラス・エタノール・鉄〕</li>
-  <li>炭素をふくむが、例外的に無機物としてあつかう物質を2つ答えよ。</li>
-  <li>スチールウール（鉄）を燃やしても二酸化炭素が出ない理由を書け。</li>
-  <li>白い粉が砂糖か食塩か、加熱して見分ける方法を書け。</li>
-  <li>金属に特有のかがやきを何というか。</li>
-  <li>金属をたたくとうすく広がる性質を何というか。</li>
-  <li>金属を引っぱると細くのびる性質を何というか。</li>
-  <li>金属に共通する性質を3つ答えよ。</li>
-  <li>「磁石につく」ことは金属すべてに共通する性質か。</li>
-  <li>金属ではない物質をまとめて何というか。</li>
-  <li>アルミニウムや銅は磁石につくか。</li>
-  <li>電気をよく通し、みがくと光るのは金属・非金属のどちらか。</li>
-  <li>一定の体積あたりの質量を何というか。</li>
-  <li>密度の単位を書け。</li>
-  <li>密度を求める式を書け。</li>
-  <li>密度が物質を区別する手がかりになるのはなぜか。</li>
-  <li>液体に入れた固体が浮くのは、固体の密度が液体よりどうのときか。</li>
-  <li>水（密度1.0g/cm³）に浮く物質の密度はどうか。</li>
-  <li>質量と重さのちがいを説明せよ。</li>
-  <li>質量をはかる器具を1つ答えよ。</li>
-  <li>上皿てんびんで分銅は重い方・軽い方どちらからのせるか。</li>
-  <li>液体や不規則な形の固体の体積をはかる器具は何か。</li>
-  <li>メスシリンダーの目盛りは、どこを・どの方向から読むか。</li>
-  <li>メスシリンダーで金属の体積を求める方法を書け。</li>
-  <li>質量40g・体積5cm³の物質の密度を求めよ。</li>
-  <li>質量54g・体積20cm³の物質の密度を求めよ。</li>
-  <li>密度7.9g/cm³の鉄10cm³の質量を求めよ。</li>
-  <li>密度0.90g/cm³の物質45gの体積を求めよ。</li>
-  <li>密度2.7g/cm³はアルミニウム・鉄・金のどれか。</li>
-  <li>同じ体積で比べたとき、密度が大きいほど質量はどうか。</li>
-  <li>氷が水に浮く理由を密度を使って説明せよ。</li>
-  <li>密度1.2g/cm³のプラスチックは水に浮くか沈むか。</li>
-  <li>プラスチックの主な原料は何か。</li>
-  <li>プラスチックは有機物か無機物か、理由も書け。</li>
-  <li>ペットボトルの材料PETは何の略か。</li>
-  <li>プラスチックに共通する性質を2つ答えよ。</li>
-  <li>プラスチックが引き起こす環境問題を1つ書け。</li>
-  <li>ガスバーナーの炎がオレンジ色のとき、どう操作するか。</li>
-  <li>ガスバーナーで空気の量を調節するねじはどれか。</li>
-  <li>ガスバーナーに点火するとき、先に開けるのはガス調節ねじ・空気調節ねじのどちらか。</li>
-  <li>密度・融点・沸点のように物質ごとに決まっていて区別に使える性質を、まとめて何というか。</li>
-  <li>実験で気体などのにおいをかぐときの正しい方法を書け。</li>
-  <li>質量237g・体積30cm³の金属の密度を求め、鉄・アルミ・金のどれか答えよ。</li>
-  <li>電子てんびんで、はかる前に表示を0にする操作を何というか。</li>
+<!-- ============================ A 物質の性質 ============================ -->
+<h2 id="a">A　物質の性質（有機物・金属・密度）<span class="pts">100問</span></h2>
+
+<figure class="fig"><figcaption>おもな物質の密度（g/cm³）— 水1.00より小さいと水に浮く</figcaption>
+<div class="tbl-wrap"><table>
+<tr><th>物質</th><td>氷</td><td>ポリエチレン</td><td>エタノール</td><td>水</td><td>アルミニウム</td><td>鉄</td><td>銅</td><td>銀</td><td>金</td><td>水銀</td></tr>
+<tr><th>密度</th><td>0.92</td><td>0.95</td><td>0.79</td><td>1.00</td><td>2.70</td><td>7.87</td><td>8.96</td><td>10.5</td><td>19.3</td><td>13.5</td></tr>
+</table></div></figure>
+
+<h3>有機物と無機物（1〜22）</h3>
+<ol class="qa" start="1">
+<li><span class="q">炭素をふくみ、燃やすと二酸化炭素を出す物質を何というか。</span><details class="a"><summary>答え</summary><div class="ac">有機物</div></details></li>
+<li><span class="q">有機物以外の物質をまとめて何というか。</span><details class="a"><summary>答え</summary><div class="ac">無機物</div></details></li>
+<li><span class="q">有機物を燃やすと、二酸化炭素のほかに何ができるか。</span><details class="a"><summary>答え</summary><div class="ac">水（水蒸気）</div></details></li>
+<li><span class="q">二酸化炭素の発生を確かめる薬品は何か。</span><details class="a"><summary>答え</summary><div class="ac">石灰水</div></details></li>
+<li><span class="q">二酸化炭素を石灰水に通すとどうなるか。</span><details class="a"><summary>答え</summary><div class="ac">白くにごる</div></details></li>
+<li><span class="q">有機物に共通してふくまれる元素を2つ答えよ。</span><details class="a"><summary>答え</summary><div class="ac">炭素と水素</div></details></li>
+<li><span class="q">次のうち有機物をすべて選べ。〔砂糖・食塩・デンプン・ガラス・エタノール・鉄〕</span><details class="a"><summary>答え</summary><div class="ac">砂糖・デンプン・エタノール</div></details></li>
+<li><span class="q">炭素をふくむが、例外的に無機物としてあつかう物質を2つ答えよ。</span><details class="a"><summary>答え</summary><div class="ac">炭（炭素）・二酸化炭素</div></details></li>
+<li><span class="q">スチールウール（鉄）を燃やしても二酸化炭素が出ない理由を書け。</span><details class="a"><summary>答え</summary><div class="ac">鉄は炭素をふくまない無機物だから</div></details></li>
+<li><span class="q">白い粉が砂糖か食塩か、加熱して見分ける方法を書け。</span><details class="a"><summary>答え</summary><div class="ac">加熱して黒くこげ二酸化炭素を出すのが砂糖（有機物）。食塩は変化しにくい</div></details></li>
+<li><span class="q">プラスチックは有機物か無機物か、理由も書け。</span><details class="a"><summary>答え</summary><div class="ac">有機物（燃やすと二酸化炭素を出すから）</div></details></li>
+<li><span class="q">紙・木・ろうは有機物か無機物か。</span><details class="a"><summary>答え</summary><div class="ac">有機物</div></details></li>
+<li><span class="q">ガラス・食塩・金属・水は有機物か無機物か。</span><details class="a"><summary>答え</summary><div class="ac">無機物</div></details></li>
+<li><span class="q">有機物を集気びんの中で燃やし、石灰水を入れて振ると何が起こるか。</span><details class="a"><summary>答え</summary><div class="ac">石灰水が白くにごる（二酸化炭素ができた証拠）</div></details></li>
+<li><span class="q">有機物を燃やしたとき、びんの内側が白くくもるのは何ができたからか。</span><details class="a"><summary>答え</summary><div class="ac">水（水蒸気）</div></details></li>
+<li><span class="q">砂糖を加熱し続けると最後に黒く残るものは何か。</span><details class="a"><summary>答え</summary><div class="ac">炭（炭素）</div></details></li>
+<li><span class="q">「燃やす」と「加熱する」で有機物を調べるとき、無機物の食塩はどうなるか。</span><details class="a"><summary>答え</summary><div class="ac">こげたり二酸化炭素を出したりせず、ほとんど変化しない</div></details></li>
+<li><span class="q">エタノールが有機物だと確かめるには、燃やして何を調べればよいか。</span><details class="a"><summary>答え</summary><div class="ac">二酸化炭素（石灰水）と水ができるか</div></details></li>
+<li><span class="q">ろうそくのろうは有機物である。燃えると出る2つの物質は何か。</span><details class="a"><summary>答え</summary><div class="ac">二酸化炭素と水</div></details></li>
+<li><span class="q">有機物と無機物を1つの操作で見分ける方法を書け。</span><details class="a"><summary>答え</summary><div class="ac">加熱（燃やして）二酸化炭素と水が出れば有機物、出なければ無機物</div></details></li>
+<li><span class="q">デンプンやブドウ糖が有機物であるのは、何をふくむからか。</span><details class="a"><summary>答え</summary><div class="ac">炭素（と水素）</div></details></li>
+<li><span class="q">二酸化炭素は炭素をふくむのに無機物とされる。もう1つ同じ例を挙げよ。</span><details class="a"><summary>答え</summary><div class="ac">一酸化炭素・炭（炭素） など</div></details></li>
 </ol>
-<details class="ans"><summary>▶ 解答・解説を開く（A 1〜50）</summary>
-<ol class="a" start="1">
-  <li>有機物</li><li>無機物</li><li>水（水蒸気）</li><li>石灰水</li><li>白くにごる</li>
-  <li>炭素と水素</li><li>砂糖・デンプン・エタノール</li><li>炭（炭素）・二酸化炭素</li>
-  <li>鉄は炭素をふくまない無機物だから</li>
-  <li>加熱して黒くこげ、二酸化炭素を出すのが砂糖（有機物）。食塩は変化しにくい</li>
-  <li>金属光沢</li><li>展性</li><li>延性</li>
-  <li>金属光沢がある／電気を通す／熱を通す／展性・延性 から3つ</li>
-  <li>共通ではない（鉄などの一部だけ）</li><li>非金属</li><li>つかない</li><li>金属</li>
-  <li>密度</li><li>g/cm³</li><li>密度＝質量÷体積</li>
-  <li>物質ごとに密度が決まっているから</li><li>小さいとき</li><li>1.0より小さい</li>
-  <li>質量＝物質そのものの量で場所により変わらない／重さ＝物体にはたらく重力の大きさで場所により変わる</li>
-  <li>上皿てんびん・電子てんびん</li><li>重い方から</li><li>メスシリンダー</li>
-  <li>液面（メニスカス）の平らな所を真横から、最小目盛りの1/10まで目分量で</li>
-  <li>水を入れて体積を読み、金属を沈めて増えた体積が金属の体積</li>
-  <li>8.0 g/cm³</li><li>2.7 g/cm³</li><li>79 g</li><li>50 cm³</li><li>アルミニウム</li>
-  <li>大きい</li><li>氷の密度が水より小さいから</li><li>沈む（1.2＞1.0）</li>
-  <li>石油</li><li>有機物（燃やすと二酸化炭素を出すから）</li><li>ポリエチレンテレフタラート</li>
-  <li>電気を通しにくい／さびない／軽い／加工しやすい から2つ</li>
-  <li>自然に分解されにくく、マイクロプラスチックとして環境に残る 等</li>
-  <li>空気調節ねじを開いて空気を増やし、青い炎にする</li><li>空気調節ねじ</li>
-  <li>ガス調節ねじ</li><li>物質固有の性質（物性）</li><li>手であおいでかぐ</li>
-  <li>7.9 g/cm³、鉄</li><li>ゼロ点調整（風袋引き・リセット）</li>
-</ol></details>
 
-<h2 id="b">B　気体の性質<span class="pts">（50問）</span></h2>
-<ol class="q" start="51">
-  <li>酸素は何に何を加えて発生させるか。</li>
-  <li>酸素の集め方は何か。</li>
-  <li>酸素を水上置換で集められる理由を書け。</li>
-  <li>酸素の色とにおいを答えよ。</li>
-  <li>酸素にはものを燃やすはたらきがあるか。火のついた線香を入れるとどうなるか。</li>
-  <li>二酸化炭素は何に何を加えて発生させるか。</li>
-  <li>二酸化炭素の集め方を2つ答えよ。</li>
-  <li>二酸化炭素を下方置換で集められる理由を書け。</li>
-  <li>二酸化炭素を水に溶かした水溶液は何性か。</li>
-  <li>二酸化炭素であることを確かめる方法を書け。</li>
-  <li>水素は何に何を加えて発生させるか。</li>
-  <li>水素の集め方は何か。</li>
-  <li>水素の最大の特徴を「重さ」の面から答えよ。</li>
-  <li>水素に火を近づけるとどうなるか。</li>
-  <li>アンモニアの発生方法を書け。</li>
-  <li>アンモニアのにおいを答えよ。</li>
-  <li>アンモニアの集め方は何か。</li>
-  <li>アンモニアを上方置換で集める理由を2つ答えよ。</li>
-  <li>アンモニアの水溶液は何性か。</li>
-  <li>アンモニア水にフェノールフタレイン溶液を加えると何色になるか。</li>
-  <li>アンモニアの噴水実験で、フラスコに水が吸い上げられる理由を書け。</li>
-  <li>空気の約78%を占める気体は何か。</li>
-  <li>空気の約21%を占める気体は何か。</li>
-  <li>気体の集め方3種をすべて答えよ。</li>
-  <li>水に溶けにくい気体の集め方は何か。</li>
-  <li>水に溶けやすく空気より軽い気体の集め方は何か。</li>
-  <li>水に溶けやすく空気より重い気体の集め方は何か。</li>
-  <li>水上置換の利点を1つ書け。</li>
-  <li>二酸化炭素を水に溶かした水溶液の名前を答えよ。</li>
-  <li>刺激臭のある気体を1つ答えよ。</li>
-  <li>酸素の中に火のついた線香を入れるとどうなるか。</li>
-  <li>二酸化炭素の中に火のついた線香を入れるとどうなるか。</li>
-  <li>酸素・二酸化炭素・水素・アンモニアで、水に最もよく溶けるのはどれか。</li>
-  <li>空気より軽い気体を2つ答えよ。</li>
-  <li>空気より重い気体を1つ答えよ。</li>
-  <li>気体を集めるとき、はじめに出てくる気体を捨てる理由を書け。</li>
-  <li>うすい塩酸に鉄（またはマグネシウム）を入れると出る気体は何か。</li>
-  <li>石灰石の代わりに二酸化炭素を出せる身近な物質を1つ答えよ。</li>
-  <li>二酸化炭素は地球温暖化の原因の1つか。</li>
-  <li>酸素を発生させるとき使う二酸化マンガンの役割を書け。</li>
-  <li>気体の性質を調べる観点を3つ答えよ。</li>
-  <li>アンモニアの実験で注意することを1つ書け。</li>
-  <li>水素が燃料電池に使われる利点を書け。</li>
-  <li>気体Aは無色・無臭で、ものを燃やすはたらきがある。Aは何か。</li>
-  <li>気体Bは刺激臭で水に非常に溶け、水溶液はアルカリ性。Bは何か。</li>
-  <li>気体Cは石灰水を白くにごらせる。Cは何か。</li>
-  <li>気体Dは最も軽く、火をつけると音を立てて燃え水ができる。Dは何か。</li>
-  <li>過酸化水素水（オキシドール）にレバーを入れても出る気体は何か。</li>
-  <li>塩酸の溶質である気体は何か。</li>
-  <li>アンモニア水にBTB溶液を加えると何色になるか。</li>
+<h3>金属の性質（23〜42）</h3>
+<ol class="qa" start="23">
+<li><span class="q">金属に特有のかがやきを何というか。</span><details class="a"><summary>答え</summary><div class="ac">金属光沢</div></details></li>
+<li><span class="q">金属をたたくとうすく広がる性質を何というか。</span><details class="a"><summary>答え</summary><div class="ac">展性</div></details></li>
+<li><span class="q">金属を引っぱると細くのびる性質を何というか。</span><details class="a"><summary>答え</summary><div class="ac">延性</div></details></li>
+<li><span class="q">金属に共通する性質を3つ答えよ。</span><details class="a"><summary>答え</summary><div class="ac">金属光沢がある／電気を通す／熱を通す／展性・延性 から3つ</div></details></li>
+<li><span class="q">「磁石につく」ことは金属すべてに共通する性質か。</span><details class="a"><summary>答え</summary><div class="ac">共通ではない（鉄などの一部だけ）</div></details></li>
+<li><span class="q">金属ではない物質をまとめて何というか。</span><details class="a"><summary>答え</summary><div class="ac">非金属</div></details></li>
+<li><span class="q">アルミニウムや銅は磁石につくか。</span><details class="a"><summary>答え</summary><div class="ac">つかない</div></details></li>
+<li><span class="q">電気をよく通し、みがくと光るのは金属・非金属のどちらか。</span><details class="a"><summary>答え</summary><div class="ac">金属</div></details></li>
+<li><span class="q">金属を見分けるのに「磁石につくか」だけでは不十分な理由を書け。</span><details class="a"><summary>答え</summary><div class="ac">鉄以外の金属（アルミ・銅など）は磁石につかないから</div></details></li>
+<li><span class="q">1円玉の材料になっている軽い金属は何か。</span><details class="a"><summary>答え</summary><div class="ac">アルミニウム</div></details></li>
+<li><span class="q">電線に多く使われる、電気をよく通す金属は何か。</span><details class="a"><summary>答え</summary><div class="ac">銅</div></details></li>
+<li><span class="q">金属をみがくとかがやくが、みがいても光らない物質の例を1つ。</span><details class="a"><summary>答え</summary><div class="ac">ガラス・プラスチック・木 など</div></details></li>
+<li><span class="q">金ぱく（金を非常にうすくのばしたもの）は、金属のどの性質を利用しているか。</span><details class="a"><summary>答え</summary><div class="ac">展性</div></details></li>
+<li><span class="q">フライパンの底に金属を使うのは、金属のどの性質を利用しているか。</span><details class="a"><summary>答え</summary><div class="ac">熱をよく通す性質</div></details></li>
+<li><span class="q">電気コードの芯に金属、まわりにプラスチックを使う理由を書け。</span><details class="a"><summary>答え</summary><div class="ac">金属は電気を通し、プラスチックは通さない（絶縁）から</div></details></li>
+<li><span class="q">金属をたたいて板や線にできるのは、展性・延性のうちどちらとどちらか。</span><details class="a"><summary>答え</summary><div class="ac">板＝展性、線＝延性</div></details></li>
+<li><span class="q">スチール缶とアルミ缶を磁石で分けられるのはなぜか。</span><details class="a"><summary>答え</summary><div class="ac">鉄（スチール）は磁石につくが、アルミはつかないから</div></details></li>
+<li><span class="q">金属は電気を通すが、同じく電気を通す非金属の例を1つ挙げよ。</span><details class="a"><summary>答え</summary><div class="ac">炭素（黒鉛・シャープペンの芯）</div></details></li>
+<li><span class="q">身のまわりで金属でできているものを1つ挙げ、使われている理由を書け。</span><details class="a"><summary>答え</summary><div class="ac">（例）なべ＝熱をよく通す／針金＝延性で曲げやすい など</div></details></li>
+<li><span class="q">金属の「電気を通す」性質を利用したものを1つ挙げよ。</span><details class="a"><summary>答え</summary><div class="ac">電線・スイッチ・電池の端子 など</div></details></li>
 </ol>
-<details class="ans"><summary>▶ 解答・解説を開く（B 51〜100）</summary>
-<ol class="a" start="51">
-  <li>二酸化マンガンにうすい過酸化水素水（オキシドール）を加える</li>
-  <li>水上置換</li><li>水に溶けにくいから</li><li>無色・無臭</li>
-  <li>ある（助燃性）。線香が炎を上げて激しく燃える</li>
-  <li>石灰石にうすい塩酸を加える</li><li>下方置換・水上置換</li>
-  <li>空気より重いから</li><li>酸性（炭酸水）</li><li>石灰水に通すと白くにごる</li>
-  <li>亜鉛（鉄・マグネシウム）にうすい塩酸を加える</li><li>水上置換</li>
-  <li>気体の中で最も軽い</li><li>ポンと音を立てて燃え、水ができる</li>
-  <li>塩化アンモニウムと水酸化カルシウムを混ぜて加熱（またはアンモニア水を加熱）</li>
-  <li>刺激臭</li><li>上方置換</li><li>水に非常に溶けやすく、空気より軽いから</li>
-  <li>アルカリ性</li><li>赤色</li>
-  <li>アンモニアが水に非常によく溶け、フラスコ内の圧力が下がるから</li>
-  <li>窒素</li><li>酸素</li><li>水上置換・上方置換・下方置換</li>
-  <li>水上置換</li><li>上方置換</li><li>下方置換</li>
-  <li>空気と混ざらず純粋に集められる／集まる量が見える</li>
-  <li>炭酸水</li><li>アンモニア（塩素）</li>
-  <li>炎を上げて激しく燃える</li><li>火が消える</li><li>アンモニア</li>
-  <li>水素・アンモニア</li><li>二酸化炭素</li>
-  <li>装置内の空気が混じっているから</li><li>水素</li>
-  <li>貝がら・卵の殻（炭酸カルシウム）</li><li>はい（温室効果ガス）</li>
-  <li>反応を速める（自身は変化しない）＝触媒</li>
-  <li>色／におい／水への溶け方／空気と比べた重さ／火をつけたとき から3つ</li>
-  <li>換気する／においは手であおいでかぐ</li>
-  <li>燃えても水しかできず環境にやさしい</li>
-  <li>酸素</li><li>アンモニア</li><li>二酸化炭素</li><li>水素</li>
-  <li>酸素</li><li>塩化水素</li><li>青色</li>
-</ol></details>
 
-<h2 id="c">C　水溶液<span class="pts">（50問）</span></h2>
-<ol class="q" start="101">
-  <li>水などに溶けている物質を何というか。</li>
-  <li>溶かしている液体を何というか。</li>
-  <li>溶質が溶媒に溶けた液全体を何というか。</li>
-  <li>溶媒が水である溶液を特に何というか。</li>
-  <li>物質が液全体に均一に広がって溶けることを何というか。</li>
-  <li>水溶液の性質を2つ答えよ。</li>
-  <li>色のついた水溶液は「透明」といえるか。</li>
-  <li>砂糖10gを水90gに溶かした砂糖水の質量は何gか。</li>
-  <li>溶質の質量＋溶媒の質量は何に等しいか。</li>
-  <li>質量パーセント濃度を求める式を書け。</li>
-  <li>砂糖20gを水80gに溶かした水溶液の濃度は何%か。</li>
-  <li>食塩15gを水135gに溶かした水溶液の濃度は何%か。</li>
-  <li>濃度10%の食塩水200gに溶けている食塩は何gか。</li>
-  <li>濃度25%の水溶液100gにふくまれる水は何gか。</li>
-  <li>一定量の水に溶ける物質の限界の量を何というか。</li>
-  <li>溶解度まで溶けた水溶液を何というか。</li>
-  <li>溶解度は水何gについての量で表すか。</li>
-  <li>多くの固体で、温度が高いほど溶解度はどうなるか。</li>
-  <li>気体の溶解度は、温度が高いほどどうなるか。</li>
-  <li>温度による溶解度の変化を表したグラフを何というか。</li>
-  <li>いったん溶かした物質を再び結晶として取り出すことを何というか。</li>
-  <li>再結晶の方法を2つ答えよ。</li>
-  <li>温度を下げても結晶が出にくい（溶解度が温度であまり変わらない）物質の例を答えよ。</li>
-  <li>塩化ナトリウムを取り出すのに適した方法はどちらか。</li>
-  <li>硝酸カリウムを取り出すのに適した方法はどちらか。</li>
-  <li>純粋な物質が規則正しい形になったものを何というか。</li>
-  <li>塩化ナトリウムの結晶の形を答えよ。</li>
-  <li>ミョウバンの結晶の形を答えよ。</li>
-  <li>固体と液体を分ける操作を何というか。</li>
-  <li>ろ過に使う紙を何というか。</li>
-  <li>ろ過で液を注ぐときに伝わせる道具は何か。</li>
-  <li>ろうとの足の長い方はどうするか。</li>
-  <li>ろ過で、ろ紙を通りぬけるもの・残るものはそれぞれ何か。</li>
-  <li>60℃の水100gに硝酸カリウムが110g溶ける。20℃では32gしか溶けない。20℃まで冷やすと何gの結晶が出るか。</li>
-  <li>飽和水溶液を冷やすと結晶が出る理由を書け。</li>
-  <li>コーヒーシュガー（茶色）を水に溶かすと、色はどうなるか。</li>
-  <li>溶けた溶質の粒子は、時間がたつと下に沈むか。</li>
-  <li>水溶液の濃度を濃くする方法を2つ答えよ。</li>
-  <li>飽和水溶液にさらに溶質を加えるとどうなるか。</li>
-  <li>水溶液から水を蒸発させると溶質はどうなるか。</li>
-  <li>濃度8%の食塩水250gにふくまれる食塩は何gか。</li>
-  <li>食塩30gを溶かして濃度15%の食塩水を作るには、水は何g必要か。</li>
-  <li>溶解度曲線が急な物質と緩やかな物質、冷やして多く結晶が出るのはどちらか。</li>
-  <li>ろ過のとき、液はろ紙の何分目までにするか。</li>
-  <li>溶質が気体である水溶液の例を1つ答えよ。</li>
-  <li>塩酸の溶質は何か。</li>
-  <li>溶解を粒子のモデルで説明すると、溶質の粒子はどうなるか。</li>
-  <li>水100gに20℃で35g溶ける物質を、20℃の水200gに溶かすと最大何g溶けるか。</li>
-  <li>塩化ナトリウム水溶液から水を蒸発させると出てくる結晶の形は何か。</li>
-  <li>純粋な水（蒸留水）は溶質をふくむか。</li>
+<h3>密度と体積・質量（43〜80）</h3>
+<figure class="fig"><figcaption>密度と浮き沈み — 液体より密度が小さい固体は浮く</figcaption>
+<svg viewBox="0 0 460 150" role="img" aria-label="密度と浮き沈みの図">
+  <rect x="20" y="40" width="180" height="90" fill="#e6f1fb" stroke="#4a86c8"/>
+  <text x="110" y="30" text-anchor="middle" font-size="12" fill="#333">水（密度1.0）</text>
+  <line x1="20" y1="70" x2="200" y2="70" stroke="#4a86c8" stroke-dasharray="4 3"/>
+  <rect x="70" y="52" width="34" height="24" fill="#ffd27f" stroke="#c8860a"/><text x="87" y="68" text-anchor="middle" font-size="10">氷0.92</text>
+  <text x="150" y="66" font-size="10" fill="#1a7a4a">浮く</text>
+  <rect x="70" y="95" width="34" height="24" fill="#bbb" stroke="#666"/><text x="87" y="111" text-anchor="middle" font-size="10">鉄7.9</text>
+  <text x="150" y="112" font-size="10" fill="#b0306a">沈む</text>
+  <text x="250" y="60" font-size="13" fill="#1a2230">密度 ＝ 質量 ÷ 体積</text>
+  <text x="250" y="82" font-size="11" fill="#556">単位：g/cm³</text>
+  <text x="250" y="104" font-size="11" fill="#556">固体の密度 ＜ 液体 → 浮く</text>
+  <text x="250" y="122" font-size="11" fill="#556">固体の密度 ＞ 液体 → 沈む</text>
+</svg></figure>
+<ol class="qa" start="43">
+<li><span class="q">一定の体積あたりの質量を何というか。</span><details class="a"><summary>答え</summary><div class="ac">密度</div></details></li>
+<li><span class="q">密度の単位を書け。</span><details class="a"><summary>答え</summary><div class="ac">g/cm³</div></details></li>
+<li><span class="q">密度を求める式を書け。</span><details class="a"><summary>答え</summary><div class="ac">密度＝質量÷体積</div></details></li>
+<li><span class="q">密度が物質を区別する手がかりになるのはなぜか。</span><details class="a"><summary>答え</summary><div class="ac">物質ごとに密度が決まっているから</div></details></li>
+<li><span class="q">液体に入れた固体が浮くのは、固体の密度が液体よりどうのときか。</span><details class="a"><summary>答え</summary><div class="ac">小さいとき</div></details></li>
+<li><span class="q">水（密度1.0g/cm³）に浮く物質の密度はどうか。</span><details class="a"><summary>答え</summary><div class="ac">1.0より小さい</div></details></li>
+<li><span class="q">質量と重さのちがいを説明せよ。</span><details class="a"><summary>答え</summary><div class="ac">質量＝物質そのものの量で場所により変わらない／重さ＝物体にはたらく重力の大きさで場所により変わる</div></details></li>
+<li><span class="q">質量をはかる器具を1つ答えよ。</span><details class="a"><summary>答え</summary><div class="ac">上皿てんびん・電子てんびん</div></details></li>
+<li><span class="q">上皿てんびんで分銅は重い方・軽い方どちらからのせるか。</span><details class="a"><summary>答え</summary><div class="ac">重い方から</div></details></li>
+<li><span class="q">液体や不規則な形の固体の体積をはかる器具は何か。</span><details class="a"><summary>答え</summary><div class="ac">メスシリンダー</div></details></li>
+<li><span class="q">メスシリンダーの目盛りは、どこを・どの方向から読むか。</span><details class="a"><summary>答え</summary><div class="ac">液面（メニスカス）の平らな所を真横から、最小目盛りの1/10まで目分量で</div></details></li>
+<li><span class="q">メスシリンダーで金属の体積を求める方法を書け。</span><details class="a"><summary>答え</summary><div class="ac">水を入れて体積を読み、金属を沈めて増えた体積が金属の体積</div></details></li>
+<li><span class="q">質量40g・体積5cm³の物質の密度を求めよ。</span><details class="a"><summary>答え</summary><div class="ac">8.0 g/cm³<span class="exp">　40÷5</span></div></details></li>
+<li><span class="q">質量54g・体積20cm³の物質の密度を求めよ。</span><details class="a"><summary>答え</summary><div class="ac">2.7 g/cm³</div></details></li>
+<li><span class="q">密度7.9g/cm³の鉄10cm³の質量を求めよ。</span><details class="a"><summary>答え</summary><div class="ac">79 g<span class="exp">　7.9×10</span></div></details></li>
+<li><span class="q">密度0.90g/cm³の物質45gの体積を求めよ。</span><details class="a"><summary>答え</summary><div class="ac">50 cm³<span class="exp">　45÷0.90</span></div></details></li>
+<li><span class="q">密度2.7g/cm³はアルミニウム・鉄・金のどれか。</span><details class="a"><summary>答え</summary><div class="ac">アルミニウム</div></details></li>
+<li><span class="q">同じ体積で比べたとき、密度が大きいほど質量はどうか。</span><details class="a"><summary>答え</summary><div class="ac">大きい</div></details></li>
+<li><span class="q">氷が水に浮く理由を密度を使って説明せよ。</span><details class="a"><summary>答え</summary><div class="ac">氷の密度が水より小さいから</div></details></li>
+<li><span class="q">密度1.2g/cm³のプラスチックは水に浮くか沈むか。</span><details class="a"><summary>答え</summary><div class="ac">沈む（1.2＞1.0）</div></details></li>
+<li><span class="q">質量237g・体積30cm³の金属の密度を求め、鉄・アルミ・金のどれか答えよ。</span><details class="a"><summary>答え</summary><div class="ac">7.9 g/cm³、鉄</div></details></li>
+<li><span class="q">密度2.7g/cm³のアルミニウム135gの体積を求めよ。</span><details class="a"><summary>答え</summary><div class="ac">50 cm³<span class="exp">　135÷2.7</span></div></details></li>
+<li><span class="q">水50cm³を入れたメスシリンダーに金属を沈めると58cm³。この金属の体積は何cm³か。</span><details class="a"><summary>答え</summary><div class="ac">8 cm³</div></details></li>
+<li><span class="q">上の金属の質量が63.2gのとき、密度と物質名を答えよ。</span><details class="a"><summary>答え</summary><div class="ac">7.9 g/cm³、鉄<span class="exp">　63.2÷8</span></div></details></li>
+<li><span class="q">体積20cm³で質量54gの金属Aと、体積10cm³で質量27gの金属Bの密度を比べよ。</span><details class="a"><summary>答え</summary><div class="ac">どちらも2.7 g/cm³で等しい（同じ物質＝アルミの可能性）</div></details></li>
+<li><span class="q">密度19.3g/cm³は金・銀・銅のどれか。</span><details class="a"><summary>答え</summary><div class="ac">金</div></details></li>
+<li><span class="q">水銀（密度13.5）に鉄（7.9）を入れると浮くか沈むか。</span><details class="a"><summary>答え</summary><div class="ac">浮く（13.5＞7.9）</div></details></li>
+<li><span class="q">同じ質量のアルミと鉄では、体積が大きいのはどちらか。</span><details class="a"><summary>答え</summary><div class="ac">アルミ（密度が小さいほど体積は大きい）</div></details></li>
+<li><span class="q">物質の体積が2倍になると、密度は変わるか。</span><details class="a"><summary>答え</summary><div class="ac">同じ物質なら質量も2倍になり、密度は変わらない</div></details></li>
+<li><span class="q">エタノール（0.79）の上に水（1.0）を静かに注ぐと、上になるのはどちらか。</span><details class="a"><summary>答え</summary><div class="ac">エタノール（密度が小さいので上になる）</div></details></li>
+<li><span class="q">密度が2.7g/cm³の物質10cm³と、7.9g/cm³の物質10cm³では、質量が大きいのはどちらか。</span><details class="a"><summary>答え</summary><div class="ac">7.9g/cm³の物質（27gと79g）</div></details></li>
+<li><span class="q">プラスチックを水に入れると、浮くものと沈むものがある理由を書け。</span><details class="a"><summary>答え</summary><div class="ac">プラスチックの種類によって密度がちがうから</div></details></li>
+<li><span class="q">電子てんびんで、はかる前に表示を0にする操作を何というか。</span><details class="a"><summary>答え</summary><div class="ac">ゼロ点調整（風袋引き・リセット）</div></details></li>
+<li><span class="q">メスシリンダーで50.0cm³をはかるとき、目の高さはどこに合わせるか。</span><details class="a"><summary>答え</summary><div class="ac">液面と同じ高さ（真横）</div></details></li>
+<li><span class="q">同じ体積のいろいろな物質の質量をはかると、何のちがいがわかるか。</span><details class="a"><summary>答え</summary><div class="ac">密度のちがい（物質のちがい）</div></details></li>
+<li><span class="q">密度8.96g/cm³は銅・銀・鉄のどれか。</span><details class="a"><summary>答え</summary><div class="ac">銅</div></details></li>
+<li><span class="q">体積がわからない不規則な石の体積を水を使ってはかる方法を書け。</span><details class="a"><summary>答え</summary><div class="ac">メスシリンダーの水に沈め、増えた水の体積を石の体積とする</div></details></li>
+<li><span class="q">同じ物質なら、大きさ（体積）がちがっても密度は同じか。</span><details class="a"><summary>答え</summary><div class="ac">同じ（密度は物質ごとに決まっていて、量に関係しない）</div></details></li>
 </ol>
-<details class="ans"><summary>▶ 解答・解説を開く（C 101〜150）</summary>
-<ol class="a" start="101">
-  <li>溶質</li><li>溶媒</li><li>溶液</li><li>水溶液</li><li>溶解</li>
-  <li>透明である／濃さがどこも均一である</li><li>いえる（色があっても透き通っていれば透明）</li>
-  <li>100 g</li><li>溶液（の質量）</li><li>溶質の質量÷溶液の質量×100</li>
-  <li>20 %</li><li>10 %</li><li>20 g</li><li>75 g</li>
-  <li>溶解度</li><li>飽和水溶液</li><li>水100 g</li><li>大きくなる</li><li>小さくなる</li>
-  <li>溶解度曲線</li><li>再結晶</li><li>水溶液を冷やす／水を蒸発させる</li>
-  <li>塩化ナトリウム（食塩）</li><li>水を蒸発させる</li><li>水溶液を冷やす</li>
-  <li>結晶</li><li>立方体（サイコロ状）</li><li>正八面体</li><li>ろ過</li><li>ろ紙</li>
-  <li>ガラス棒</li><li>ビーカーの内壁につける</li>
-  <li>溶けているもの（溶質）は通りぬけ、溶けていない固体は残る</li>
-  <li>78 g</li><li>温度が下がると溶解度が小さくなり、溶けきれなくなるから</li>
-  <li>均一に広がり、透き通った茶色（透明）になる</li><li>沈まない（均一のまま）</li>
-  <li>溶質を増やす／水（溶媒）を蒸発させて減らす</li><li>溶け残る</li>
-  <li>結晶として出てくる</li><li>20 g</li><li>170 g</li><li>急な物質</li>
-  <li>八分目以下（あふれさせない）</li>
-  <li>炭酸水／塩酸／アンモニア水 など</li><li>塩化水素（気体）</li>
-  <li>水の粒子の間に均一に散らばる（なくならない）</li><li>70 g</li>
-  <li>立方体</li><li>ふくまない（純物質）</li>
-</ol></details>
 
-<h2 id="d">D　状態変化<span class="pts">（50問）</span></h2>
-<ol class="q" start="151">
-  <li>物質が温度によって固体・液体・気体とすがたを変えることを何というか。</li>
-  <li>物質の3つのすがた（状態）を答えよ。</li>
-  <li>状態変化で変化するのは体積・質量のどちらか。</li>
-  <li>状態変化で質量が変わらないのはなぜか。</li>
-  <li>状態変化すると密度はどうなるか。</li>
-  <li>ふつうの物質は固体→液体→気体と変化すると体積はどうなるか。</li>
-  <li>水が例外である点を答えよ。</li>
-  <li>そのため氷は水にどうなるか。</li>
-  <li>固体→液体の変化を何というか。</li>
-  <li>液体→固体の変化を何というか。</li>
-  <li>液体→気体の変化を何というか。</li>
-  <li>気体→液体の変化を何というか。</li>
-  <li>固体が液体を経ずに直接気体になる変化を何というか。</li>
-  <li>昇華する物質の例を1つ答えよ。</li>
-  <li>固体がとけて液体になる温度を何というか。</li>
-  <li>液体が沸騰して気体になる温度を何というか。</li>
-  <li>純粋な物質の融点・沸点は決まっているか。</li>
-  <li>混合物の融点・沸点は一定か。</li>
-  <li>水の融点と沸点をそれぞれ答えよ。</li>
-  <li>固体の粒子のようすを説明せよ。</li>
-  <li>液体の粒子のようすを説明せよ。</li>
-  <li>気体の粒子のようすを説明せよ。</li>
-  <li>状態変化で粒子の数や大きさは変わるか。</li>
-  <li>液体が表面から気体になる現象を何というか。</li>
-  <li>液体の内部からも気体になる現象を何というか。</li>
-  <li>加熱中、沸騰している間の温度はどうなるか。</li>
-  <li>加熱のグラフで温度が一定になる区間では何が起きているか。</li>
-  <li>液体を加熱するとき沸騰石を入れる理由を書け。</li>
-  <li>液体を沸騰させ、出た気体を冷やして再び液体にして集める操作を何というか。</li>
-  <li>蒸留で物質を分けられるのは、何のちがいを利用しているか。</li>
-  <li>水とエタノールの混合物を蒸留すると、先に多く出てくるのはどちらか。</li>
-  <li>エタノールの沸点は約何℃か。</li>
-  <li>蒸留の実験で、温度計の球部はどこの高さに置くか。</li>
-  <li>赤ワインを蒸留して得た最初の液体に火をつけると燃えるのはなぜか。</li>
-  <li>2種類以上の物質が混ざったものを何というか。</li>
-  <li>1種類の物質でできたものを何というか。</li>
-  <li>空気は純物質か混合物か。</li>
-  <li>食塩水は純物質か混合物か。</li>
-  <li>状態変化と化学変化のちがいを書け。</li>
-  <li>氷→水→水蒸気と変化しても変わらないものを2つ答えよ。</li>
-  <li>液体のろうが固まると体積はどうなるか。</li>
-  <li>冷たいコップの外側に水滴がつく現象は何変化か。</li>
-  <li>洗濯物が乾くのは何変化か。</li>
-  <li>ドライアイスが小さくなるのは何変化か。</li>
-  <li>純粋な水を冷やすと0℃で何が起き、そのときの温度はどうなるか。</li>
-  <li>加熱グラフで一定になる2つの区間は、それぞれ何を表すか。</li>
-  <li>蒸留で温度計の位置が枝より高い・低いと正しく測れない理由を書け。</li>
-  <li>海水から真水を得るのに使える方法は何か。</li>
-  <li>状態変化で体積は変わるのに質量が変わらないと、密度はどう変化するか。</li>
-  <li>純物質と混合物を、沸騰中の温度変化のグラフで見分ける方法を書け。</li>
+<h3>プラスチック・実験器具（81〜100）</h3>
+<ol class="qa" start="81">
+<li><span class="q">プラスチックの主な原料は何か。</span><details class="a"><summary>答え</summary><div class="ac">石油</div></details></li>
+<li><span class="q">ペットボトルの材料PETは何の略か。</span><details class="a"><summary>答え</summary><div class="ac">ポリエチレンテレフタラート</div></details></li>
+<li><span class="q">プラスチックに共通する性質を2つ答えよ。</span><details class="a"><summary>答え</summary><div class="ac">電気を通しにくい／さびない／軽い／加工しやすい から2つ</div></details></li>
+<li><span class="q">プラスチックが引き起こす環境問題を1つ書け。</span><details class="a"><summary>答え</summary><div class="ac">自然に分解されにくく、マイクロプラスチックとして環境に残る</div></details></li>
+<li><span class="q">レジ袋などに使われ、水に浮くプラスチックを1つ挙げよ。</span><details class="a"><summary>答え</summary><div class="ac">ポリエチレン（PE）</div></details></li>
+<li><span class="q">プラスチックを燃やすと出る気体は何か。</span><details class="a"><summary>答え</summary><div class="ac">二酸化炭素（有機物だから）</div></details></li>
+<li><span class="q">プラスチックが金属とちがう点を1つ書け。</span><details class="a"><summary>答え</summary><div class="ac">電気を通さない／さびない／燃える（有機物） など</div></details></li>
+<li><span class="q">ガスバーナーの炎がオレンジ色のとき、どう操作するか。</span><details class="a"><summary>答え</summary><div class="ac">空気調節ねじを開いて空気を増やし、青い炎にする</div></details></li>
+<li><span class="q">ガスバーナーで空気の量を調節するねじはどれか。</span><details class="a"><summary>答え</summary><div class="ac">空気調節ねじ（上のねじ）</div></details></li>
+<li><span class="q">ガスバーナーに点火するとき、先に開けるのはガス・空気どちらのねじか。</span><details class="a"><summary>答え</summary><div class="ac">ガス調節ねじ</div></details></li>
+<li><span class="q">ガスバーナーの2つのねじは、上と下どちらが空気調節ねじか。</span><details class="a"><summary>答え</summary><div class="ac">上が空気調節ねじ、下がガス調節ねじ</div></details></li>
+<li><span class="q">ガスバーナーの火を消すときの正しい順番を書け。</span><details class="a"><summary>答え</summary><div class="ac">空気調節ねじ→ガス調節ねじ→コック→元栓の順に閉じる</div></details></li>
+<li><span class="q">青い炎と赤い炎で、温度が高いのはどちらか。</span><details class="a"><summary>答え</summary><div class="ac">青い炎</div></details></li>
+<li><span class="q">実験で気体などのにおいをかぐときの正しい方法を書け。</span><details class="a"><summary>答え</summary><div class="ac">手であおいでかぐ</div></details></li>
+<li><span class="q">薬品が手についたときの正しい対応を書け。</span><details class="a"><summary>答え</summary><div class="ac">すぐに大量の水で洗い流す</div></details></li>
+<li><span class="q">加熱した試験管の口を、人のいる方に向けてはいけない理由を書け。</span><details class="a"><summary>答え</summary><div class="ac">中身が飛び出してけがをする危険があるから</div></details></li>
+<li><span class="q">密度・融点・沸点のように物質ごとに決まっていて区別に使える性質をまとめて何というか。</span><details class="a"><summary>答え</summary><div class="ac">物質固有の性質（物性）</div></details></li>
+<li><span class="q">物質を区別するのに使える手がかりを3つ挙げよ。</span><details class="a"><summary>答え</summary><div class="ac">密度／融点・沸点／色・におい・水への溶け方・燃え方 など</div></details></li>
+<li><span class="q">上皿てんびんを使い終わったあと、皿はどうしておくか。</span><details class="a"><summary>答え</summary><div class="ac">一方に重ねて、うでが動かないようにする</div></details></li>
+<li><span class="q">実験の記録で、はかった値は最小目盛りのどこまで読むか。</span><details class="a"><summary>答え</summary><div class="ac">最小目盛りの1/10まで（目分量で1けた）</div></details></li>
 </ol>
-<details class="ans"><summary>▶ 解答・解説を開く（D 151〜200）</summary>
-<ol class="a" start="151">
-  <li>状態変化</li><li>固体・液体・気体</li><li>体積（質量は変わらない）</li>
-  <li>粒子の数や大きさは変わらないから</li><li>変わる（体積が変わるため）</li>
-  <li>大きくなる</li><li>固体（氷）になると体積が増える（水より密度が小さい）</li><li>浮く</li>
-  <li>融解</li><li>凝固</li><li>蒸発（沸騰）</li><li>凝縮（凝結）</li><li>昇華</li>
-  <li>ドライアイス・ヨウ素・ナフタレン など</li><li>融点</li><li>沸点</li>
-  <li>決まっている（一定）</li><li>一定ではない</li><li>0℃と100℃</li>
-  <li>規則正しく並び、その場で振動している</li>
-  <li>粒子の間隔がやや広がり、比較的自由に動く</li>
-  <li>粒子の間隔が非常に広く、激しく飛び回る</li>
-  <li>変わらない</li><li>蒸発</li><li>沸騰</li><li>一定（沸点で変わらない）</li>
-  <li>状態変化（融解や沸騰）</li><li>急な沸騰（突沸）を防ぐため</li>
-  <li>蒸留</li><li>沸点のちがい</li><li>エタノール（沸点が低いため）</li><li>約78℃</li>
-  <li>枝つきフラスコの枝（気体の出口）の高さ</li>
-  <li>沸点の低いエタノールを多くふくむから</li>
-  <li>混合物</li><li>純粋な物質（純物質）</li><li>混合物</li><li>混合物</li>
-  <li>状態変化は物質の種類が変わらない／化学変化は別の物質になる</li>
-  <li>物質の種類・質量</li><li>小さくなる（へこむ）</li>
-  <li>凝縮（空気中の水蒸気が液体になる）</li><li>蒸発</li><li>昇華</li>
-  <li>凝固が起こり、こおる間は0℃で一定になる</li><li>融点（融解）と沸点（沸騰）</li>
-  <li>出てくる気体（蒸気）の温度を正しく測れないから</li><li>蒸留</li>
-  <li>体積が大きくなるので密度は小さくなる</li>
-  <li>純物質は沸点で温度が一定、混合物は温度が上がり続ける</li>
-</ol></details>
 
-<h2 id="star" class="star">★発展問題<span class="pts">（20問・応用/計算/記述）</span></h2>
-<ol class="q" start="201">
-  <li>密度の異なる3種類の液体を静かに重ねると、一番下にくるのは密度が大きい・小さいどちらの液体か。</li>
-  <li>濃度20%の食塩水150gと、濃度10%の食塩水50gを混ぜると、濃度は何%になるか。</li>
-  <li>60℃の水100gに硝酸カリウムを溶けるだけ溶かした（110g）。20℃（溶解度32g）まで冷やすと結晶は何g出るか。</li>
-  <li>気体Xを水上置換で集め、火のついた線香を入れると激しく燃えた。空気の約21%を占める。Xは何か。</li>
-  <li>アンモニアの噴水実験でフェノールフタレイン溶液が赤くなった。アンモニア水が何性だからか。</li>
-  <li>同じ体積の鉄（7.9g/cm³）とアルミニウム（2.7g/cm³）では、質量が大きいのはどちらか。</li>
-  <li>水50cm³を入れたメスシリンダーに金属を沈めると58cm³になった。金属の質量が21.6gのとき、密度と物質名を答えよ。</li>
-  <li>蒸留で最初に出た液（エタノールが多い）と後に出た液（水が多い）で、火をつけると燃えるのはどちらか。</li>
-  <li>二酸化炭素をBTB溶液に通すと何色になるか。またそれは何性だからか。</li>
-  <li>純物質と混合物を、加熱したときの温度変化のグラフだけで見分ける方法を書け。</li>
-  <li>金属を見分けるのに「磁石につくか」だけでは不十分な理由を書け。</li>
-  <li>ある白い粉が有機物か無機物かを、1つの実験で見分ける方法を書け。</li>
-  <li>密度2.7g/cm³のアルミニウム135gの体積を求めよ。</li>
-  <li>20℃の水100gに物質を80g入れたら20g溶け残った。この温度での溶解度は何gか。</li>
-  <li>状態変化で気体の体積が最も大きくなる理由を、粒子のようすで説明せよ。</li>
-  <li>水（密度1.0）に、密度0.92の氷と密度1.03の食塩水を考える。氷を食塩水に入れると浮くか沈むか。</li>
-  <li>うすい塩酸に鉄を加えると出る気体を確かめる方法（火を近づける）と、その結果を書け。</li>
-  <li>質量パーセント濃度15%の砂糖水を、水を加えて10%にしたい。砂糖を30g使ったとき、あとから加える水は何gか。</li>
-  <li>海水（混合物）を蒸留すると真水が得られる。この原理を「沸点」「水蒸気」を使って説明せよ。</li>
-  <li>物質A〜Cのうち、加熱すると黒くこげて石灰水を白くにごらせる気体を出すのはどれか（A砂糖・B食塩・Cガラス）。</li>
+<!-- ============================ B 気体 ============================ -->
+<h2 id="b">B　気体の性質<span class="pts">100問</span></h2>
+<figure class="fig"><figcaption>おもな気体のまとめ（→は横スクロール）</figcaption>
+<div class="tbl-wrap"><table>
+<tr><th>気体</th><th class="wrap">発生方法</th><th>集め方</th><th>色・におい</th><th class="wrap">水への溶け方</th><th>空気と比べ</th></tr>
+<tr><th>酸素</th><td class="wrap">二酸化マンガン＋過酸化水素水</td><td>水上置換</td><td>無色・無臭</td><td class="wrap">溶けにくい</td><td>少し重い</td></tr>
+<tr><th>二酸化炭素</th><td class="wrap">石灰石＋うすい塩酸</td><td>下方／水上</td><td>無色・無臭</td><td class="wrap">少し溶ける（酸性）</td><td>重い</td></tr>
+<tr><th>水素</th><td class="wrap">亜鉛（鉄）＋うすい塩酸</td><td>水上置換</td><td>無色・無臭</td><td class="wrap">溶けにくい</td><td>最も軽い</td></tr>
+<tr><th>アンモニア</th><td class="wrap">塩化アンモニウム＋水酸化カルシウムを加熱</td><td>上方置換</td><td>無色・刺激臭</td><td class="wrap">非常に溶ける（アルカリ性）</td><td>軽い</td></tr>
+</table></div></figure>
+<figure class="fig"><figcaption>気体の集め方3種と選び方</figcaption>
+<svg viewBox="0 0 470 160" role="img" aria-label="気体の集め方の図">
+  <!-- 水上置換 -->
+  <text x="70" y="16" text-anchor="middle" font-size="12" font-weight="bold" fill="#1a7a4a">水上置換</text>
+  <rect x="20" y="70" width="100" height="60" fill="#e6f1fb" stroke="#4a86c8"/>
+  <rect x="55" y="40" width="30" height="70" fill="#fff" stroke="#666"/>
+  <rect x="55" y="80" width="30" height="30" fill="#dff0e6" stroke="#666"/>
+  <text x="70" y="150" text-anchor="middle" font-size="9" fill="#556">水に溶けにくい気体</text>
+  <!-- 上方置換 -->
+  <text x="235" y="16" text-anchor="middle" font-size="12" font-weight="bold" fill="#1a7a4a">上方置換</text>
+  <rect x="205" y="30" width="60" height="55" fill="#dff0e6" stroke="#666"/>
+  <path d="M215 85 L255 85 L250 120 L220 120 Z" fill="#fff" stroke="#666"/>
+  <text x="235" y="140" text-anchor="middle" font-size="9" fill="#556">溶けやすく空気より軽い</text>
+  <text x="235" y="152" text-anchor="middle" font-size="9" fill="#556">（例：アンモニア）</text>
+  <!-- 下方置換 -->
+  <text x="400" y="16" text-anchor="middle" font-size="12" font-weight="bold" fill="#1a7a4a">下方置換</text>
+  <path d="M375 30 L415 30 L410 65 L380 65 Z" fill="#fff" stroke="#666"/>
+  <rect x="370" y="65" width="60" height="55" fill="#dff0e6" stroke="#666"/>
+  <text x="400" y="140" text-anchor="middle" font-size="9" fill="#556">溶けやすく空気より重い</text>
+  <text x="400" y="152" text-anchor="middle" font-size="9" fill="#556">（例：二酸化炭素）</text>
+</svg></figure>
+
+<h3>酸素・二酸化炭素（101〜130）</h3>
+<ol class="qa" start="101">
+<li><span class="q">酸素は何に何を加えて発生させるか。</span><details class="a"><summary>答え</summary><div class="ac">二酸化マンガンにうすい過酸化水素水（オキシドール）を加える</div></details></li>
+<li><span class="q">酸素の集め方は何か。</span><details class="a"><summary>答え</summary><div class="ac">水上置換</div></details></li>
+<li><span class="q">酸素を水上置換で集められる理由を書け。</span><details class="a"><summary>答え</summary><div class="ac">水に溶けにくいから</div></details></li>
+<li><span class="q">酸素の色とにおいを答えよ。</span><details class="a"><summary>答え</summary><div class="ac">無色・無臭</div></details></li>
+<li><span class="q">酸素の中に火のついた線香を入れるとどうなるか。</span><details class="a"><summary>答え</summary><div class="ac">炎を上げて激しく燃える</div></details></li>
+<li><span class="q">酸素そのものは燃えるか。</span><details class="a"><summary>答え</summary><div class="ac">燃えない（ほかのものを燃やすはたらき＝助燃性がある）</div></details></li>
+<li><span class="q">酸素は空気中に体積で約何%ふくまれるか。</span><details class="a"><summary>答え</summary><div class="ac">約21%</div></details></li>
+<li><span class="q">二酸化マンガンの役割を書け。</span><details class="a"><summary>答え</summary><div class="ac">反応を速める（自身は変化しない）＝触媒</div></details></li>
+<li><span class="q">過酸化水素水のかわりに使える身近なもの（酸素発生）を1つ。</span><details class="a"><summary>答え</summary><div class="ac">レバー（カタラーゼ）・ジャガイモ など</div></details></li>
+<li><span class="q">二酸化炭素は何に何を加えて発生させるか。</span><details class="a"><summary>答え</summary><div class="ac">石灰石にうすい塩酸を加える</div></details></li>
+<li><span class="q">二酸化炭素の集め方を2つ答えよ。</span><details class="a"><summary>答え</summary><div class="ac">下方置換・水上置換</div></details></li>
+<li><span class="q">二酸化炭素を下方置換で集められる理由を書け。</span><details class="a"><summary>答え</summary><div class="ac">空気より重いから</div></details></li>
+<li><span class="q">二酸化炭素を水に溶かした水溶液は何性か。</span><details class="a"><summary>答え</summary><div class="ac">酸性（炭酸水）</div></details></li>
+<li><span class="q">二酸化炭素であることを確かめる方法を書け。</span><details class="a"><summary>答え</summary><div class="ac">石灰水に通すと白くにごる</div></details></li>
+<li><span class="q">二酸化炭素の中に火のついた線香を入れるとどうなるか。</span><details class="a"><summary>答え</summary><div class="ac">火が消える</div></details></li>
+<li><span class="q">二酸化炭素の色とにおいを答えよ。</span><details class="a"><summary>答え</summary><div class="ac">無色・無臭</div></details></li>
+<li><span class="q">二酸化炭素の水溶液の名前を答えよ。</span><details class="a"><summary>答え</summary><div class="ac">炭酸水</div></details></li>
+<li><span class="q">石灰石のかわりに二酸化炭素を出せる身近な物質を1つ。</span><details class="a"><summary>答え</summary><div class="ac">貝がら・卵の殻（炭酸カルシウム）</div></details></li>
+<li><span class="q">二酸化炭素は地球温暖化の原因の1つか。</span><details class="a"><summary>答え</summary><div class="ac">はい（温室効果ガス）</div></details></li>
+<li><span class="q">炭酸水にBTB溶液を加えると何色になるか。</span><details class="a"><summary>答え</summary><div class="ac">黄色（酸性）</div></details></li>
+<li><span class="q">酸素を発生させる装置で、はじめに出る気体を捨てる理由を書け。</span><details class="a"><summary>答え</summary><div class="ac">装置内の空気が混じっているから</div></details></li>
+<li><span class="q">酸素を水上置換で集めるとき、試験管を水で満たしておく理由を書け。</span><details class="a"><summary>答え</summary><div class="ac">中の空気を追い出し、酸素だけを集めるため</div></details></li>
+<li><span class="q">酸素が使われている身近な例を1つ挙げよ。</span><details class="a"><summary>答え</summary><div class="ac">呼吸・ものを燃やす・医療用酸素 など</div></details></li>
+<li><span class="q">二酸化炭素をたくさん出す身近な現象を1つ挙げよ。</span><details class="a"><summary>答え</summary><div class="ac">ものが燃える・呼吸（吐く息）・炭酸飲料 など</div></details></li>
+<li><span class="q">ドライアイスは何が固体になったものか。</span><details class="a"><summary>答え</summary><div class="ac">二酸化炭素</div></details></li>
+<li><span class="q">二酸化炭素を石灰水に通しすぎると再び透明になることがある理由（発展）。</span><details class="a"><summary>答え</summary><div class="ac">さらに反応して水に溶ける物質に変わるから</div></details></li>
+<li><span class="q">酸素と二酸化炭素はどちらも無色無臭。線香を使ってどう見分けるか。</span><details class="a"><summary>答え</summary><div class="ac">激しく燃えれば酸素、消えれば二酸化炭素</div></details></li>
+<li><span class="q">酸素と二酸化炭素で、石灰水を白くにごらせるのはどちらか。</span><details class="a"><summary>答え</summary><div class="ac">二酸化炭素</div></details></li>
+<li><span class="q">二酸化炭素が水に少し溶けることで作られる、身近な飲み物は何か。</span><details class="a"><summary>答え</summary><div class="ac">炭酸飲料（炭酸水）</div></details></li>
+<li><span class="q">酸素が「ものを燃やすはたらき」をもつことを何というか。</span><details class="a"><summary>答え</summary><div class="ac">助燃性</div></details></li>
 </ol>
-<details class="ans star"><summary>▶ 解答・解説を開く（★発展 201〜220）</summary>
-<ol class="a" start="201">
-  <li>密度が大きい液体</li>
-  <li>17.5 %<span class="exp">　…（150×0.2＋50×0.1）÷200×100＝(30＋5)÷200×100</span></li>
-  <li>78 g<span class="exp">　…110−32＝78（水100g基準）</span></li>
-  <li>酸素</li><li>アルカリ性</li><li>鉄</li>
-  <li>2.7 g/cm³、アルミニウム<span class="exp">　…体積58−50＝8cm³、21.6÷8＝2.7</span></li>
-  <li>最初に出た液（エタノールが多い）</li>
-  <li>黄色。二酸化炭素の水溶液が酸性だから</li>
-  <li>純物質は沸点（融点）で温度が一定になるが、混合物は一定にならず温度が上がり続ける</li>
-  <li>鉄以外の金属（アルミニウム・銅など）は磁石につかないから</li>
-  <li>加熱（燃やして）二酸化炭素（石灰水が白くにごる）と水が出れば有機物、変化しなければ無機物</li>
-  <li>50 cm³<span class="exp">　…135÷2.7</span></li>
-  <li>60 g<span class="exp">　…80−20＝60g溶けた</span></li>
-  <li>気体は粒子の間隔が最も広く、激しく飛び回るから</li>
-  <li>浮く<span class="exp">　…氷0.92＜食塩水1.03</span></li>
-  <li>水素。火を近づけるとポンと音を立てて燃え、水ができる</li>
-  <li>100 g<span class="exp">　…砂糖30gが15%→溶液200g（水170g）。10%にするには溶液300g（水270g）。270−170＝100g</span></li>
-  <li>水が先に沸騰して水蒸気になり、それを冷やして液体（真水）として集める。塩は蒸発せず残る</li>
-  <li>A（砂糖）</li>
-</ol></details>
 
-<p class="note" style="margin-top:44px;text-align:center;border-top:1px solid var(--line);padding-top:18px;">
-全200問＋発展20問。計算問題（密度・濃度・溶解度）とグラフ・実験器具は定期テスト頻出。まちがえた問題に印をつけ、3日後・テスト前にもう一度。
-</p>
+<h3>水素・アンモニア・窒素（131〜160）</h3>
+<ol class="qa" start="131">
+<li><span class="q">水素は何に何を加えて発生させるか。</span><details class="a"><summary>答え</summary><div class="ac">亜鉛（鉄・マグネシウム）にうすい塩酸を加える</div></details></li>
+<li><span class="q">水素の集め方は何か。</span><details class="a"><summary>答え</summary><div class="ac">水上置換</div></details></li>
+<li><span class="q">水素の最大の特徴を「重さ」の面から答えよ。</span><details class="a"><summary>答え</summary><div class="ac">気体の中で最も軽い</div></details></li>
+<li><span class="q">水素に火を近づけるとどうなるか。</span><details class="a"><summary>答え</summary><div class="ac">ポンと音を立てて燃え、水ができる</div></details></li>
+<li><span class="q">水素の色とにおいを答えよ。</span><details class="a"><summary>答え</summary><div class="ac">無色・無臭</div></details></li>
+<li><span class="q">水素が燃料電池に使われる利点を書け。</span><details class="a"><summary>答え</summary><div class="ac">燃えても水しかできず環境にやさしい</div></details></li>
+<li><span class="q">うすい塩酸に鉄を入れると出る気体は何か。</span><details class="a"><summary>答え</summary><div class="ac">水素</div></details></li>
+<li><span class="q">水素を集めた試験管の口に火を近づけて調べる方法を何というか（音）。</span><details class="a"><summary>答え</summary><div class="ac">（ポンと音がするか調べる）＝水素の確認方法</div></details></li>
+<li><span class="q">アンモニアの発生方法を書け。</span><details class="a"><summary>答え</summary><div class="ac">塩化アンモニウムと水酸化カルシウムを混ぜて加熱（またはアンモニア水を加熱）</div></details></li>
+<li><span class="q">アンモニアのにおいを答えよ。</span><details class="a"><summary>答え</summary><div class="ac">刺激臭</div></details></li>
+<li><span class="q">アンモニアの集め方は何か。</span><details class="a"><summary>答え</summary><div class="ac">上方置換</div></details></li>
+<li><span class="q">アンモニアを上方置換で集める理由を2つ答えよ。</span><details class="a"><summary>答え</summary><div class="ac">水に非常に溶けやすく、空気より軽いから</div></details></li>
+<li><span class="q">アンモニアの水溶液は何性か。</span><details class="a"><summary>答え</summary><div class="ac">アルカリ性</div></details></li>
+<li><span class="q">アンモニア水にフェノールフタレイン溶液を加えると何色になるか。</span><details class="a"><summary>答え</summary><div class="ac">赤色</div></details></li>
+<li><span class="q">アンモニア水にBTB溶液を加えると何色になるか。</span><details class="a"><summary>答え</summary><div class="ac">青色</div></details></li>
+<li><span class="q">アンモニアの噴水実験で、フラスコに水が吸い上げられる理由を書け。</span><details class="a"><summary>答え</summary><div class="ac">アンモニアが水に非常によく溶け、フラスコ内の圧力が下がるから</div></details></li>
+<li><span class="q">アンモニアの実験で注意することを1つ書け。</span><details class="a"><summary>答え</summary><div class="ac">換気する／においは手であおいでかぐ</div></details></li>
+<li><span class="q">空気の約78%を占める気体は何か。</span><details class="a"><summary>答え</summary><div class="ac">窒素</div></details></li>
+<li><span class="q">空気の約21%を占める気体は何か。</span><details class="a"><summary>答え</summary><div class="ac">酸素</div></details></li>
+<li><span class="q">窒素は燃えたり、ものを燃やしたりするか。</span><details class="a"><summary>答え</summary><div class="ac">どちらもしない（反応しにくい）</div></details></li>
+<li><span class="q">ポテトチップスの袋に窒素を入れる理由を書け。</span><details class="a"><summary>答え</summary><div class="ac">酸素をふくまず、中身が酸化（酸素と反応）しにくいから</div></details></li>
+<li><span class="q">空気より軽い気体を2つ答えよ。</span><details class="a"><summary>答え</summary><div class="ac">水素・アンモニア</div></details></li>
+<li><span class="q">酸素・二酸化炭素・水素・アンモニアで、水に最もよく溶けるのはどれか。</span><details class="a"><summary>答え</summary><div class="ac">アンモニア</div></details></li>
+<li><span class="q">水素とアンモニアはどちらも空気より軽い。においで見分けるとどうか。</span><details class="a"><summary>答え</summary><div class="ac">水素は無臭、アンモニアは刺激臭</div></details></li>
+<li><span class="q">刺激臭があり、水溶液がアルカリ性の気体は何か。</span><details class="a"><summary>答え</summary><div class="ac">アンモニア</div></details></li>
+<li><span class="q">火をつけると音を立てて燃え、水ができる気体は何か。</span><details class="a"><summary>答え</summary><div class="ac">水素</div></details></li>
+<li><span class="q">塩素の色とにおいを答えよ（発展）。</span><details class="a"><summary>答え</summary><div class="ac">黄緑色・刺激臭（漂白・殺菌作用がある）</div></details></li>
+<li><span class="q">アンモニアが上方置換なのに、二酸化炭素が下方置換なのはなぜか。</span><details class="a"><summary>答え</summary><div class="ac">アンモニアは空気より軽く、二酸化炭素は空気より重いから</div></details></li>
+<li><span class="q">アンモニアを水にとかした液を何というか。</span><details class="a"><summary>答え</summary><div class="ac">アンモニア水</div></details></li>
+<li><span class="q">アンモニアは肥料の原料にもなる。人の生活に役立つ例をもう1つ挙げよ。</span><details class="a"><summary>答え</summary><div class="ac">洗剤・冷却剤 など</div></details></li>
+</ol>
+
+<h3>気体の集め方・識別（161〜200）</h3>
+<ol class="qa" start="161">
+<li><span class="q">気体の集め方3種をすべて答えよ。</span><details class="a"><summary>答え</summary><div class="ac">水上置換・上方置換・下方置換</div></details></li>
+<li><span class="q">水に溶けにくい気体の集め方は何か。</span><details class="a"><summary>答え</summary><div class="ac">水上置換</div></details></li>
+<li><span class="q">水に溶けやすく空気より軽い気体の集め方は何か。</span><details class="a"><summary>答え</summary><div class="ac">上方置換</div></details></li>
+<li><span class="q">水に溶けやすく空気より重い気体の集め方は何か。</span><details class="a"><summary>答え</summary><div class="ac">下方置換</div></details></li>
+<li><span class="q">水上置換の利点を1つ書け。</span><details class="a"><summary>答え</summary><div class="ac">空気と混ざらず純粋に集められる／集まる量が見える</div></details></li>
+<li><span class="q">酸素の集め方を答え、その理由も書け。</span><details class="a"><summary>答え</summary><div class="ac">水上置換。水に溶けにくいから</div></details></li>
+<li><span class="q">アンモニアの集め方を答え、その理由も書け。</span><details class="a"><summary>答え</summary><div class="ac">上方置換。水に溶けやすく空気より軽いから</div></details></li>
+<li><span class="q">二酸化炭素を下方置換で集めるときの注意（口の向き）を書け。</span><details class="a"><summary>答え</summary><div class="ac">容器の口を上に向け、気体を下にためる</div></details></li>
+<li><span class="q">気体の性質を調べる観点を3つ答えよ。</span><details class="a"><summary>答え</summary><div class="ac">色／におい／水への溶け方／空気と比べた重さ／火をつけたとき から3つ</div></details></li>
+<li><span class="q">気体Aは無色・無臭で、ものを燃やすはたらきがある。Aは何か。</span><details class="a"><summary>答え</summary><div class="ac">酸素</div></details></li>
+<li><span class="q">気体Bは刺激臭で水に非常に溶け、水溶液はアルカリ性。Bは何か。</span><details class="a"><summary>答え</summary><div class="ac">アンモニア</div></details></li>
+<li><span class="q">気体Cは石灰水を白くにごらせる。Cは何か。</span><details class="a"><summary>答え</summary><div class="ac">二酸化炭素</div></details></li>
+<li><span class="q">気体Dは最も軽く、火をつけると音を立てて燃え水ができる。Dは何か。</span><details class="a"><summary>答え</summary><div class="ac">水素</div></details></li>
+<li><span class="q">気体Eは空気の約8割を占め、反応しにくい。Eは何か。</span><details class="a"><summary>答え</summary><div class="ac">窒素</div></details></li>
+<li><span class="q">水に溶けやすい気体を水上置換で集めてはいけない理由を書け。</span><details class="a"><summary>答え</summary><div class="ac">水に溶けてしまい、集められないから</div></details></li>
+<li><span class="q">同じ体積で比べて、空気より軽い気体は上・下どちらにたまるか。</span><details class="a"><summary>答え</summary><div class="ac">上</div></details></li>
+<li><span class="q">塩酸の溶質である気体は何か。</span><details class="a"><summary>答え</summary><div class="ac">塩化水素</div></details></li>
+<li><span class="q">水にとけると酸性を示す気体を2つ挙げよ。</span><details class="a"><summary>答え</summary><div class="ac">二酸化炭素・塩化水素 など</div></details></li>
+<li><span class="q">水にとけるとアルカリ性を示す気体を1つ挙げよ。</span><details class="a"><summary>答え</summary><div class="ac">アンモニア</div></details></li>
+<li><span class="q">酸素と二酸化炭素で、空気より重いのはどちらか。</span><details class="a"><summary>答え</summary><div class="ac">二酸化炭素（酸素も少し重いが二酸化炭素の方が重い）</div></details></li>
+<li><span class="q">気体を発生させるとき、集気びんはあらかじめどうしておくか（水上置換）。</span><details class="a"><summary>答え</summary><div class="ac">水で満たしておく</div></details></li>
+<li><span class="q">上方置換・下方置換で集めた気体は、集まったかどうかをどう確かめるか。</span><details class="a"><summary>答え</summary><div class="ac">火のついた線香やにおい、指示薬などで性質を調べる</div></details></li>
+<li><span class="q">酸素を集めた集気びんにふたをするとき、口を上・下どちらに向けるか。</span><details class="a"><summary>答え</summary><div class="ac">上（水上置換で集めた後、水中でふたをして取り出す）</div></details></li>
+<li><span class="q">火のついたマッチを近づけると「ポン」と音がする気体は何か。</span><details class="a"><summary>答え</summary><div class="ac">水素</div></details></li>
+<li><span class="q">石灰水・BTB・フェノールフタレインのうち、二酸化炭素の確認に使うのはどれか。</span><details class="a"><summary>答え</summary><div class="ac">石灰水（BTBでも酸性＝黄色で確認できる）</div></details></li>
+<li><span class="q">アンモニアのにおいをかぐとき、鼻を近づけてはいけない理由を書け。</span><details class="a"><summary>答え</summary><div class="ac">刺激が強く、目や鼻をいためるから</div></details></li>
+<li><span class="q">気体の集め方を、水への溶け方と重さで整理して説明せよ。</span><details class="a"><summary>答え</summary><div class="ac">溶けにくい→水上／溶けやすく軽い→上方／溶けやすく重い→下方</div></details></li>
+<li><span class="q">酸素・水素・二酸化炭素・アンモニアのうち、水上置換で集められるものをすべて選べ。</span><details class="a"><summary>答え</summary><div class="ac">酸素・水素・二酸化炭素（アンモニアは溶けやすいので不可）</div></details></li>
+<li><span class="q">気体を発生させる実験で、火を使うとき換気する理由を書け。</span><details class="a"><summary>答え</summary><div class="ac">有害な気体がたまるのを防ぐため</div></details></li>
+<li><span class="q">水素と酸素の混合気体に火をつけると危険な理由を書け。</span><details class="a"><summary>答え</summary><div class="ac">激しく反応（爆発）して水ができるから</div></details></li>
+<li><span class="q">二酸化炭素を集めた集気びんに火のついたろうそくを入れるとどうなるか。</span><details class="a"><summary>答え</summary><div class="ac">火が消える（燃え続けられない）</div></details></li>
+<li><span class="q">酸素の中でスチールウールを燃やすと、空気中と比べてどうなるか。</span><details class="a"><summary>答え</summary><div class="ac">より激しく燃える</div></details></li>
+<li><span class="q">気体が空気より重いか軽いかは、何と比べて判断するか。</span><details class="a"><summary>答え</summary><div class="ac">空気（の重さ・密度）</div></details></li>
+<li><span class="q">水にとかしても中性のままの気体を1つ挙げよ。</span><details class="a"><summary>答え</summary><div class="ac">酸素・水素・窒素 など</div></details></li>
+<li><span class="q">二酸化炭素の性質を3つ書け。</span><details class="a"><summary>答え</summary><div class="ac">無色無臭／空気より重い／水に少し溶け酸性／石灰水を白くにごらせる から3つ</div></details></li>
+<li><span class="q">アンモニアの性質を3つ書け。</span><details class="a"><summary>答え</summary><div class="ac">無色／刺激臭／空気より軽い／水に非常によく溶けアルカリ性 から3つ</div></details></li>
+<li><span class="q">水素の性質を3つ書け。</span><details class="a"><summary>答え</summary><div class="ac">無色無臭／最も軽い／水に溶けにくい／燃えて水ができる から3つ</div></details></li>
+<li><span class="q">酸素の性質を3つ書け。</span><details class="a"><summary>答え</summary><div class="ac">無色無臭／水に溶けにくい／ものを燃やすはたらき（助燃性） から3つ</div></details></li>
+<li><span class="q">気体を発生させる装置で、加熱をやめる前に必ずすることを書け（水上置換）。</span><details class="a"><summary>答え</summary><div class="ac">ガラス管を水そうから抜く（水の逆流を防ぐ）</div></details></li>
+<li><span class="q">空気は1種類の気体か、混合物か。</span><details class="a"><summary>答え</summary><div class="ac">混合物（窒素・酸素・二酸化炭素などの混合）</div></details></li>
+</ol>
+
+<!-- ============================ C 水溶液 ============================ -->
+<h2 id="c">C　水溶液<span class="pts">100問</span></h2>
+<figure class="fig"><figcaption>溶解度曲線 — 温度が上がると多くの固体は溶解度が大きくなる</figcaption>
+<svg viewBox="0 0 460 220" role="img" aria-label="溶解度曲線の図">
+  <line x1="50" y1="185" x2="440" y2="185" stroke="#333"/>
+  <line x1="50" y1="185" x2="50" y2="20" stroke="#333"/>
+  <text x="245" y="212" text-anchor="middle" font-size="11" fill="#556">温度（℃）　0　　20　　40　　60　　80</text>
+  <text x="16" y="105" font-size="11" fill="#556" transform="rotate(-90 16 105)">溶解度（g/水100g）</text>
+  <path d="M50 170 Q180 150 250 100 T440 25" fill="none" stroke="#c8860a" stroke-width="2.5"/>
+  <text x="360" y="45" font-size="11" fill="#c8860a">硝酸カリウム（急）</text>
+  <path d="M50 150 L440 138" fill="none" stroke="#1a7a4a" stroke-width="2.5"/>
+  <text x="330" y="130" font-size="11" fill="#1a7a4a">塩化ナトリウム（ほぼ一定）</text>
+  <line x1="250" y1="185" x2="250" y2="100" stroke="#999" stroke-dasharray="3 3"/>
+  <line x1="440" y1="185" x2="440" y2="25" stroke="#999" stroke-dasharray="3 3"/>
+</svg></figure>
+<figure class="fig"><figcaption>ろ過のしかた — ガラス棒を伝わせ、ろうとの足の長い方をビーカーの壁につける</figcaption>
+<svg viewBox="0 0 340 190" role="img" aria-label="ろ過装置の図">
+  <line x1="40" y1="30" x2="150" y2="30" stroke="#666" stroke-width="2"/>
+  <path d="M60 55 L130 55 L100 110 L90 110 Z" fill="#eef6f0" stroke="#666"/>
+  <path d="M62 58 L128 58 L100 100 Z" fill="#fff" stroke="#4a86c8" stroke-dasharray="2 2"/>
+  <line x1="95" y1="30" x2="95" y2="58" stroke="#4a86c8" stroke-width="3"/>
+  <text x="150" y="48" font-size="10" fill="#4a86c8">ガラス棒を伝わせる</text>
+  <line x1="95" y1="110" x2="95" y2="150" stroke="#666"/>
+  <rect x="70" y="150" width="90" height="35" fill="#e6f1fb" stroke="#666"/>
+  <text x="175" y="170" font-size="10" fill="#556">ろうとの足の長い方を</text>
+  <text x="175" y="183" font-size="10" fill="#556">ビーカーの内壁につける</text>
+</svg></figure>
+
+<h3>溶質・溶媒・濃度（201〜235）</h3>
+<ol class="qa" start="201">
+<li><span class="q">水などに溶けている物質を何というか。</span><details class="a"><summary>答え</summary><div class="ac">溶質</div></details></li>
+<li><span class="q">溶かしている液体を何というか。</span><details class="a"><summary>答え</summary><div class="ac">溶媒</div></details></li>
+<li><span class="q">溶質が溶媒に溶けた液全体を何というか。</span><details class="a"><summary>答え</summary><div class="ac">溶液</div></details></li>
+<li><span class="q">溶媒が水である溶液を特に何というか。</span><details class="a"><summary>答え</summary><div class="ac">水溶液</div></details></li>
+<li><span class="q">物質が液全体に均一に広がって溶けることを何というか。</span><details class="a"><summary>答え</summary><div class="ac">溶解</div></details></li>
+<li><span class="q">水溶液の性質を2つ答えよ。</span><details class="a"><summary>答え</summary><div class="ac">透明である／濃さがどこも均一である</div></details></li>
+<li><span class="q">色のついた水溶液は「透明」といえるか。</span><details class="a"><summary>答え</summary><div class="ac">いえる（色があっても透き通っていれば透明）</div></details></li>
+<li><span class="q">砂糖10gを水90gに溶かした砂糖水の質量は何gか。</span><details class="a"><summary>答え</summary><div class="ac">100 g</div></details></li>
+<li><span class="q">溶質の質量＋溶媒の質量は何に等しいか。</span><details class="a"><summary>答え</summary><div class="ac">溶液（の質量）</div></details></li>
+<li><span class="q">砂糖を水に溶かしても全体の質量が変わらないのはなぜか。</span><details class="a"><summary>答え</summary><div class="ac">砂糖はなくならず、水の中に散らばっているだけだから</div></details></li>
+<li><span class="q">質量パーセント濃度を求める式を書け。</span><details class="a"><summary>答え</summary><div class="ac">溶質の質量÷溶液の質量×100</div></details></li>
+<li><span class="q">砂糖20gを水80gに溶かした水溶液の濃度は何%か。</span><details class="a"><summary>答え</summary><div class="ac">20 %</div></details></li>
+<li><span class="q">食塩15gを水135gに溶かした水溶液の濃度は何%か。</span><details class="a"><summary>答え</summary><div class="ac">10 %<span class="exp">　15÷150×100</span></div></details></li>
+<li><span class="q">濃度10%の食塩水200gに溶けている食塩は何gか。</span><details class="a"><summary>答え</summary><div class="ac">20 g</div></details></li>
+<li><span class="q">濃度25%の水溶液100gにふくまれる水は何gか。</span><details class="a"><summary>答え</summary><div class="ac">75 g</div></details></li>
+<li><span class="q">濃度8%の食塩水250gにふくまれる食塩は何gか。</span><details class="a"><summary>答え</summary><div class="ac">20 g<span class="exp">　250×0.08</span></div></details></li>
+<li><span class="q">食塩30gを溶かして濃度15%の食塩水を作るには、水は何g必要か。</span><details class="a"><summary>答え</summary><div class="ac">170 g<span class="exp">　溶液200g−溶質30g</span></div></details></li>
+<li><span class="q">水100gに食塩25gを溶かした水溶液の濃度は何%か。</span><details class="a"><summary>答え</summary><div class="ac">20 %<span class="exp">　25÷125×100</span></div></details></li>
+<li><span class="q">濃度12%の砂糖水150gにふくまれる砂糖は何gか。</span><details class="a"><summary>答え</summary><div class="ac">18 g</div></details></li>
+<li><span class="q">濃度20%の食塩水50gと10%の食塩水50gを混ぜると濃度は何%か。</span><details class="a"><summary>答え</summary><div class="ac">15 %<span class="exp">　(10+5)÷100×100</span></div></details></li>
+<li><span class="q">水溶液の濃度を濃くする方法を2つ答えよ。</span><details class="a"><summary>答え</summary><div class="ac">溶質を増やす／水（溶媒）を蒸発させて減らす</div></details></li>
+<li><span class="q">濃度10%の食塩水300gを、水を加えて6%にするには水を何g加えるか。</span><details class="a"><summary>答え</summary><div class="ac">200 g<span class="exp">　食塩30g→6%の溶液は500g→追加200g</span></div></details></li>
+<li><span class="q">溶けた溶質の粒子は、時間がたつと下に沈むか。</span><details class="a"><summary>答え</summary><div class="ac">沈まない（均一のまま）</div></details></li>
+<li><span class="q">溶解を粒子のモデルで説明すると、溶質の粒子はどうなるか。</span><details class="a"><summary>答え</summary><div class="ac">水の粒子の間に均一に散らばる（なくならない）</div></details></li>
+<li><span class="q">コーヒーシュガー（茶色）を水に溶かすと、色はどうなるか。</span><details class="a"><summary>答え</summary><div class="ac">均一に広がり、透き通った茶色（透明）になる</div></details></li>
+<li><span class="q">溶質が気体である水溶液の例を1つ答えよ。</span><details class="a"><summary>答え</summary><div class="ac">炭酸水／塩酸／アンモニア水 など</div></details></li>
+<li><span class="q">塩酸の溶質は何か。</span><details class="a"><summary>答え</summary><div class="ac">塩化水素（気体）</div></details></li>
+<li><span class="q">溶質が液体である水溶液の例を1つ挙げよ。</span><details class="a"><summary>答え</summary><div class="ac">（うすい）エタノール水溶液 など</div></details></li>
+<li><span class="q">同じ濃度の食塩水なら、量が2倍になると食塩の量はどうなるか。</span><details class="a"><summary>答え</summary><div class="ac">2倍になる（濃度は同じ）</div></details></li>
+<li><span class="q">濃度5%の食塩水400gにふくまれる食塩と水はそれぞれ何gか。</span><details class="a"><summary>答え</summary><div class="ac">食塩20g・水380g</div></details></li>
+<li><span class="q">水50gに砂糖10gを溶かした砂糖水の濃度は何%か（小数第1位）。</span><details class="a"><summary>答え</summary><div class="ac">約16.7 %<span class="exp">　10÷60×100</span></div></details></li>
+<li><span class="q">砂糖水と食塩水を見た目だけで区別できるか。</span><details class="a"><summary>答え</summary><div class="ac">できない（どちらも無色透明のことが多い）</div></details></li>
+<li><span class="q">水溶液の「均一」とはどういう意味か。</span><details class="a"><summary>答え</summary><div class="ac">どの部分をとっても濃さ（成分の割合）が同じであること</div></details></li>
+<li><span class="q">濃度15%の食塩水を水でうすめても変わらないものは何か。</span><details class="a"><summary>答え</summary><div class="ac">溶けている食塩の質量（濃度は下がるが食塩量は同じ）</div></details></li>
+<li><span class="q">「溶質・溶媒・溶液」を砂糖水を例に説明せよ。</span><details class="a"><summary>答え</summary><div class="ac">溶質＝砂糖、溶媒＝水、溶液＝砂糖水</div></details></li>
+</ol>
+
+<h3>溶解度・再結晶・ろ過（236〜270）</h3>
+<ol class="qa" start="236">
+<li><span class="q">一定量の水に溶ける物質の限界の量を何というか。</span><details class="a"><summary>答え</summary><div class="ac">溶解度</div></details></li>
+<li><span class="q">溶解度まで溶けた水溶液を何というか。</span><details class="a"><summary>答え</summary><div class="ac">飽和水溶液</div></details></li>
+<li><span class="q">溶解度は水何gについての量で表すか。</span><details class="a"><summary>答え</summary><div class="ac">水100 g</div></details></li>
+<li><span class="q">多くの固体で、温度が高いほど溶解度はどうなるか。</span><details class="a"><summary>答え</summary><div class="ac">大きくなる</div></details></li>
+<li><span class="q">気体の溶解度は、温度が高いほどどうなるか。</span><details class="a"><summary>答え</summary><div class="ac">小さくなる（溶けにくい）</div></details></li>
+<li><span class="q">温度による溶解度の変化を表したグラフを何というか。</span><details class="a"><summary>答え</summary><div class="ac">溶解度曲線</div></details></li>
+<li><span class="q">いったん溶かした物質を再び結晶として取り出すことを何というか。</span><details class="a"><summary>答え</summary><div class="ac">再結晶</div></details></li>
+<li><span class="q">再結晶の方法を2つ答えよ。</span><details class="a"><summary>答え</summary><div class="ac">水溶液を冷やす／水を蒸発させる</div></details></li>
+<li><span class="q">温度を下げても結晶が出にくい（溶解度が温度であまり変わらない）物質の例を答えよ。</span><details class="a"><summary>答え</summary><div class="ac">塩化ナトリウム（食塩）</div></details></li>
+<li><span class="q">塩化ナトリウムを取り出すのに適した方法はどちらか。</span><details class="a"><summary>答え</summary><div class="ac">水を蒸発させる</div></details></li>
+<li><span class="q">硝酸カリウムを取り出すのに適した方法はどちらか。</span><details class="a"><summary>答え</summary><div class="ac">水溶液を冷やす</div></details></li>
+<li><span class="q">硝酸カリウムを冷やすと多くの結晶が出るのはなぜか。</span><details class="a"><summary>答え</summary><div class="ac">温度が下がると溶解度が大きく小さくなるから</div></details></li>
+<li><span class="q">純粋な物質が規則正しい形になったものを何というか。</span><details class="a"><summary>答え</summary><div class="ac">結晶</div></details></li>
+<li><span class="q">塩化ナトリウムの結晶の形を答えよ。</span><details class="a"><summary>答え</summary><div class="ac">立方体（サイコロ状）</div></details></li>
+<li><span class="q">ミョウバンの結晶の形を答えよ。</span><details class="a"><summary>答え</summary><div class="ac">正八面体</div></details></li>
+<li><span class="q">固体と液体を分ける操作を何というか。</span><details class="a"><summary>答え</summary><div class="ac">ろ過</div></details></li>
+<li><span class="q">ろ過に使う紙を何というか。</span><details class="a"><summary>答え</summary><div class="ac">ろ紙</div></details></li>
+<li><span class="q">ろ過で液を注ぐときに伝わせる道具は何か。</span><details class="a"><summary>答え</summary><div class="ac">ガラス棒</div></details></li>
+<li><span class="q">ろうとの足の長い方はどうするか。</span><details class="a"><summary>答え</summary><div class="ac">ビーカーの内壁につける</div></details></li>
+<li><span class="q">ろ過で、ろ紙を通りぬけるもの・残るものはそれぞれ何か。</span><details class="a"><summary>答え</summary><div class="ac">溶けているもの（溶質）は通りぬけ、溶けていない固体は残る</div></details></li>
+<li><span class="q">ろ過のとき、液はろ紙の何分目までにするか。</span><details class="a"><summary>答え</summary><div class="ac">八分目以下（あふれさせない）</div></details></li>
+<li><span class="q">60℃の水100gに硝酸カリウムが110g溶ける。20℃では32g。20℃まで冷やすと結晶は何g出るか。</span><details class="a"><summary>答え</summary><div class="ac">78 g<span class="exp">　110−32</span></div></details></li>
+<li><span class="q">飽和水溶液を冷やすと結晶が出る理由を書け。</span><details class="a"><summary>答え</summary><div class="ac">温度が下がると溶解度が小さくなり、溶けきれなくなるから</div></details></li>
+<li><span class="q">飽和水溶液にさらに溶質を加えるとどうなるか。</span><details class="a"><summary>答え</summary><div class="ac">溶け残る</div></details></li>
+<li><span class="q">水溶液から水を蒸発させると溶質はどうなるか。</span><details class="a"><summary>答え</summary><div class="ac">結晶として出てくる</div></details></li>
+<li><span class="q">水100gに20℃で35g溶ける物質を、20℃の水200gに溶かすと最大何g溶けるか。</span><details class="a"><summary>答え</summary><div class="ac">70 g</div></details></li>
+<li><span class="q">20℃の水100gに物質を80g入れたら20g溶け残った。この温度での溶解度は何gか。</span><details class="a"><summary>答え</summary><div class="ac">60 g</div></details></li>
+<li><span class="q">溶解度曲線が急な物質と緩やかな物質、冷やして多く結晶が出るのはどちらか。</span><details class="a"><summary>答え</summary><div class="ac">急な物質（硝酸カリウムなど）</div></details></li>
+<li><span class="q">食塩水から食塩を取り出すのに「冷やす」があまり有効でない理由を書け。</span><details class="a"><summary>答え</summary><div class="ac">食塩は温度が下がっても溶解度がほとんど変わらないから</div></details></li>
+<li><span class="q">40℃の硝酸カリウム飽和水溶液を10℃に冷やすと結晶が出る。この操作を何というか。</span><details class="a"><summary>答え</summary><div class="ac">再結晶</div></details></li>
+<li><span class="q">再結晶で純粋な物質が得られる理由を書け。</span><details class="a"><summary>答え</summary><div class="ac">物質ごとに溶解度がちがい、目的の物質だけが結晶として出てくるから</div></details></li>
+<li><span class="q">ろ過した後の、ろ紙を通りぬけた液を何というか。</span><details class="a"><summary>答え</summary><div class="ac">ろ液</div></details></li>
+<li><span class="q">ろ過で泥水を分けると、ろ紙に残るものと通りぬけるものは何か。</span><details class="a"><summary>答え</summary><div class="ac">残る＝泥（固体）、通る＝水（溶けているもの）</div></details></li>
+<li><span class="q">砂糖水をろ過しても砂糖を取り出せない理由を書け。</span><details class="a"><summary>答え</summary><div class="ac">砂糖は水に溶けていて、ろ紙を通りぬけるから</div></details></li>
+<li><span class="q">結晶の形が物質ごとに決まっているのはなぜか（記述）。</span><details class="a"><summary>答え</summary><div class="ac">物質をつくる粒子が規則正しく並ぶから</div></details></li>
+</ol>
+
+<h3>溶解度曲線の読み取り・応用（271〜300）</h3>
+<ol class="qa" start="271">
+<li><span class="q">溶解度曲線で、縦軸・横軸はそれぞれ何を表すか。</span><details class="a"><summary>答え</summary><div class="ac">縦軸＝溶解度（水100gに溶ける量）、横軸＝温度</div></details></li>
+<li><span class="q">溶解度曲線が右上がりの物質は、温度と溶解度がどんな関係か。</span><details class="a"><summary>答え</summary><div class="ac">温度が高いほど溶解度が大きい</div></details></li>
+<li><span class="q">40℃で60g溶ける物質を60℃（110g）で溶けるだけ溶かし、40℃に冷やすと出る結晶は何gか。</span><details class="a"><summary>答え</summary><div class="ac">50 g<span class="exp">　110−60</span></div></details></li>
+<li><span class="q">80℃の水100gにある物質が160g溶けた。20℃（30g）に冷やすと出る結晶は何gか。</span><details class="a"><summary>答え</summary><div class="ac">130 g</div></details></li>
+<li><span class="q">同じ温度なら、水の量を2倍にすると溶ける量はどうなるか。</span><details class="a"><summary>答え</summary><div class="ac">2倍になる</div></details></li>
+<li><span class="q">60℃の水200gに硝酸カリウムは最大何g溶けるか（100gに110g）。</span><details class="a"><summary>答え</summary><div class="ac">220 g</div></details></li>
+<li><span class="q">溶解度曲線を使うと、どんなことがわかるか1つ書け。</span><details class="a"><summary>答え</summary><div class="ac">ある温度で何gまで溶けるか／冷やすと何g結晶が出るか など</div></details></li>
+<li><span class="q">気体の溶解度が温度で小さくなる例を、身近な現象で1つ挙げよ。</span><details class="a"><summary>答え</summary><div class="ac">あたたかい炭酸水は泡（二酸化炭素）が抜けやすい など</div></details></li>
+<li><span class="q">水の温度を上げると炭酸水の泡が出やすくなるのはなぜか。</span><details class="a"><summary>答え</summary><div class="ac">温度が高いほど気体の溶解度が小さくなり、溶けきれない二酸化炭素が出るから</div></details></li>
+<li><span class="q">溶解度が温度でほとんど変わらない物質は、冷やす・蒸発のどちらで取り出すのがよいか。</span><details class="a"><summary>答え</summary><div class="ac">水を蒸発させる</div></details></li>
+<li><span class="q">水100gに40℃で溶ける量が「硝酸カリウム64g・食塩36g」のとき、冷やして多く結晶が出るのはどちらか。</span><details class="a"><summary>答え</summary><div class="ac">硝酸カリウム（溶解度が温度で大きく変わるから）</div></details></li>
+<li><span class="q">飽和とは、溶質がそれ以上どうなる状態か。</span><details class="a"><summary>答え</summary><div class="ac">それ以上溶けきれない（限界まで溶けた）状態</div></details></li>
+<li><span class="q">50℃で飽和した水溶液を50℃のまま置いても結晶は出るか。</span><details class="a"><summary>答え</summary><div class="ac">出ない（温度が変わらず水も減らないため）</div></details></li>
+<li><span class="q">結晶を取り出したあとの水溶液は、その温度で飽和しているか。</span><details class="a"><summary>答え</summary><div class="ac">飽和している</div></details></li>
+<li><span class="q">ミョウバンの水溶液を静かに冷やすと、大きな結晶ができやすいのはなぜか。</span><details class="a"><summary>答え</summary><div class="ac">ゆっくり冷やすと粒子が規則正しく並びやすいから</div></details></li>
+<li><span class="q">溶解度の単位を書け。</span><details class="a"><summary>答え</summary><div class="ac">g（水100gあたりのg）</div></details></li>
+<li><span class="q">40℃で溶解度64gの物質を、40℃の水50gに溶かすと最大何g溶けるか。</span><details class="a"><summary>答え</summary><div class="ac">32 g</div></details></li>
+<li><span class="q">硝酸カリウム飽和水溶液（60℃・110g）を20℃（32g）に冷やしたとき、溶けたまま残っている量は何gか。</span><details class="a"><summary>答え</summary><div class="ac">32 g</div></details></li>
+<li><span class="q">同じ量の結晶を出すのに、冷やす幅を大きくするとどうなるか。</span><details class="a"><summary>答え</summary><div class="ac">より多くの結晶が出る</div></details></li>
+<li><span class="q">水溶液を加熱して溶媒を減らすと、濃度はどうなるか。</span><details class="a"><summary>答え</summary><div class="ac">濃くなる（やがて飽和し結晶が出る）</div></details></li>
+<li><span class="q">溶質・溶媒・溶液のうち、質量パーセント濃度の分母になるのはどれか。</span><details class="a"><summary>答え</summary><div class="ac">溶液</div></details></li>
+<li><span class="q">硝酸カリウムと塩化ナトリウムの混合物から、硝酸カリウムだけを多く取り出す方法を書け。</span><details class="a"><summary>答え</summary><div class="ac">水に溶かして冷やす（溶解度の差を利用した再結晶）</div></details></li>
+<li><span class="q">40℃で溶けるだけ溶かした水溶液を「40℃の飽和水溶液」という。これを60℃に加熱するとどうなるか。</span><details class="a"><summary>答え</summary><div class="ac">溶解度が大きくなり、さらに溶質を溶かせる（飽和でなくなる）</div></details></li>
+<li><span class="q">溶けきれずに残った固体をろ過で取り除くと、ろ液はどんな状態か。</span><details class="a"><summary>答え</summary><div class="ac">その温度で飽和した水溶液</div></details></li>
+<li><span class="q">溶解度が「100gの水に20℃で20g」の物質は、20℃の水100gに30g入れると何g溶け残るか。</span><details class="a"><summary>答え</summary><div class="ac">10 g</div></details></li>
+<li><span class="q">水よう液を冷やして出た結晶をろ過で集める。この一連の操作の名前を書け。</span><details class="a"><summary>答え</summary><div class="ac">再結晶</div></details></li>
+<li><span class="q">溶解度曲線で2つの曲線が交わる点は何を表すか。</span><details class="a"><summary>答え</summary><div class="ac">その温度で2つの物質の溶解度が等しいこと</div></details></li>
+<li><span class="q">100gの水に溶ける量が温度でほぼ一定の物質を、グラフではどんな線で表すか。</span><details class="a"><summary>答え</summary><div class="ac">ほぼ水平（右へ緩やかな）線</div></details></li>
+<li><span class="q">濃度と溶解度のちがいを一言で説明せよ。</span><details class="a"><summary>答え</summary><div class="ac">濃度＝溶けている割合／溶解度＝溶ける限界の量</div></details></li>
+<li><span class="q">再結晶が身近に使われている例を1つ挙げよ。</span><details class="a"><summary>答え</summary><div class="ac">塩づくり（海水を煮つめる）・氷砂糖 など</div></details></li>
+</ol>
+
+<!-- ============================ D 状態変化 ============================ -->
+<h2 id="d">D　状態変化<span class="pts">100問</span></h2>
+<figure class="fig"><figcaption>粒子モデル — 状態変化で粒子の数・大きさは変わらず、間隔（動き）が変わる</figcaption>
+<svg viewBox="0 0 460 150" role="img" aria-label="固体・液体・気体の粒子モデル">
+  <text x="70" y="18" text-anchor="middle" font-size="12" font-weight="bold">固体</text>
+  <rect x="20" y="26" width="100" height="100" fill="#eef6f0" stroke="#666"/>
+  <g fill="#1a7a4a">
+   <circle cx="40" cy="46" r="7"/><circle cx="60" cy="46" r="7"/><circle cx="80" cy="46" r="7"/><circle cx="100" cy="46" r="7"/>
+   <circle cx="40" cy="66" r="7"/><circle cx="60" cy="66" r="7"/><circle cx="80" cy="66" r="7"/><circle cx="100" cy="66" r="7"/>
+   <circle cx="40" cy="86" r="7"/><circle cx="60" cy="86" r="7"/><circle cx="80" cy="86" r="7"/><circle cx="100" cy="86" r="7"/>
+   <circle cx="40" cy="106" r="7"/><circle cx="60" cy="106" r="7"/><circle cx="80" cy="106" r="7"/><circle cx="100" cy="106" r="7"/>
+  </g>
+  <text x="70" y="142" text-anchor="middle" font-size="9" fill="#556">規則正しく並ぶ</text>
+  <text x="230" y="18" text-anchor="middle" font-size="12" font-weight="bold">液体</text>
+  <rect x="180" y="26" width="100" height="100" fill="#eef6f0" stroke="#666"/>
+  <g fill="#1a7a4a">
+   <circle cx="200" cy="52" r="7"/><circle cx="222" cy="60" r="7"/><circle cx="248" cy="50" r="7"/><circle cx="266" cy="66" r="7"/>
+   <circle cx="196" cy="78" r="7"/><circle cx="224" cy="84" r="7"/><circle cx="252" cy="78" r="7"/><circle cx="270" cy="92" r="7"/>
+   <circle cx="206" cy="104" r="7"/><circle cx="234" cy="108" r="7"/><circle cx="260" cy="104" r="7"/>
+  </g>
+  <text x="230" y="142" text-anchor="middle" font-size="9" fill="#556">少し自由に動く</text>
+  <text x="390" y="18" text-anchor="middle" font-size="12" font-weight="bold">気体</text>
+  <rect x="340" y="26" width="100" height="100" fill="#eef6f0" stroke="#666"/>
+  <g fill="#1a7a4a">
+   <circle cx="356" cy="44" r="7"/><circle cx="410" cy="52" r="7"/><circle cx="384" cy="80" r="7"/>
+   <circle cx="424" cy="96" r="7"/><circle cx="352" cy="104" r="7"/><circle cx="400" cy="116" r="7"/>
+  </g>
+  <text x="390" y="142" text-anchor="middle" font-size="9" fill="#556">間隔広く飛び回る</text>
+</svg></figure>
+<figure class="fig"><figcaption>状態変化の名前</figcaption>
+<svg viewBox="0 0 460 130" role="img" aria-label="状態変化の名称の図">
+  <rect x="20" y="50" width="90" height="34" rx="5" fill="#e6f4ec" stroke="#1a7a4a"/><text x="65" y="72" text-anchor="middle" font-size="13">固体</text>
+  <rect x="185" y="50" width="90" height="34" rx="5" fill="#e6f4ec" stroke="#1a7a4a"/><text x="230" y="72" text-anchor="middle" font-size="13">液体</text>
+  <rect x="350" y="50" width="90" height="34" rx="5" fill="#e6f4ec" stroke="#1a7a4a"/><text x="395" y="72" text-anchor="middle" font-size="13">気体</text>
+  <text x="147" y="44" text-anchor="middle" font-size="11" fill="#c8860a">融解 →</text>
+  <text x="147" y="98" text-anchor="middle" font-size="11" fill="#4a86c8">← 凝固</text>
+  <text x="312" y="44" text-anchor="middle" font-size="11" fill="#c8860a">蒸発 →</text>
+  <text x="312" y="98" text-anchor="middle" font-size="11" fill="#4a86c8">← 凝縮</text>
+  <path d="M110 60 L185 60" stroke="#c8860a"/><path d="M185 74 L110 74" stroke="#4a86c8"/>
+  <path d="M275 60 L350 60" stroke="#c8860a"/><path d="M350 74 L275 74" stroke="#4a86c8"/>
+  <path d="M65 50 Q230 8 395 50" fill="none" stroke="#999" stroke-dasharray="4 3"/>
+  <text x="230" y="18" text-anchor="middle" font-size="11" fill="#556">昇華（固体⇔気体を直接）</text>
+</svg></figure>
+<figure class="fig"><figcaption>加熱と温度変化 — 純粋な物質は融点・沸点で温度が一定になる</figcaption>
+<svg viewBox="0 0 460 180" role="img" aria-label="加熱による温度変化のグラフ">
+  <line x1="45" y1="150" x2="440" y2="150" stroke="#333"/>
+  <line x1="45" y1="150" x2="45" y2="20" stroke="#333"/>
+  <text x="245" y="172" text-anchor="middle" font-size="11" fill="#556">加熱時間 →</text>
+  <text x="18" y="90" font-size="11" fill="#556" transform="rotate(-90 18 90)">温度 →</text>
+  <polyline points="45,140 105,100 175,100 245,60 340,60 420,35" fill="none" stroke="#1a7a4a" stroke-width="2.5"/>
+  <line x1="105" y1="100" x2="175" y2="100" stroke="#c8860a" stroke-width="3"/>
+  <text x="140" y="94" text-anchor="middle" font-size="10" fill="#c8860a">融点（融解）</text>
+  <line x1="245" y1="60" x2="340" y2="60" stroke="#b0306a" stroke-width="3"/>
+  <text x="292" y="54" text-anchor="middle" font-size="10" fill="#b0306a">沸点（沸騰）</text>
+</svg></figure>
+
+<h3>状態変化と体積・質量（301〜335）</h3>
+<ol class="qa" start="301">
+<li><span class="q">物質が温度によって固体・液体・気体とすがたを変えることを何というか。</span><details class="a"><summary>答え</summary><div class="ac">状態変化</div></details></li>
+<li><span class="q">物質の3つのすがた（状態）を答えよ。</span><details class="a"><summary>答え</summary><div class="ac">固体・液体・気体</div></details></li>
+<li><span class="q">状態変化で変化するのは体積・質量のどちらか。</span><details class="a"><summary>答え</summary><div class="ac">体積（質量は変わらない）</div></details></li>
+<li><span class="q">状態変化で質量が変わらないのはなぜか。</span><details class="a"><summary>答え</summary><div class="ac">粒子の数や大きさは変わらないから</div></details></li>
+<li><span class="q">状態変化すると密度はどうなるか。</span><details class="a"><summary>答え</summary><div class="ac">変わる（体積が変わるため）</div></details></li>
+<li><span class="q">ふつうの物質は固体→液体→気体と変化すると体積はどうなるか。</span><details class="a"><summary>答え</summary><div class="ac">大きくなる</div></details></li>
+<li><span class="q">水が例外である点を答えよ。</span><details class="a"><summary>答え</summary><div class="ac">固体（氷）になると体積が増える（水より密度が小さい）</div></details></li>
+<li><span class="q">そのため氷は水にどうなるか。</span><details class="a"><summary>答え</summary><div class="ac">浮く</div></details></li>
+<li><span class="q">状態変化で体積は変わるのに質量が変わらないと、密度はどう変化するか説明せよ。</span><details class="a"><summary>答え</summary><div class="ac">体積が大きくなれば密度は小さくなる（質量÷体積のため）</div></details></li>
+<li><span class="q">液体のろうが固まると体積はどうなるか。</span><details class="a"><summary>答え</summary><div class="ac">小さくなる（表面がへこむ）</div></details></li>
+<li><span class="q">水を凍らせるとペットボトルがふくらむ理由を書け。</span><details class="a"><summary>答え</summary><div class="ac">水は凍ると体積が増えるから</div></details></li>
+<li><span class="q">状態変化で変わらないものを2つ答えよ。</span><details class="a"><summary>答え</summary><div class="ac">物質の種類・質量（粒子の数・大きさ）</div></details></li>
+<li><span class="q">固体・液体・気体で、体積が最も大きいのはどれか。</span><details class="a"><summary>答え</summary><div class="ac">気体</div></details></li>
+<li><span class="q">固体・液体・気体で、密度が最も小さいのはふつうどれか。</span><details class="a"><summary>答え</summary><div class="ac">気体</div></details></li>
+<li><span class="q">固体→液体の変化を何というか。</span><details class="a"><summary>答え</summary><div class="ac">融解</div></details></li>
+<li><span class="q">液体→固体の変化を何というか。</span><details class="a"><summary>答え</summary><div class="ac">凝固</div></details></li>
+<li><span class="q">液体→気体の変化を何というか。</span><details class="a"><summary>答え</summary><div class="ac">蒸発（沸騰）</div></details></li>
+<li><span class="q">気体→液体の変化を何というか。</span><details class="a"><summary>答え</summary><div class="ac">凝縮（凝結）</div></details></li>
+<li><span class="q">固体が液体を経ずに直接気体になる変化を何というか。</span><details class="a"><summary>答え</summary><div class="ac">昇華</div></details></li>
+<li><span class="q">昇華する物質の例を1つ答えよ。</span><details class="a"><summary>答え</summary><div class="ac">ドライアイス・ヨウ素・ナフタレン など</div></details></li>
+<li><span class="q">冷たいコップの外側に水滴がつく現象は何変化か。</span><details class="a"><summary>答え</summary><div class="ac">凝縮（空気中の水蒸気が液体になる）</div></details></li>
+<li><span class="q">洗濯物が乾くのは何変化か。</span><details class="a"><summary>答え</summary><div class="ac">蒸発</div></details></li>
+<li><span class="q">ドライアイスが小さくなるのは何変化か。</span><details class="a"><summary>答え</summary><div class="ac">昇華</div></details></li>
+<li><span class="q">氷がとけて水になるのは何変化か。</span><details class="a"><summary>答え</summary><div class="ac">融解</div></details></li>
+<li><span class="q">水を熱して湯気が出るのは何変化か（水蒸気→細かい水滴）。</span><details class="a"><summary>答え</summary><div class="ac">凝縮（水蒸気が冷えて水滴になる）</div></details></li>
+<li><span class="q">固体の粒子のようすを説明せよ。</span><details class="a"><summary>答え</summary><div class="ac">規則正しく並び、その場で振動している</div></details></li>
+<li><span class="q">液体の粒子のようすを説明せよ。</span><details class="a"><summary>答え</summary><div class="ac">間隔がやや広がり、比較的自由に動く</div></details></li>
+<li><span class="q">気体の粒子のようすを説明せよ。</span><details class="a"><summary>答え</summary><div class="ac">間隔が非常に広く、激しく飛び回る</div></details></li>
+<li><span class="q">状態変化で粒子の数や大きさは変わるか。</span><details class="a"><summary>答え</summary><div class="ac">変わらない</div></details></li>
+<li><span class="q">気体の体積が最も大きい理由を、粒子のようすで説明せよ。</span><details class="a"><summary>答え</summary><div class="ac">粒子の間隔が最も広く、激しく飛び回るから</div></details></li>
+<li><span class="q">状態変化と化学変化のちがいを書け。</span><details class="a"><summary>答え</summary><div class="ac">状態変化は物質の種類が変わらない／化学変化は別の物質になる</div></details></li>
+<li><span class="q">氷→水→水蒸気と変化しても、物質の種類は変わるか。</span><details class="a"><summary>答え</summary><div class="ac">変わらない（すべて水）</div></details></li>
+<li><span class="q">水を熱し続けると水蒸気になる。このとき水の粒子はどうなるか。</span><details class="a"><summary>答え</summary><div class="ac">間隔が広がり激しく動くようになる（数・大きさは同じ）</div></details></li>
+<li><span class="q">液体を冷やして固体にするとき、粒子の動きはどうなるか。</span><details class="a"><summary>答え</summary><div class="ac">おだやかになり、規則正しく並ぶ</div></details></li>
+<li><span class="q">状態変化を利用して固体の防虫剤（ナフタレン）が小さくなるのは何変化か。</span><details class="a"><summary>答え</summary><div class="ac">昇華</div></details></li>
+</ol>
+
+<h3>融点・沸点・蒸留（336〜370）</h3>
+<ol class="qa" start="336">
+<li><span class="q">固体がとけて液体になる温度を何というか。</span><details class="a"><summary>答え</summary><div class="ac">融点</div></details></li>
+<li><span class="q">液体が沸騰して気体になる温度を何というか。</span><details class="a"><summary>答え</summary><div class="ac">沸点</div></details></li>
+<li><span class="q">純粋な物質の融点・沸点は決まっているか。</span><details class="a"><summary>答え</summary><div class="ac">決まっている（一定）</div></details></li>
+<li><span class="q">混合物の融点・沸点は一定か。</span><details class="a"><summary>答え</summary><div class="ac">一定ではない</div></details></li>
+<li><span class="q">水の融点と沸点をそれぞれ答えよ。</span><details class="a"><summary>答え</summary><div class="ac">0℃と100℃</div></details></li>
+<li><span class="q">液体が表面から気体になる現象を何というか。</span><details class="a"><summary>答え</summary><div class="ac">蒸発</div></details></li>
+<li><span class="q">液体の内部からも気体になる現象を何というか。</span><details class="a"><summary>答え</summary><div class="ac">沸騰</div></details></li>
+<li><span class="q">加熱中、沸騰している間の温度はどうなるか。</span><details class="a"><summary>答え</summary><div class="ac">一定（沸点で変わらない）</div></details></li>
+<li><span class="q">加熱のグラフで温度が一定になる区間では何が起きているか。</span><details class="a"><summary>答え</summary><div class="ac">状態変化（融解や沸騰）</div></details></li>
+<li><span class="q">加熱グラフで一定になる2つの区間は、それぞれ何を表すか。</span><details class="a"><summary>答え</summary><div class="ac">融点（融解）と沸点（沸騰）</div></details></li>
+<li><span class="q">液体を加熱するとき沸騰石を入れる理由を書け。</span><details class="a"><summary>答え</summary><div class="ac">急な沸騰（突沸）を防ぐため</div></details></li>
+<li><span class="q">純粋な物質と混合物を、加熱の温度変化のグラフで見分ける方法を書け。</span><details class="a"><summary>答え</summary><div class="ac">純物質は沸点（融点）で温度が一定、混合物は温度が上がり続ける</div></details></li>
+<li><span class="q">液体を沸騰させ、出た気体を冷やして再び液体にして集める操作を何というか。</span><details class="a"><summary>答え</summary><div class="ac">蒸留</div></details></li>
+<li><span class="q">蒸留で物質を分けられるのは、何のちがいを利用しているか。</span><details class="a"><summary>答え</summary><div class="ac">沸点のちがい</div></details></li>
+<li><span class="q">水とエタノールの混合物を蒸留すると、先に多く出てくるのはどちらか。</span><details class="a"><summary>答え</summary><div class="ac">エタノール（沸点が低いため）</div></details></li>
+<li><span class="q">エタノールの沸点は約何℃か。</span><details class="a"><summary>答え</summary><div class="ac">約78℃</div></details></li>
+<li><span class="q">蒸留の実験で、温度計の球部はどこの高さに置くか。</span><details class="a"><summary>答え</summary><div class="ac">枝つきフラスコの枝（気体の出口）の高さ</div></details></li>
+<li><span class="q">温度計の位置が枝より高い・低いと正しく測れない理由を書け。</span><details class="a"><summary>答え</summary><div class="ac">出てくる気体（蒸気）の温度を正しく測れないから</div></details></li>
+<li><span class="q">赤ワインを蒸留して得た最初の液体に火をつけると燃えるのはなぜか。</span><details class="a"><summary>答え</summary><div class="ac">沸点の低いエタノールを多くふくむから</div></details></li>
+<li><span class="q">蒸留で出てきた気体を液体にもどす部分（冷やす）を何というか。</span><details class="a"><summary>答え</summary><div class="ac">冷却器（水などで冷やす）</div></details></li>
+<li><span class="q">海水から真水を得るのに使える方法は何か。</span><details class="a"><summary>答え</summary><div class="ac">蒸留</div></details></li>
+<li><span class="q">海水を蒸留すると真水が得られる原理を「沸点」「水蒸気」を使って説明せよ。</span><details class="a"><summary>答え</summary><div class="ac">水が先に沸騰して水蒸気になり、それを冷やして真水として集める。塩は残る</div></details></li>
+<li><span class="q">2種類以上の物質が混ざったものを何というか。</span><details class="a"><summary>答え</summary><div class="ac">混合物</div></details></li>
+<li><span class="q">1種類の物質でできたものを何というか。</span><details class="a"><summary>答え</summary><div class="ac">純粋な物質（純物質）</div></details></li>
+<li><span class="q">空気は純物質か混合物か。</span><details class="a"><summary>答え</summary><div class="ac">混合物</div></details></li>
+<li><span class="q">食塩水は純物質か混合物か。</span><details class="a"><summary>答え</summary><div class="ac">混合物</div></details></li>
+<li><span class="q">蒸留水（純粋な水）は純物質か混合物か。</span><details class="a"><summary>答え</summary><div class="ac">純物質</div></details></li>
+<li><span class="q">混合物を融点・沸点のちがいで分けられる理由を書け。</span><details class="a"><summary>答え</summary><div class="ac">物質ごとに融点・沸点が決まっているから</div></details></li>
+<li><span class="q">氷を加熱していくと、0℃でしばらく温度が変わらないのはなぜか。</span><details class="a"><summary>答え</summary><div class="ac">とける（融解する）ために熱が使われるから</div></details></li>
+<li><span class="q">水を加熱し100℃で温度が上がらなくなるのはなぜか。</span><details class="a"><summary>答え</summary><div class="ac">沸騰して気体になるために熱が使われるから</div></details></li>
+<li><span class="q">純粋な水を冷やすと0℃で何が起き、そのときの温度はどうなるか。</span><details class="a"><summary>答え</summary><div class="ac">凝固が起こり、こおる間は0℃で一定になる</div></details></li>
+<li><span class="q">融点・沸点は物質を区別する手がかりになるか。</span><details class="a"><summary>答え</summary><div class="ac">なる（物質ごとに決まっているから）</div></details></li>
+<li><span class="q">エタノール（沸点78℃）と水（沸点100℃）の混合物を加熱すると、先に沸騰するのはどちらか。</span><details class="a"><summary>答え</summary><div class="ac">エタノール</div></details></li>
+<li><span class="q">蒸留を身近に利用している例を1つ挙げよ。</span><details class="a"><summary>答え</summary><div class="ac">石油の分留・焼酎などの酒づくり・海水の淡水化 など</div></details></li>
+<li><span class="q">同じ物質なら、量が変わると融点・沸点は変わるか。</span><details class="a"><summary>答え</summary><div class="ac">変わらない（物質の量に関係なく一定）</div></details></li>
+</ol>
+
+<h3>状態変化の総合（371〜400）</h3>
+<ol class="qa" start="371">
+<li><span class="q">やかんの口の少し先が白く見えるのは何か。またそれは何変化か。</span><details class="a"><summary>答え</summary><div class="ac">湯気（細かい水滴）。水蒸気が冷えてできる凝縮</div></details></li>
+<li><span class="q">やかんの口のすぐ近くが透明なのはなぜか。</span><details class="a"><summary>答え</summary><div class="ac">目に見えない水蒸気（気体）だから</div></details></li>
+<li><span class="q">冬の窓ガラスの内側がくもるのは何変化か。</span><details class="a"><summary>答え</summary><div class="ac">凝縮</div></details></li>
+<li><span class="q">霜（しも）ができるのは何変化か。</span><details class="a"><summary>答え</summary><div class="ac">昇華（水蒸気が直接固体になる）</div></details></li>
+<li><span class="q">打ち水で涼しくなるのは、水が何変化するときに熱をうばうからか。</span><details class="a"><summary>答え</summary><div class="ac">蒸発</div></details></li>
+<li><span class="q">状態変化で熱を加えると、粒子の動きはどうなるか。</span><details class="a"><summary>答え</summary><div class="ac">激しくなり、間隔が広がる</div></details></li>
+<li><span class="q">状態変化で熱をうばうと、粒子の動きはどうなるか。</span><details class="a"><summary>答え</summary><div class="ac">おだやかになり、間隔がせまくなる</div></details></li>
+<li><span class="q">同じ質量の水と氷では、体積が大きいのはどちらか。</span><details class="a"><summary>答え</summary><div class="ac">氷</div></details></li>
+<li><span class="q">同じ質量の水と水蒸気では、体積が大きいのはどちらか。</span><details class="a"><summary>答え</summary><div class="ac">水蒸気（気体）</div></details></li>
+<li><span class="q">状態変化を粒子で説明すると、加熱で「なくなる」ものはあるか。</span><details class="a"><summary>答え</summary><div class="ac">ない（粒子は移動・拡散するだけでなくならない）</div></details></li>
+<li><span class="q">液体のろうを冷やして固体にすると、質量は変わるか。</span><details class="a"><summary>答え</summary><div class="ac">変わらない</div></details></li>
+<li><span class="q">氷を熱して水にし、さらに水蒸気にする間、質量の合計はどうなるか。</span><details class="a"><summary>答え</summary><div class="ac">変わらない</div></details></li>
+<li><span class="q">加熱グラフで、最初に温度が上がる区間は物質は何の状態か（氷を加熱）。</span><details class="a"><summary>答え</summary><div class="ac">固体（氷）</div></details></li>
+<li><span class="q">加熱グラフで、融点と沸点の間の区間は物質は何の状態か。</span><details class="a"><summary>答え</summary><div class="ac">液体</div></details></li>
+<li><span class="q">加熱グラフで、沸点をこえたあとは物質は何の状態か。</span><details class="a"><summary>答え</summary><div class="ac">気体</div></details></li>
+<li><span class="q">純粋な物質のグラフに「平らな部分」が2回あるのはなぜか。</span><details class="a"><summary>答え</summary><div class="ac">融解と沸騰の2回の状態変化で温度が一定になるから</div></details></li>
+<li><span class="q">混合物のグラフに平らな部分がはっきり出ないのはなぜか。</span><details class="a"><summary>答え</summary><div class="ac">融点・沸点が一定でなく、温度が上がり続けるから</div></details></li>
+<li><span class="q">融点0℃・沸点100℃の物質はふつう何か。</span><details class="a"><summary>答え</summary><div class="ac">水</div></details></li>
+<li><span class="q">ある物質の融点が-39℃、沸点が357℃である。常温（20℃）ではどの状態か。</span><details class="a"><summary>答え</summary><div class="ac">液体（融点と沸点の間だから）＝水銀</div></details></li>
+<li><span class="q">融点が20℃より高い物質は、常温では何の状態か（沸点はさらに高い）。</span><details class="a"><summary>答え</summary><div class="ac">固体</div></details></li>
+<li><span class="q">沸点が20℃より低い物質は、常温では何の状態か。</span><details class="a"><summary>答え</summary><div class="ac">気体</div></details></li>
+<li><span class="q">エタノールは融点-115℃・沸点78℃。常温では何の状態か。</span><details class="a"><summary>答え</summary><div class="ac">液体</div></details></li>
+<li><span class="q">酸素は沸点-183℃。常温では何の状態か。</span><details class="a"><summary>答え</summary><div class="ac">気体</div></details></li>
+<li><span class="q">鉄は融点約1500℃。常温では何の状態か。</span><details class="a"><summary>答え</summary><div class="ac">固体</div></details></li>
+<li><span class="q">物質の状態は、その温度が融点・沸点に対してどこにあるかで決まる。20℃で液体になる条件を書け。</span><details class="a"><summary>答え</summary><div class="ac">融点＜20℃＜沸点</div></details></li>
+<li><span class="q">状態変化は物質の種類が変わらないので、化学変化とちがって何ができないか。</span><details class="a"><summary>答え</summary><div class="ac">別の新しい物質はできない</div></details></li>
+<li><span class="q">水を電気分解すると水素と酸素になる。これは状態変化か化学変化か。</span><details class="a"><summary>答え</summary><div class="ac">化学変化（別の物質になる）</div></details></li>
+<li><span class="q">水が氷になるのは状態変化か化学変化か。</span><details class="a"><summary>答え</summary><div class="ac">状態変化</div></details></li>
+<li><span class="q">状態変化を利用して、混合物から純粋な物質を取り出す代表的な方法を2つ挙げよ。</span><details class="a"><summary>答え</summary><div class="ac">蒸留（沸点の差）／再結晶（溶解度の差） ※再結晶は溶解の利用</div></details></li>
+<li><span class="q">身のまわりの「物質」の学習で、固体・液体・気体を分ける基準になる2つの温度は何か。</span><details class="a"><summary>答え</summary><div class="ac">融点と沸点</div></details></li>
+</ol>
+
+<!-- ============================ ★ 発展 ============================ -->
+<h2 id="star" class="star">★発展問題<span class="pts">40問・応用/計算/記述</span></h2>
+<ol class="qa" start="401">
+<li><span class="q">密度の異なる3種類の液体を静かに重ねると、一番下にくるのは密度が大・小どちらの液体か。</span><details class="a star"><summary>答え</summary><div class="ac">密度が大きい液体</div></details></li>
+<li><span class="q">濃度20%の食塩水150gと濃度10%の食塩水50gを混ぜると、濃度は何%か。</span><details class="a star"><summary>答え</summary><div class="ac">17.5 %<span class="exp">　(30＋5)÷200×100</span></div></details></li>
+<li><span class="q">濃度15%の砂糖水を水を加えて10%にしたい。砂糖を30g使ったとき、あとから加える水は何gか。</span><details class="a star"><summary>答え</summary><div class="ac">100 g<span class="exp">　15%で溶液200g→10%で溶液300g→追加100g</span></div></details></li>
+<li><span class="q">60℃の硝酸カリウム飽和水溶液（水100gに110g）を20℃（32g）に冷やすと出る結晶は何gか。</span><details class="a star"><summary>答え</summary><div class="ac">78 g</div></details></li>
+<li><span class="q">上の水溶液の水が200gだった場合、20℃に冷やすと出る結晶は何gか。</span><details class="a star"><summary>答え</summary><div class="ac">156 g<span class="exp">　78×2</span></div></details></li>
+<li><span class="q">水50cm³に金属を沈めると58cm³になった。金属21.6gの密度と物質名を答えよ。</span><details class="a star"><summary>答え</summary><div class="ac">2.7 g/cm³、アルミニウム<span class="exp">　21.6÷8</span></div></details></li>
+<li><span class="q">状態変化で体積は増えるのに質量が変わらないと、密度はどうなるか説明せよ。</span><details class="a star"><summary>答え</summary><div class="ac">体積が大きくなるので密度は小さくなる</div></details></li>
+<li><span class="q">氷（0.92）を食塩水（1.03）に入れると浮くか沈むか。</span><details class="a star"><summary>答え</summary><div class="ac">浮く（0.92＜1.03）</div></details></li>
+<li><span class="q">気体Xは水上置換で集め、火のついた線香が激しく燃えた。空気の約21%を占める。Xは何か。</span><details class="a star"><summary>答え</summary><div class="ac">酸素</div></details></li>
+<li><span class="q">アンモニアの噴水実験でフェノールフタレイン溶液が赤くなった。アンモニア水が何性だからか。</span><details class="a star"><summary>答え</summary><div class="ac">アルカリ性</div></details></li>
+<li><span class="q">同じ体積の鉄（7.9）とアルミ（2.7）で、質量が大きいのはどちらか。</span><details class="a star"><summary>答え</summary><div class="ac">鉄</div></details></li>
+<li><span class="q">同じ質量の鉄とアルミで、体積が大きいのはどちらか。</span><details class="a star"><summary>答え</summary><div class="ac">アルミ</div></details></li>
+<li><span class="q">二酸化炭素をBTB溶液に通すと何色になるか。またそれは何性だからか。</span><details class="a star"><summary>答え</summary><div class="ac">黄色。酸性だから</div></details></li>
+<li><span class="q">純物質と混合物を、加熱の温度変化のグラフだけで見分ける方法を書け。</span><details class="a star"><summary>答え</summary><div class="ac">純物質は融点・沸点で温度が一定、混合物は一定にならず上がり続ける</div></details></li>
+<li><span class="q">金属を見分けるのに「磁石につくか」だけでは不十分な理由を書け。</span><details class="a star"><summary>答え</summary><div class="ac">鉄以外の金属（アルミ・銅など）は磁石につかないから</div></details></li>
+<li><span class="q">白い粉が有機物か無機物かを、1つの実験で見分ける方法を書け。</span><details class="a star"><summary>答え</summary><div class="ac">加熱して二酸化炭素（石灰水が白くにごる）と水が出れば有機物、変化しなければ無機物</div></details></li>
+<li><span class="q">水100gに物質を80g入れたら20g溶け残った。この温度での溶解度は何gか。</span><details class="a star"><summary>答え</summary><div class="ac">60 g</div></details></li>
+<li><span class="q">状態変化で気体の体積が最も大きくなる理由を、粒子のようすで説明せよ。</span><details class="a star"><summary>答え</summary><div class="ac">粒子の間隔が最も広く、激しく飛び回るから</div></details></li>
+<li><span class="q">うすい塩酸に鉄を加えると出る気体の確かめ方（火を近づける）と、その結果を書け。</span><details class="a star"><summary>答え</summary><div class="ac">水素。火を近づけるとポンと音を立てて燃え、水ができる</div></details></li>
+<li><span class="q">海水（混合物）を蒸留すると真水が得られる原理を「沸点」「水蒸気」を使って説明せよ。</span><details class="a star"><summary>答え</summary><div class="ac">沸点の低い水が先に沸騰して水蒸気になり、冷やして真水として集める。塩は残る</div></details></li>
+<li><span class="q">融点-115℃・沸点78℃のエタノールは、-120℃では何の状態か。</span><details class="a star"><summary>答え</summary><div class="ac">固体（融点より低いから）</div></details></li>
+<li><span class="q">水銀（融点-39℃・沸点357℃）は500℃では何の状態か。</span><details class="a star"><summary>答え</summary><div class="ac">気体（沸点より高いから）</div></details></li>
+<li><span class="q">密度2.7g/cm³のアルミ板を水に入れると沈む。理由を書け。</span><details class="a star"><summary>答え</summary><div class="ac">アルミの密度2.7が水1.0より大きいから</div></details></li>
+<li><span class="q">濃度8%の食塩水500gを加熱して水を100g蒸発させた。濃度は何%になるか。</span><details class="a star"><summary>答え</summary><div class="ac">10 %<span class="exp">　食塩40g÷溶液400g×100</span></div></details></li>
+<li><span class="q">40℃で溶解度64gの物質を40℃の水150gに溶かすと最大何g溶けるか。</span><details class="a star"><summary>答え</summary><div class="ac">96 g<span class="exp">　64×1.5</span></div></details></li>
+<li><span class="q">酸素・二酸化炭素・水素・アンモニアのうち、水上置換で集められないものはどれか。</span><details class="a star"><summary>答え</summary><div class="ac">アンモニア（水に非常に溶けやすいから）</div></details></li>
+<li><span class="q">気体A〜Cのうち、石灰水を白くにごらせるのはどれか（A酸素・B二酸化炭素・C水素）。</span><details class="a star"><summary>答え</summary><div class="ac">B（二酸化炭素）</div></details></li>
+<li><span class="q">加熱すると黒くこげ、石灰水を白くにごらせる気体を出すのはどれか（A砂糖・B食塩・Cガラス）。</span><details class="a star"><summary>答え</summary><div class="ac">A（砂糖）</div></details></li>
+<li><span class="q">硝酸カリウムと塩化ナトリウムの混合物から硝酸カリウムを多く取り出す方法を書け。</span><details class="a star"><summary>答え</summary><div class="ac">水に溶かして冷やす（溶解度の差を利用した再結晶）</div></details></li>
+<li><span class="q">同じ温度で、水の量を3倍にすると溶ける物質の量はどうなるか。</span><details class="a star"><summary>答え</summary><div class="ac">3倍になる</div></details></li>
+<li><span class="q">密度がわからない液体Xに、密度1.0の氷を入れると沈んだ。液体Xの密度は1.0より大きいか小さいか。</span><details class="a star"><summary>答え</summary><div class="ac">小さい（氷が沈む＝液体の密度が氷より小さい）</div></details></li>
+<li><span class="q">状態変化と化学変化を、それぞれ身近な例で1つずつ挙げよ。</span><details class="a star"><summary>答え</summary><div class="ac">状態変化＝水が凍る／化学変化＝ものが燃える・鉄がさびる など</div></details></li>
+<li><span class="q">気体を上方置換で集める条件を2つ書け。</span><details class="a star"><summary>答え</summary><div class="ac">水に溶けやすい／空気より軽い</div></details></li>
+<li><span class="q">水100gに20℃で溶解度20gの物質を、20℃の水100gに30g入れてろ過した。ろ液の濃度は何%か。</span><details class="a star"><summary>答え</summary><div class="ac">約16.7 %<span class="exp">　溶けた20g÷溶液120g×100</span></div></details></li>
+<li><span class="q">ある金属50cm³の質量が445gだった。密度と物質名（銀10.5/銅8.96/鉄7.9）を答えよ。</span><details class="a star"><summary>答え</summary><div class="ac">8.9 g/cm³、銅<span class="exp">　445÷50</span></div></details></li>
+<li><span class="q">液体を加熱して沸騰させ、蒸気を冷やして集める蒸留で、フラスコに残るのはどんな物質か（食塩水の場合）。</span><details class="a star"><summary>答え</summary><div class="ac">食塩（沸点が非常に高く蒸発しないため）</div></details></li>
+<li><span class="q">エタノールと水の混合物を蒸留し、温度計が約78℃で一定になった。このとき多く出ている物質は何か。</span><details class="a star"><summary>答え</summary><div class="ac">エタノール</div></details></li>
+<li><span class="q">同じ物質でも、砕いて粒を小さくすると溶ける速さはどうなるか（溶解度は変わらない）。</span><details class="a star"><summary>答え</summary><div class="ac">速くなる（水にふれる表面が増えるから）</div></details></li>
+<li><span class="q">温度を上げても溶ける量がほとんど増えない物質は、どうやって取り出すのがよいか。</span><details class="a star"><summary>答え</summary><div class="ac">水を蒸発させる</div></details></li>
+<li><span class="q">「身のまわりの物質」で学ぶ、物質を区別・分離するための考え方を1つまとめて書け。</span><details class="a star"><summary>答え</summary><div class="ac">物質ごとに密度・融点・沸点・溶解度が決まっているので、その差を使って区別・分離できる</div></details></li>
+</ol>
+
+<p class="note" style="margin-top:40px;text-align:center;border-top:1px solid var(--line);padding-top:16px;">全400問＋発展40問。密度・濃度・溶解度の計算、気体の識別、状態変化のグラフ・蒸留は定期テスト頻出。</p>
+</body></html>
